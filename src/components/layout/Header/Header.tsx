@@ -18,6 +18,7 @@ export type HeaderProps = {
   onExit: () => void;
 
   onImportRequested: () => void;
+  onToggleSidebar: () => void;
 };
 
 const MAX_VISIBLE_TABS = 4;
@@ -33,24 +34,25 @@ const Header: React.FC<HeaderProps> = ({
   onExportAgent,
   onExit,
   onImportRequested,
+  onToggleSidebar,
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = React.useState(false);
   const [isMoreOpen, setIsMoreOpen] = React.useState(false);
 
-  const menuRef = React.useRef<HTMLDivElement | null>(null);
+  const settingsRef = React.useRef<HTMLDivElement | null>(null);
   const moreRef = React.useRef<HTMLDivElement | null>(null);
 
   // Close hamburger menu on outside click
   React.useEffect(() => {
-    if (!isMenuOpen) return;
+    if (!isSettingsOpen) return;
     const handle = (event: MouseEvent) => {
       const target = event.target as Node | null;
-      if (!target || !menuRef.current) return;
-      if (!menuRef.current.contains(target)) setIsMenuOpen(false);
+      if (!target || !settingsRef.current) return;
+      if (!settingsRef.current.contains(target)) setIsSettingsOpen(false);
     };
     document.addEventListener("mousedown", handle);
     return () => document.removeEventListener("mousedown", handle);
-  }, [isMenuOpen]);
+  }, [isSettingsOpen]);
 
   // Close "More" menu on outside click
   React.useEffect(() => {
@@ -79,78 +81,14 @@ const Header: React.FC<HeaderProps> = ({
   return (
     <header className="bb-header">
       <div className="bb-header__left">
-        <div ref={menuRef} className="bb-header__hamburger-wrapper">
-          <button
-            className="bb-header__hamburger"
-            aria-label="Open menu"
-            type="button"
-            onClick={() => setIsMenuOpen((o) => !o)}
-          >
-            {isMenuOpen ? "X" : "☰"}
-          </button>
-
-          {isMenuOpen && (
-            <div className="bb-header__menu">
-              <button
-                type="button"
-                className="bb-header__menu-item"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onNewAgent();
-                }}
-              >
-                New Agent
-              </button>
-
-              <button
-                type="button"
-                className="bb-header__menu-item"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onLoadAgent();
-                }}
-              >
-                Load Agent
-              </button>
-
-              <button
-                type="button"
-                className="bb-header__menu-item"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onExportAgent();
-                }}
-              >
-                Export Agent
-              </button>
-
-              <button
-                type="button"
-                className="bb-header__menu-item"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onImportRequested();
-                }}
-              >
-                Import Agent
-              </button>
-
-              <div className="bb-header__menu-divider" />
-
-              <button
-                type="button"
-                className="bb-header__menu-item bb-header__menu-item--danger"
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  onExit();
-                }}
-              >
-                Exit
-              </button>
-            </div>
-          )}
-        </div>
-
+        <button
+          className="bb-header__hamburger"
+          aria-label="Toggle sidebar"
+          type="button"
+          onClick={onToggleSidebar}
+        >
+          ☰
+        </button>
         <div className="bb-header__logo">
           <img
             src={blackbookLogo}
@@ -267,7 +205,73 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      <div className="bb-header__right">{/* future menu */}</div>
+      <div className="bb-header__right">
+        <div ref={settingsRef} className="bb-header__settings-wrapper">
+          <button
+            className="bb-header__settings"
+            aria-label="Open settings"
+            onClick={() => setIsSettingsOpen(o => !o)}
+          >
+            ⚙
+          </button>
+
+          {isSettingsOpen && (
+            <div className="bb-header__menu">
+              <button
+                type="button"
+                className="bb-header__menu-item"
+                onClick={() => {
+                  setIsSettingsOpen(false);
+                  onNewAgent();
+                }}
+              >
+                New Agent
+              </button>
+              <button
+                type="button"
+                className="bb-header__menu-item"
+                onClick={() => {
+                  setIsSettingsOpen(false);
+                  onLoadAgent();
+                }}
+              >
+                Load Agent
+              </button>
+              <button
+                type="button"
+                className="bb-header__menu-item"
+                onClick={() => {
+                  setIsSettingsOpen(false);
+                  onExportAgent();
+                }}
+              >
+                Export Agent
+              </button>
+              <button
+                type="button"
+                className="bb-header__menu-item"
+                onClick={() => {
+                  setIsSettingsOpen(false);
+                  onImportRequested();
+                }}
+              >
+                Import Agent
+              </button>
+              <div className="bb-header__menu-divider" />
+              <button
+                type="button"
+                className="bb-header__menu-item bb-header__menu-item--danger"
+                onClick={() => {
+                  setIsSettingsOpen(false);
+                  onExit();
+                }}
+              >
+                Exit
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
     </header>
   );
 };

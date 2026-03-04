@@ -196,6 +196,7 @@ const MainPage: React.FC<MainPageProps> = ({
     }
   };
 
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
   const [openCreationSection, setOpenCreationSection] = React.useState<CreationSectionKey>("IDENTITY");
   const [activeBottomTab, setActiveBottomTab] = React.useState<BottomTabKey>("weapons");
   const [statMode, setStatMode] = React.useState<"Assigned" | "Rolled">("Assigned");
@@ -540,6 +541,7 @@ const MainPage: React.FC<MainPageProps> = ({
       onExportAgent={handleExportAgent}
       onExit={onCloseAgent}
       onImportRequested={() => fileInputRef.current?.click()}
+      onToggleSidebar={() => setIsSidebarOpen(v => !v)}
     />
   );
 
@@ -702,7 +704,7 @@ const MainPage: React.FC<MainPageProps> = ({
     <>
       <MainPageLayout
         header={headerNode}
-        sidebar={sidebarNode}
+        sidebar={isSidebarOpen ? sidebarNode : null}
         playerPanel={playerPanelNode}
         footer={footerNode}
       />
