@@ -1,0 +1,173 @@
+[
+  {
+    "id": "exhausted",
+    "label": "Exhausted",
+    "category": "physical",
+    "description": "You’ve pushed too long without rest.",
+    "effects": [
+      "−10% or −20% penalty to all tests (Handler decides).",
+      "Lose 1D6 WP when exhaustion sets in.",
+      "A full night’s sleep cures exhaustion."
+    ],
+    "rollMods": {
+      "stats": { "all": -20 },
+      "skills": { "all": -20 },
+      "san": -20
+    }
+  },
+  {
+    "id": "stunned",
+    "label": "Stunned",
+    "category": "physical",
+    "description": "You can’t act for the moment.",
+    "effects": [
+      "Cannot act while stunned.",
+      "On your turn: CON×5 to recover and act next turn."
+    ]
+  },
+  {
+    "id": "suppressed",
+    "label": "Suppressed",
+    "category": "combat",
+    "description": "Incoming fire forces you to keep your head down.",
+    "effects": [
+      "Next action must be to find cover or go prone.",
+      "You may stifle fear and act normally at the cost of 1 SAN."
+    ]
+  },
+  {
+    "id": "pinned",
+    "label": "Pinned",
+    "category": "combat",
+    "description": "You are immobilized by an opponent.",
+    "effects": [
+      "Cannot move; can attempt Escape once per turn.",
+      "+20% bonus to melee/unarmed attacks against you."
+    ]
+  },
+  {
+    "id": "prone",
+    "label": "Prone",
+    "category": "combat",
+    "description": "You are on the ground.",
+    "effects": [
+      "Movement restricted until you spend a turn standing."
+    ]
+  },
+  {
+    "id": "low_willpower",
+    "label": "Low Willpower (1–2 WP)",
+    "category": "mental",
+    "description": "You’re close to collapse.",
+    "effects": [
+      "−20% penalty to all actions until WP rises above 2."
+    ],
+    "rollMods": {
+      "stats": { "all": -20 },
+      "skills": { "all": -20 }
+    }
+  },
+  {
+    "id": "temporary_insanity",
+    "label": "Temporary Insanity",
+    "category": "sanity",
+    "description": "Overwhelming stress causes loss of control.",
+    "effects": [
+      "Handler chooses (or you negotiate): Flee, Struggle, or Submit."
+    ]
+  },
+  {
+    "id": "panic_attack",
+    "label": "Panic Attack",
+    "category": "sanity",
+    "description": "Acute panic overwhelms you.",
+    "effects": [
+      "−20% to tests during the episode (typical)."
+    ],
+    "rollMods": {
+      "stats": { "all": -20 },
+      "skills": { "all": -20 },
+      "san": -20
+    }
+  },
+  {
+    "id": "sedated",
+    "label": "Sedated",
+    "category": "chemical",
+    "description": "Alcohol or sedatives dull your edge.",
+    "effects": [
+      "−20% to skill/stat tests.",
+      "+20% to SAN test to sleep or repress an episode (contextual)."
+    ],
+    "rollMods": {
+      "stats": { "all": -20 },
+      "skills": { "all": -20 },
+      "san": 20
+    }
+  },
+  {
+    "id": "stimulated",
+    "label": "Stimulated",
+    "category": "chemical",
+    "description": "Stimulants keep you going.",
+    "effects": [
+      "Temporarily ignore exhaustion penalty.",
+      "Additional doses cost 1D6 WP.",
+      "Can only be applied while Exhausted"
+    ],
+    "rollMods": {
+      "stats": { "all": 20 },
+      "skills": { "all": 20 },
+      "san": 20
+    }
+  },
+  {
+    "id": "alienated",
+    "label": "Alienated",
+    "category": "social",
+    "description": "You offended an important NPC.",
+    "effects": [
+      "All CHA or Persuade tests with that NPC automatically fail until the end of the operation."
+    ]
+  },
+  {
+    "id": "dead",
+    "label": "Dead",
+    "category": "status",
+    "description": "You are reduced to 0 HP.",
+    "effects": [
+      "You have completed the Opera."
+    ]
+  },
+  {
+    "id": "no_will",
+    "label": "No Will",
+    "category": "status",
+    "description": "You collapse from exhaustion at 0 WP.",
+    "effects": [
+      "The Agent might collapse in wracking sobs, or lash out wildly, or simply pass out.",
+      "The Handler controls your Agent until WP returns to 1 or higher and describes the reaction.",
+      "An Agent with 0 WP cannot succeed at any tests, including SAN tests.",
+      "Sooner or later the Agent falls asleep, regardless of any disorders or stimulants, long enough to regain WP."
+    ]
+  },
+  {
+    "id": "unconscious",
+    "label": "Unconscious",
+    "category": "status",
+    "description": "You pass out from pain at <2 HP.",
+    "effects": [
+      "An unconscious agent is helpless and can be killed with a single attack without having to roll.",
+      "At 3 HP or more (or after an hour passes), the agent regains consciousness."
+    ]
+  },
+  {
+    "id": "permanent_insanity",
+    "label": "Permanent Insanity",
+    "category": "status",
+    "description": "You go insane at 0 SAN.",
+    "effects": [
+      "An Agent with 0 SAN becomes the property of the Handler."
+    ]
+  }
+]

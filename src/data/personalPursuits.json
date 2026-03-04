@@ -1,0 +1,150 @@
+[
+  {
+    "id": "fulfill_responsibilities",
+    "name": "Fulfill Responsibilities",
+    "description": "Focus on ordinary obligations and relationships to support one non–Delta Green Bond.",
+    "test": "SAN",
+    "target": "selected_bond",
+    "result": {
+      "failure": {
+        "selected_bond": "+1"
+      },
+      "critical_failure": {
+        "selected_bond": "-1d4",
+        "san": "-1"
+      },
+      "success": {
+        "selected_bond": "+1d6"
+      },
+      "critical_success": {
+        "selected_bond": "+1d6",
+        "san": "+1"
+      }
+    }
+  },
+
+  {
+    "id": "back_to_nature",
+    "name": "Back to Nature",
+    "description": "Extended time alone in a physically active but low‑stress environment.",
+    "test": "SAN",
+    "target": "selected_bond",
+    "pre_effect": {
+      "selected_bond": "-1"
+    },
+    "result": {
+      "failure": {
+        "san": "+1"
+      },
+      "critical_failure": {
+        "san": "-1d4"
+      },
+      "success": {
+        "san": "+1d4"
+      },
+      "critical_success": {
+        "san": "+4"
+      }
+    }
+  },
+
+  {
+    "id": "establish_new_bond",
+    "name": "Establish a New Bond",
+    "description": "Attempt to form a new meaningful relationship.",
+    "test": "CHA×5",
+    "creates_bond": {
+      "score": "ceil(CHA/2)"
+    },
+    "post_effect": {
+      "selected_bond": "-1"
+    }
+  },
+
+  {
+    "id": "therapy",
+    "name": "Go to Therapy",
+    "description": "Systematic deconstruction of mental trauma with a therapist.",
+    "test": "LUCK",
+    "requires_choice": ["tell_truth"],
+    "result": {
+      "truth_success": {
+        "san": "+1d6"
+      },
+      "truth_failure": {
+        "san": "+1"
+      },
+      "lie_success": {
+        "san": "+1d4"
+      },
+      "lie_failure": {}
+    }
+  },
+
+  {
+    "id": "improve_skills_stats",
+    "name": "Improve Skills or Stats",
+    "description": "Extensive training or study to improve skills or stats.",
+    "test": "STAT×5_OR_SKILL",
+    "post_effect": {
+      "selected_bond": "-1"
+    },
+    "on_failure": {
+      "skill": "+3d6",
+      "stat": "+1"
+    }
+  },
+
+  {
+    "id": "personal_motivation",
+    "name": "Personal Motivation",
+    "description": "Indulge in personal motivations.",
+    "test": "SAN",
+    "post_effect": {
+      "selected_bond": "-1"
+    },
+    "result": {
+      "failure": {},
+      "critical_failure": {
+        "san": "-1"
+      },
+      "success": {
+        "san": "+1"
+      },
+      "critical_success": {
+        "san": "+1d4"
+      }
+    }
+  },
+
+  {
+    "id": "special_training",
+    "name": "Special Training",
+    "description": "Study and practice to gain special training.",
+    "post_effect": {
+      "selected_bond": "-1"
+    },
+    "grants": "special_training"
+  },
+
+  {
+    "id": "stay_on_case",
+    "name": "Stay On the Case",
+    "description": "Obsessively re‑examine an old Delta Green case.",
+    "hidden_test": "CRIMINOLOGY_OR_OCCULT",
+    "san": "+1d6-3",
+    "post_effect": {
+      "selected_bond": "-1"
+    }
+  },
+
+  {
+    "id": "study_unnatural",
+    "name": "Study the Unnatural",
+    "description": "Study forbidden knowledge.",
+    "post_effect": {
+      "unnatural": "+1d4",
+      "selected_bond": "-1d4"
+    }
+  }
+]

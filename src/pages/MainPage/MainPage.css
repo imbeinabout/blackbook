@@ -1,0 +1,3079 @@
+.bb-main {
+  overflow: hidden;
+}
+
+.bb-sidebar {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.bb-sidebar * {
+  white-space: normal;
+}
+
+.bb-player-panel {
+  overflow: hidden;
+}
+
+/* Basic reset-ish */
+.bb-app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #050807;
+  color: #9be27b;
+  font-family: "Courier New", monospace;
+  overflow: hidden;
+}
+
+/* HEADER */
+.bb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #1f3b2a;
+  background: #020403;
+}
+
+.bb-header__left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bb-header__hamburger {
+  background: transparent;
+  border: 1px solid #3a6b45;
+  color: #9be27b;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+}
+
+/* Wrapper so the dropdown can be positioned relative to the hamburger */
+.bb-header__hamburger-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown menu panel */
+.bb-header__menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.25rem;
+  min-width: 160px;
+  border: 1px solid #274630;
+  background: #030604;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0;
+}
+
+/* Menu items */
+.bb-header__menu-item {
+  background: transparent;
+  border: none;
+  color: #9be27b;
+  text-align: left;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.bb-header__menu-item:hover {
+  background: #0a1a11;
+}
+
+/* Divider between normal actions and Exit */
+.bb-header__menu-divider {
+  border-top: 1px solid #274630;
+  margin: 0.25rem 0;
+}
+
+/* Exit item: red-ish text */
+.bb-header__menu-item--danger {
+  color: #f88;
+}
+
+.bb-header__menu-item--danger:hover {
+  background: #300;
+  color: #fff;
+}
+
+.bb-header__logo {
+  display: flex;
+  align-items: center;
+}
+
+/* New: image styling */
+.bb-header__logo-img {
+  display: block;
+  height: 32px;      /* tweak this to taste */
+  width: auto;
+}
+
+.bb-header__center {
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  padding-left: 6rem;
+}
+
+.bb-header__tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: -20px;
+}
+
+.bb-header__tab {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #3a6b45;
+  background: #040806;
+  font-size: 0.9rem;
+}
+
+/* Tab with a close button */
+.bb-header__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.bb-header__tab-label {
+  white-space: nowrap;
+}
+
+/* Small X close button on the tab */
+.bb-header__tab-close {
+  background: transparent;
+  border: none;
+  color: #9be27b;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0 0.2rem;
+  cursor: pointer;
+}
+
+.bb-header__tab-close:hover {
+  color: #b02020; /* red-ish to signal closing */
+}
+
+.bb-header__tab {
+  padding: 0.25rem 0.75rem;
+  border: 1px solid #3a6b45;
+  background: #040806;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* Active tab: visually meld with the panel by hiding its bottom border */
+.bb-header__tab--active {
+  background: #06110b;
+  border-bottom-color: #030604; /* match player panel background */
+}
+
+/* Wrapper for the More dropdown inside the tabs row */
+.bb-header__more-wrapper {
+  position: relative;
+}
+
+
+/* More "tab" button */
+.bb-header__tab--more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Vertical menu of overflow tabs */
+.bb-header__more-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.25rem;
+  min-width: 220px;
+  border: 1px solid #274630;
+  background: #030604;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.75);
+  z-index: 1000;
+}
+
+/* Overflow tab row: label + close button */
+.bb-header__more-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Label button inside More menu */
+.bb-header__more-item-label {
+  flex: 1 1 auto;
+  background: transparent;
+  border: none;
+  color: #9be27b;
+  text-align: left;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.bb-header__more-item-label:hover {
+  background: #0a1a11;
+}
+
+/* Close button for overflow tab */
+.bb-header__more-item-close {
+  flex: 0 0 auto;
+  background: transparent;
+  border: none;
+  color: #9be27b;
+  font-size: 0.9rem;
+  padding: 0 0.5rem;
+  cursor: pointer;
+}
+
+.bb-header__more-item-close:hover {
+  color: #b02020; /* red-ish, similar to main tab close hover */
+}
+
+/* MAIN BODY */
+.bb-main {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* SIDEBAR */
+.bb-sidebar {
+  flex: 0 0 auto;      /* do NOT grow, do NOT shrink */
+  width: max-content;  /* size to content */
+  max-width: 260px;    /* safety cap (adjust if you want) */
+  min-width: 260px;
+
+  border-right: 1px solid #1f3b2a;
+  padding: 0.25rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.bb-sidebar .bb-form-row--inline > *,
+.bb-sidebar .bb-skill-alloc-row > *,
+.bb-sidebar .bb-skill-list__item > *,
+.bb-sidebar .bb-profession-meta > * {
+  min-width: 0;
+}
+
+.bb-sidebar-section__title,
+.bb-section-title,
+.bb-form-label__text {
+  overflow-wrap: anywhere;
+}
+
+.bb-sidebar button {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.bb-sidebar-center {
+  display: flex;
+  justify-content: center;
+}
+
+.bb-sidebar-section {
+  margin-bottom: 0.5rem;
+}
+
+.bb-sidebar-section__header {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem;
+  background: #06110b;
+  color: #9be27b;
+  border: 1px solid #274630;
+  padding-left: 0;
+  padding-right: 0;
+  cursor: pointer;
+}
+
+/* Make the title take the left side */
+.bb-sidebar-section__title {
+  flex: 1 1 auto;
+  text-align: left;
+}
+
+/* Keep icon snug on the right */
+.bb-sidebar-section__icon {
+  flex: 0 0 auto;
+  margin-left: 0.5rem;
+}
+
+.bb-sidebar-section__body {
+  border: 1px solid #274630;
+  border-top: none;
+  padding: 0.5rem;
+  background: #030604;
+  font-size: 0.85rem;
+  min-height: 0;
+}
+
+.bb-sidebar .bb-skills-package-select__control {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.bb-sidebar-section__header--locked {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.bb-sidebar-section__body--locked {
+  opacity: 0.7;
+}
+
+.bb-sidebar-locked-msg {
+  font-size: 0.8rem;
+  color: var(--bb-warning);
+}
+
+.bb-sidebar-play-controls {
+  margin-top: 0.75rem;                  /* space from last section */
+  padding-top: 0.75rem;
+  border-top: 1px solid #1f3b2a;        /* subtle divider */
+  display: flex;
+  justify-content: center;              /* center the button */
+}
+
+.bb-sidebar-play-controls .bb-button {
+  min-width: 180px;                     /* optional: make it nice and wide */
+  text-align: center;
+}
+
+/* --- Sidebar generic typography --- */
+.bb-section-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* --- Toggle-style radios (Assigned / Rolled, etc.) --- */
+
+.bb-toggle-group {
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.bb-toggle {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+  user-select: none;
+}
+
+.bb-toggle__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bb-toggle__pill {
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid #3a6b45;
+  background: #050807;
+  color: #4f7f55;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: background 0.15s ease-out, color 0.15s ease-out,
+    box-shadow 0.15s ease-out, border-color 0.15s ease-out;
+}
+
+.bb-toggle__input:checked + .bb-toggle__pill {
+  background: #07140d;
+  color: #9be27b;
+  border-color: #9be27b;
+  box-shadow: 0 0 4px rgba(155, 226, 123, 0.5);
+}
+
+.bb-toggle__pill:hover {
+  border-color: #9be27b;
+}
+
+/* --- Generic form grid for sidebar sections --- */
+
+.bb-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.bb-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.bb-form-row--stat {
+  padding: 0.25rem 0.35rem;
+  border: 1px solid #1f3b2a;
+  background: #020403;
+}
+
+.bb-form-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.bb-form-label__text {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+
+.bb-form-label--df {
+  margin-top: 0.15rem;
+}
+
+/* Identity section tweaks */
+.bb-identity-section {
+  font-size: 0.8rem;
+}
+
+.bb-form-row--sex {
+  margin-top: 0.35rem;
+}
+
+.bb-input.bb-input--sex-other {
+  margin-top: 0.25rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Inputs specific to stats */
+
+.bb-select.bb-select--stat {
+  width: 100%;
+  background: #050807;
+}
+
+.bb-input.bb-input--df {
+  width: 100%;
+}
+
+/* Alert block for errors/warnings */
+
+.bb-alert {
+  margin-top: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.bb-alert--error {
+  background: #2a0505;
+  border: 1px solid #b02020;
+  color: #ffaaaa;
+}
+
+/* Derived stats display */
+
+.bb-derived-stats {
+  margin-top: 0.75rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #274630;
+  background: #020403;
+  font-size: 0.8rem;
+}
+
+.bb-derived-stats__title {
+  margin: 0 0 0.35rem 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bb-derived-stats__line {
+  margin: 0.1rem 0;
+}
+
+/* --- Profession section --- */
+
+.bb-profession-section {
+  font-size: 0.8rem;
+}
+
+.bb-section-help {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.bb-profession-actions {
+  margin-top: 0.75rem;
+}
+
+.bb-section-note {
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Buttons */
+
+.bb-button.bb-button--primary {
+  background: #07140d;
+  border-color: #3a6b45;
+}
+
+.bb-button.bb-button--primary:hover:not(:disabled) {
+  background: #0a1a11;
+  border-color: #9be27b;
+}
+
+.bb-button.bb-button--ghost {
+  background: transparent;
+  color: #9be27b;
+  border-color: #3a6b45;
+}
+
+.bb-button.bb-button--ghost:hover:not(:disabled) {
+  background: #050807;
+}
+
+/* Profession selector layout */
+
+.bb-profession-selector {
+  border: 1px solid #1f3b2a;
+  background: #020403;
+  padding: 0.5rem;
+}
+
+.bb-profession-selector__title {
+  margin: 0 0 0.35rem 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Compact form row in narrow sidebar – stack vertically */
+.bb-form-row--compact {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+}
+
+/* Force the manage button to fit inside the sidebar */
+.bb-profession-selector__manage-btn {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  white-space: normal;      /* allow wrapping */
+  font-size: 0.7rem;        /* slightly smaller to fit text */
+  padding: 0.25rem 0.35rem; /* tighter padding */
+}
+
+.bb-select.bb-select--profession {
+  width: 100%;
+}
+
+/* Profession meta (bonds, description) */
+
+.bb-profession-meta {
+  margin-top: 0.5rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid #1f3b2a;
+}
+
+.bb-profession-meta__line {
+  font-size: 0.8rem;
+}
+
+.bb-profession-meta__label {
+  font-weight: bold;
+}
+
+.bb-profession-meta__description {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* Profession blocks (fixed skills, choice groups) */
+
+.bb-profession-block {
+  margin-top: 0.6rem;
+}
+
+.bb-profession-block__title {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* --- Skills sidebar section --- */
+
+.bb-skills-section {
+  font-size: 0.8rem;
+}
+
+.bb-subsection-title {
+  margin: 0.5rem 0 0.25rem 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bb-skills-card {
+  border: 1px solid #1f3b2a;
+  background: #020403;
+  padding: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.bb-skills-card--inline {
+  margin-top: 0.5rem;
+}
+
+.bb-skills-subpanel {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.bb-form-row--inline {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+/* Make inline inputs shrink within the sidebar */
+.bb-form-row--inline .bb-input,
+.bb-form-row--inline .bb-input.bb-input--subtype {
+  flex: 1 1 auto;
+  max-width: 100%;
+}
+
+/* Safety: all bb-inputs respect container width */
+.bb-input,
+.bb-input.bb-input--subtype {
+  max-width: 100%;
+}
+
+.bb-input:disabled,
+.bb-select:disabled,
+.bb-input--df:disabled {
+  background: #2a2a2a !important;
+  color: #666 !important;
+  border-color: #444 !important;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.bb-skills-apply-btn,
+.bb-skills-add-btn {
+  margin-top: 0.4rem;
+  align-self: stretch;
+}
+
+.bb-select.bb-select--skills-package {
+  width: 100%;
+}
+
+.bb-skills-allocation {
+  margin-top: 0.25rem;
+}
+
+.bb-skills-summary {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+}
+
+/* Skill lists */
+
+.bb-skill-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bb-skill-list__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+}
+
+.bb-skill-list__name {
+  font-weight: bold;
+}
+
+.bb-skill-list__subtype {
+  font-style: italic;
+}
+
+.bb-skill-list__value {
+  margin-left: 0.15rem;
+}
+
+/* Typed subtype input */
+
+.bb-input.bb-input--subtype {
+  min-width: 80px;
+  margin: 0 0.25rem;
+}
+
+/* Choice groups */
+
+.bb-choice-group {
+  margin-top: 0.5rem;
+}
+
+.bb-choice-group__header {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+}
+
+.bb-choice-group__list {
+  list-style: none;
+  margin: 0.25rem 0 0 0;
+  padding: 0;
+}
+
+.bb-choice-group__item {
+  margin-bottom: 0.2rem;
+}
+
+/* Terminal checkbox style */
+
+.bb-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.bb-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.bb-checkbox__box {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 2px;
+  border: 1px solid #274630;
+  background: #050807;
+  box-shadow: inset 0 0 0 1px #020403;
+  position: relative;
+}
+
+.bb-checkbox__input:checked + .bb-checkbox__box {
+  background: #07140d;
+  border-color: #9be27b;
+  box-shadow: 0 0 3px rgba(155, 226, 123, 0.5);
+}
+
+.bb-checkbox__input:checked + .bb-checkbox__box::after {
+  content: "✔";
+  font-size: 0.6rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -52%);
+  color: #9be27b;
+}
+
+/* Size variants */
+.bb-checkbox--small .bb-checkbox__box {
+  width: 0.7rem;
+  height: 0.7rem;
+}
+
+.bb-checkbox--tiny .bb-checkbox__box {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+
+.bb-checkbox__label {
+  font-size: 0.8rem;
+}
+
+/* Align advancement checkbox nicely beside skills */
+.bb-skill-advancement.bb-checkbox {
+  margin-right: 0.25rem;
+}
+
+
+/* Allocation rows in the SKILLS sidebar section */
+.bb-skill-alloc-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  min-width: 0; /* allow children to shrink inside sidebar */
+}
+
+.bb-skill-alloc-label {
+  flex: 1 1 auto;
+  padding-right: 0.5rem;
+  white-space: normal;        /* allow wrapping */
+  word-break: break-word;     /* break long strings if needed */
+}
+
+.bb-skill-alloc-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;             /* keep buttons visible */
+}
+
+.bb-skill-alloc-button {
+  min-width: 1.5rem;
+  padding: 0;
+  line-height: 1;
+  /* Optional: inherit your existing button styling */
+  background: #111;
+  color: #9f9;
+  border: 1px solid #555;
+}
+
+.bb-skill-alloc-button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  background: #050805;  /* slightly darker */
+  color: #4f6f4f;       /* more muted green */
+  border-color: #333;
+}
+
+.bb-skill-alloc-value {
+  min-width: 2.5rem;
+  text-align: right;
+}
+
+/* PLAYER PANEL */
+.bb-player-panel {
+  flex: 1;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* TOP: 3 columns */
+.bb-player-panel__top {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1.2fr;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  min-height: 0;
+}
+
+.bb-top-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* CARDS */
+.bb-card {
+  border: 1px solid #274630;
+  background: #030604;
+}
+
+.bb-card__header {
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid #274630;
+  background: #06110b;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bb-card__body {
+  padding: 0.5rem;
+  font-size: 0.85rem;
+}
+/* PERSONAL DATA table */
+.bb-personal-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.bb-personal-table td {
+  padding: 0.15rem 0.35rem 0.1rem 0;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.bb-personal-table__label {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.bb-personal-table__value {
+  display: block;
+}
+
+/* STAT buttons row inside PERSONAL DATA */
+.bb-personal-stats-row {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+
+/* Make the six buttons share the row evenly */
+.bb-personal-stats-row .bb-stat-button {
+  flex: 1 1 0;
+}
+
+/* STATS grid */
+.bb-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+.bb-stat-button {
+  background: #07140d;
+  color: #9be27b;
+  border: 1px solid #274630;
+  padding: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.bb-stat-button__label {
+  font-weight: bold;
+}
+
+.bb-stat-button__value {
+  font-size: 1rem;
+}
+
+.bb-stat-button__x5 {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.bb-stat-button__df {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: #8f8f8f;
+}
+
+/* STATUS */
+.bb-status {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.bb-status__armor {
+  min-width: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+}
+
+.bb-status__helmet,
+.bb-status__body-armor {
+  position: relative;
+  border: 1px dashed #274630;
+  padding: 0.25rem;
+  text-align: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  min-height: 50px; /* ensure space for image + text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bb-status__helmet {
+  background-image: url("../../assets/helmet-nobg.png");
+}
+
+.bb-status__body-armor {
+  background-image: url("../../assets/vest-nobg.png");
+}
+
+.bb-status__armor-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.15rem;
+}
+
+.bb-status__armor-value {
+  display: inline-block;
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+  border: 1px solid #274630;
+  background: rgba(5, 8, 7, 0.9);
+  font-size: 0.75rem;
+}
+
+/* Tracks container: stack rows vertically */
+.bb-status__tracks {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Each row: [square button] [track] */
+.bb-status__row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 0.4rem;
+}
+
+/* Left column: HP/WP/SAN buttons */
+.bb-status__track-controls {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+/* Make buttons stretch to roughly match track row height */
+.bb-status__track-btn {
+  width: 1.8rem;
+  height: 1.8rem;
+  padding: 0;
+  border-radius: 4px; /* or 50% if you prefer circular */
+  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bb-button.bb-status__track-btn {
+  font-size: 1.5rem;
+  padding: 0;
+}
+
+/* Right column: track rows stack vertically */
+.bb-status__track-list {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Tracks */
+.bb-track {
+  font-size: 0.75rem;
+}
+
+.bb-track__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Outer bar */
+.bb-track__bar {
+  position: relative;
+  margin-top: 0.1rem;
+  height: 0.45rem;
+  background: #09150f;
+  border: 1px solid #274630;
+  overflow: hidden;
+}
+
+/* Fill portion */
+.bb-track__fill {
+  height: 100%;
+  background: #1f8c3a; /* green fill */
+  transition: width 0.25s ease-out;
+}
+
+/* SAN-specific fill color */
+.bb-track__fill--san {
+  background: #b08c20; /* amber-ish for SAN */
+}
+
+/* Breaking Point number above the SAN bar */
+.bb-track__bp-label {
+  position: absolute;
+  bottom: 100%;          /* place it above the bar */
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #b02020;        /* same color as BP marker */
+  white-space: nowrap;
+  pointer-events: none;  /* text not clickable */
+}
+
+.bb-track__bp {
+  position: absolute;
+  top: -1px;
+  width: 2px;
+  height: calc(100% + 2px);
+  background: #b02020; /* red marker */
+  pointer-events: auto;
+}
+
+.bb-track--san {
+  position: relative; /* ensure BP label positions correctly */
+}
+
+.bb-track--san .bb-track__bar {
+  overflow: visible; /* allow BP marker to overflow */
+}
+
+.bb-track--san .bb-track__bar--san {
+  background: #141009;
+}
+
+/* Ensure the SAN bar can position children absolutely */
+.bb-track__bar.bb-track__bar--san {
+  position: relative;
+  overflow: visible;
+}
+
+/* Green SAN fill (you likely already have a style for this) */
+.bb-track__fill.bb-track__fill--san {
+  position: relative;
+  z-index: 1;
+}
+
+/* New: Unnatural bleed zone on the right */
+.bb-track__bleed.bb-track__bleed--san {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to left,
+    rgba(176, 32, 32, 0.85),
+    rgba(176, 32, 32, 0.4)
+  );
+  z-index: 2;
+  pointer-events: auto;
+}
+
+.bb-track__bp,
+.bb-track__bp-label {
+  position: absolute;
+  z-index: 3;
+}
+
+.bb-track__edit-btn {
+  margin-left: 0.25rem;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+/* Adaptations */
+.bb-status__adaptations {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/*.bb-adaptations-inline {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.bb-adaptation-inline-row {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+} */
+
+/* Adaptation rows: label | checkboxes | status button */
+.bb-adaptation-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  gap: 1rem; /* space between label, checks, and status */
+}
+
+.bb-adaptation-row__label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex: 0 0 auto;
+}
+
+.bb-adaptation-row__checks {
+  display: flex;
+  gap: 0.25rem;
+  flex: 0 0 auto;
+}
+
+.bb-adaptation-row__status {
+  flex: 0 0 auto;
+  margin-left: auto; /* push status/ADAPTED button to far right */
+}
+
+.bb-adapt-label {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.bb-adapt-adapted {
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+  color: var(--bb-accent);
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+.bb-adapt-missing {
+  opacity: 0.5;
+}
+
+/* Weapons table */
+.bb-bonds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.bb-bonds-table th,
+.bb-bonds-table td {
+  border-bottom: 1px solid var(--bb-border-soft);
+  padding: 0.2rem 0.35rem;
+}
+
+.bb-bonds-table th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bb-text-muted);
+}
+
+.bb-bonds-table__row {
+  background: #06110b;
+}
+
+.bb-bonds-table__row .bb-bond-desc {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* 2x2 grid for action buttons in the modals card */
+.bb-modals__buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem;
+}
+
+/* Ensure buttons fill their grid cell nicely */
+.bb-modals__buttons .bb-button {
+  width: 100%;
+  justify-content: center;
+}
+
+
+/* Adaptations to Sanity card */
+
+/*.bb-card--adaptations { */
+  /* same base styling as other .bb-card; reserved for tweaks */
+/*}*/
+
+.bb-adaptations {
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;   /* evenly space both columns */
+  gap: 1rem;                         /* optional */
+}
+
+.bb-adaptations__row {
+  display: flex;
+  flex-direction: column;            /* label above squares */
+  align-items: flex-start;
+}
+
+.bb-adaptations__label {
+  font-weight: bold;
+}
+
+.bb-adaptations__track {
+  opacity: 0.9;
+}
+
+.bb-adaptations__box {
+  display: inline-block;
+  margin-right: 0.25rem;
+}
+
+.bb-adaptations__box--filled {
+  color: var(--bb-accent);
+}
+
+.bb-adaptations__badge--adapted {
+  margin-left: 0.5rem;
+  padding: 0 0.3rem;
+  border: 1px solid var(--bb-accent);
+  font-size: 0.65rem;
+}
+
+/* MOTIVATIONS & DISORDERS fills the column above the buttons card */
+.bb-card--mot-dis {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;  /* take all available space in bb-top-col--right */
+  min-height: 0;
+}
+
+/* Only the MOTIVATIONS & DISORDERS body scrolls if content is long */
+.bb-card--mot-dis .bb-card__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.bb-motdis-flex {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.bb-motdis-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.bb-motdis-subhead {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.bb-motdis-empty {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Motivations list inside MOTIVATIONS & DISORDERS card */
+.bb-motivations-list {
+  margin: 0.15rem 0 0 0;
+  padding-left: 0;          /* bullets handled via layout, not default list */
+  list-style: none;
+}
+
+.bb-motivations-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.bb-motivation-label {
+  word-break: break-word;
+}
+
+.bb-motivation--crossed .bb-motivation-label {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Disorders list inside MOTIVATIONS & DISORDERS card */
+.bb-disorders-list {
+  margin: 0.15rem 0 0 0;
+  padding-left: 0;          /* bullets handled via layout, not default list */
+  list-style: none;
+}
+
+.bb-disorders-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
+.bb-disorder-label {
+  word-break: break-word;
+}
+
+.bb-disorder--cured .bb-disorder-label {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* BOTTOM: two columns */
+.bb-player-panel__bottom {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr;
+  gap: 0.5rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bb-sidebar .bb-skills-grid {
+  column-width: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* SKILLS grid */
+.bb-skills-grid {
+  /* Let the browser create as many columns as fit,
+     each about this width, in column-major order */
+  column-width: 180px;
+  column-gap: 0.25rem;
+  display: block;
+}
+
+.bb-skills-grid .bb-skill-cell {
+  margin-bottom: 0.2rem; 
+  break-inside: avoid-column;
+}
+
+.bb-card--skills-list .bb-card__body {
+  padding-bottom: 0.25rem; /* or 0 */
+}
+
+/* Skills card should fill the entire left column */
+.bb-card--skills-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;  /* take all vertical space in the left column */
+  min-height: 0;
+}
+
+.bb-card--skills-list .bb-card__body {
+  flex: 1 1 auto;      /* fill remaining height inside card */
+  min-height: 0;       /* allow internal content to shrink/scroll */
+  overflow-y: auto;    /* scroll only when skill list is too tall */
+  overflow-x: hidden;
+}
+
+/* Each skill cell stays together in a column */
+.bb-skill-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  break-inside: avoid-column;
+  margin-bottom: 0.25rem;
+}
+
+/* Rollable skill button */
+.bb-skill-button {
+  flex: 1 1 auto;
+  width: 100%; /* uniform width */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.2rem 0.4rem;
+  border: 1px solid #274630;
+  background: #07140d;   /* match STATISTICS buttons */
+  color: #9be27b;        /* match STATISTICS buttons */
+  cursor: pointer;
+  min-width: 2rem;
+}
+
+.bb-skill-button__label {
+  margin-right: 0.25rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.bb-skill-button__value {
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+/* Advancement checkbox */
+.bb-skill-advancement {
+  display: flex;
+  align-items: center;
+  margin-right: 0.25rem;
+  font-size: 0.65rem;
+  opacity: 0.85;
+}
+
+.bb-skill-advancement input {
+  margin: 0;
+}
+
+/* Left bottom column: SKILLS occupies full height */
+.bb-bottom-col--left {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;  /* allow inner card to shrink within bottom grid row */
+}
+
+/* Right bottom column: tabs + special training */
+.bb-bottom-col--right {
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* allow inner flex children to shrink */
+}
+
+/* Tabs */
+.bb-tabs {
+  display: flex;
+  border-bottom: 1px solid #274630;
+}
+
+/* Wrapper: tab content area that flexes between tabs and SPECIAL TRAINING */
+.bb-tabs-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;               /* allows .bb-tabs__content to scroll */
+  display: flex;
+  flex-direction: column;
+}
+
+.bb-tabs__tab {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid #274630;
+  border-bottom: none;
+  margin-right: 0.25rem;
+  background: #030604;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.bb-tabs__tab--active {
+  background: #06110b;
+  overflow-y: auto;
+}
+
+.bb-header__tab--add {
+  padding: 0 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.bb-tabs__content {
+  border: 1px solid #274630;
+  padding: 0.5rem;
+  background: #030604;
+  font-size: 0.85rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.bb-tabs__content.bb-terminal-tab {
+  overflow: hidden;
+}
+
+/* Weapons tab container */
+.bb-weapons-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bb-weapons-tab__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.bb-weapons-tab__title {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.bb-weapons-tab__body {
+  flex: 1;
+  overflow: auto;
+}
+
+.bb-weapons-tab__empty {
+  font-size: 0.8rem;
+  color: var(--bb-text-muted);
+}
+
+/* Weapons table */
+.bb-weapons-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.bb-weapons-table th,
+.bb-weapons-table td {
+  border-bottom: 1px solid var(--bb-border-soft);
+  padding: 0.2rem 0.35rem;
+}
+
+.bb-weapons-table th {
+  text-align: left;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bb-text-muted);
+}
+
+.bb-weapons-table__row--equipped {
+  background: #06110b;
+}
+
+/* Weapons modal layout */
+/* .bb-weapons-modal__dialog {
+  /* piggy-back on .bb-load-modal__dialog size rules 
+} */
+
+/* Weapons modal header with filter */
+.bb-weapons-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.bb-weapons-modal__filter {
+  font-size: 0.8rem;
+}
+
+.bb-weapons-modal__filter .bb-select {
+  min-width: 140px;
+}
+
+/* Optional message when filter has no matches */
+.bb-weapons-modal__empty {
+  font-size: 0.8rem;
+  color: var(--bb-text-muted);
+}
+
+.bb-weapons-modal__body {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Left list */
+.bb-weapons-modal__list {
+  flex: 0 0 32%;
+  max-height: 380px;
+  overflow-y: auto;
+  border-right: 1px solid var(--bb-border-soft);
+  padding-right: 0.75rem;
+}
+
+.bb-weapons-modal__list-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bb-weapons-modal__list-item {
+  margin-bottom: 0.15rem;
+}
+
+.bb-weapons-modal__list-button {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 0.25rem 0.4rem;
+}
+
+.bb-weapons-modal__list-item--selected .bb-weapons-modal__list-button {
+  background: var(--bb-accent-soft);
+  color: #fff;
+}
+
+.bb-weapons-modal__list-name {
+  display: block;
+  font-size: 0.85rem;
+}
+
+.bb-weapons-modal__list-meta {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--bb-text-muted);
+}
+
+.bb-weapons-modal__list-header {
+  margin-bottom: 0.4rem;
+  display: flex;
+  justify-content: flex-start;
+}
+.bb-weapons-custom-modal__body {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Right details */
+.bb-weapons-modal__details {
+  flex: 1;
+  max-height: 380px;
+  overflow-y: auto;
+}
+
+.bb-weapons-modal__weapon-name {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.bb-weapons-modal__weapon-desc {
+  margin: 0 0 0.5rem;
+  font-size: 0.8rem;
+}
+
+.bb-weapons-modal__details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.4rem 1rem;
+}
+
+.bb-weapons-modal__field-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bb-text-muted);
+}
+
+.bb-weapons-modal__field-value {
+  font-size: 0.85rem;
+}
+
+/* Gear quantity controls */
+.bb-gear-qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.bb-gear-qty__value {
+  min-width: 2rem;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+/* DetailsTab layout */
+.bb-details-tab__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+/* Photo block */
+.bb-photo-dropzone {
+  border: 1px dashed var(--bb-border-soft);
+  border-radius: 4px;
+  padding: 0.75rem;
+  text-align: center;
+  cursor: pointer;
+  background: #020605;
+}
+
+.bb-photo-dropzone--drag-over {
+  border-color: var(--bb-accent-soft);
+  background: #04110b;
+}
+
+.bb-photo-dropzone__image {
+  max-width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Text areas reuse your existing .bb-textarea / .bb-field-group /.bb-field-label */
+
+/* Special Training */
+.bb-card--special-training {
+  margin-top: 0.75rem;
+}
+
+.bb-card--special-training .bb-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bb-card--special-training-wide {
+  margin-top: 0.5rem;
+}
+
+/* FOOTER */
+.bb-footer {
+  border-top: 1px solid #1f3b2a;
+  padding: 0.25rem 0.5rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.bb-footer__left {
+  width: 160px;
+}
+
+.bb-footer__center {
+  flex: 1;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.bb-footer__right {
+  width: 100px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.bb-status-light {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  border: 1px solid #274630;
+}
+
+.bb-status-light--ok {
+  background: #1f8c3a;
+}
+
+.bb-status-light--warn {
+  background: #b08c20;
+}
+
+.bb-status-light--err {
+  background: #b02020;
+}
+
+
+/* Generic terminal-style button */
+.bb-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.8rem;
+  border: 1px solid #3a6b45;
+  background: #07140d;
+  color: #9be27b;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bb-button:hover {
+  background: #0a1c14;
+}
+
+.bb-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Slightly smaller, compact button (for cramped spaces) */
+.bb-button--small {
+  padding: 0.15rem 0.4rem;
+  font-size: 0.75rem;
+}
+
+/* APPLY buttons — green, prominent */
+.bb-button--apply {
+  background: #103010;
+  color: #c4f0c4;
+  border: 1px solid var(--bb-border);
+}
+
+.bb-button--apply:hover:not(:disabled) {
+  background: #145014;
+}
+
+/* DANGER / RESET buttons — destructive */
+.bb-button--danger {
+  background: #300;
+  color: #f88;
+  border: 1px solid #a33;
+}
+
+.bb-button--danger:hover:not(:disabled) {
+  background: #500;
+  color: #fff;
+  border-color: #d55;
+}
+
+.bb-button--danger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bb-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 930;
+}
+
+.bb-modal__dialog {
+  width: 260px;
+  max-width: 90vw;
+  border: 1px solid #274630;
+  background: #030604;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+  padding: 0.75rem;
+}
+
+/* Make the Load Agent modal much larger than the default tiny dialog */
+.bb-modal__dialog.bb-load-modal__dialog {
+  width: 96%;
+  max-width: 1100px;
+  max-height: 80vh;
+}
+
+.bb-modal__title {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bb-load-modal__dialog .bb-modal__title {
+  text-align: center;
+}
+
+.bb-modal__body {
+  margin-bottom: 0.5rem;
+}
+
+.bb-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Wider, scrollable dialog for StatusAdjustModal (SAN flow) */
+.bb-modal__dialog.bb-status-adjust-modal__dialog {
+  width: 96%;
+  max-width: 450px;
+  min-width: 0;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Make body scroll when content is tall */
+.bb-status-adjust-modal__body {
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Small layout helpers inside SAN sections */
+.bb-status-adjust-san {
+  margin-top: 0.75rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--bb-border-soft);
+}
+
+.bb-status-adjust-projection {
+  margin-top: 0.75rem;
+}
+
+.bb-status-adjust-projection__row {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.bb-status-adjust-bonds {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Custom footer layout for the Load Agent modal */
+.bb-load-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* left group, center group, right group */
+}
+
+/* Each region (left / center / right) contains its own buttons */
+.bb-load-modal__footer-left,
+.bb-load-modal__footer-center,
+.bb-load-modal__footer-right {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Center group should be visually centered */
+.bb-load-modal__footer-center {
+  justify-content: center;
+  flex: 1 1 auto;
+}
+
+/* Left and right can hug the edges */
+.bb-load-modal__footer-left {
+  justify-content: flex-start;
+}
+
+.bb-load-modal__footer-right {
+  justify-content: flex-end;
+}
+
+.dv-button-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: stretch;
+  margin-top: 0.5rem;
+}
+
+/* Remove default browser number spinners */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  appearance: textfield;
+  position: relative;
+  padding-right: 1.6rem; /* room for custom arrows */
+}
+
+/* Custom arrow container */
+/* Make spinner container match input height tightly */
+.bb-spinner {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  bottom: 2px;
+  width: 1rem;            /* narrower */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 1px solid var(--bb-border);
+  padding: 0;             /* remove extra vertical padding */
+  background: #050807;
+}
+
+/* Shrink arrow buttons */
+.bb-spinner-btn {
+  flex: none;              /* no forced stretching */
+  height: 50%;
+  line-height: 0.75rem;
+  font-size: 0.55rem;      /* smaller symbols */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--bb-accent);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+/* Hover effect (subtle) */
+.bb-spinner-btn:hover:not(:disabled) {
+  background: #0a1a11;
+  color: #b7ff9a;
+  box-shadow: 0 0 3px var(--bb-accent-soft);
+}
+
+.bb-spinner-btn:hover {
+  background: #0a1a11;
+  color: #b7ff9a;
+  box-shadow: 0 0 4px #3a6b45;
+}
+.bb-spinner-btn:active {
+  background: #0f2a1c;
+}
+
+/* Disabled state */
+input[type="number"]:disabled + .bb-spinner .bb-spinner-btn {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Floating d100 launcher button */
+.bb-dice-button {
+  position: fixed;
+  right: 2rem;
+  bottom: 2.75rem;
+  z-index: 900;
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  font-weight: bold;
+  background: var(--bb-panel-alt);
+  border-color: var(--bb-accent-soft);
+  color: var(--bb-accent);
+}
+
+.bb-dice-button:hover {
+  border-color: var(--bb-accent);
+}
+
+/* Dice tray panel */
+.bb-dice-tray {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 320px;
+  max-width: 80vw;
+  height: 100vh;
+  background: var(--bb-panel-bg);
+  border-left: 1px solid var(--bb-border);
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.8);
+  transform: translateX(100%);
+  transition: transform 0.18s ease-out;
+  z-index: 950;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+}
+
+.bb-dice-tray--open {
+  transform: translateX(0);
+}
+
+/* Header */
+.bb-dice-tray__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--bb-border-soft);
+  background: var(--bb-panel-alt);
+}
+
+.bb-dice-tray__title {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.8rem;
+}
+
+.bb-dice-tray__close {
+  background: transparent;
+  border: 1px solid var(--bb-border-soft);
+  border-radius: 3px;
+  padding: 0 0.4rem;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Controls */
+.bb-dice-tray__controls {
+  padding: 0.4rem 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--bb-border-soft);
+}
+
+.bb-dice-tray__reset {
+  width: 100%;
+  margin-bottom: 0.4rem;
+}
+
+.bb-dice-tray__dice-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.bb-dice-tray__die-btn {
+  flex: 1 1 calc(33.3% - 0.25rem);
+  text-align: center;
+  padding: 0.2rem 0;
+}
+
+/* Current roll area (placeholder for 3D dice later) */
+.bb-dice-tray__current {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--bb-border-soft);
+  background: #020403;
+}
+
+.bb-dice-tray__current-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.3rem;
+}
+
+.bb-dice-tray__current-formula {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bb-text-muted);
+}
+
+.bb-dice-tray__current-total {
+  font-size: 0.8rem;
+}
+
+.bb-dice-tray__current-value {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Log */
+.bb-dice-tray__log {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bb-dice-tray__log-header {
+  padding: 0.35rem 0.75rem;
+  border-bottom: 1px solid var(--bb-border-soft);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.bb-dice-tray__log-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.4rem 0.75rem 0.6rem;
+}
+
+.bb-dice-tray__log-empty {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--bb-text-muted);
+}
+
+.bb-dice-tray__log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bb-dice-tray__log-item {
+  padding: 0.25rem 0;
+  border-bottom: 1px dotted var(--bb-border-soft);
+}
+
+.bb-dice-tray__log-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.bb-dice-tray__log-label {
+  font-size: 0.8rem;
+}
+
+.bb-dice-tray__log-result {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.bb-dice-tray__log-sub {
+  font-size: 0.7rem;
+  color: var(--bb-text-muted);
+}
+
+/* Subtle dark overlay behind the dice tray */
+.bb-dice-tray-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 940; /* below tray (950), above rest of UI */
+}
+
+/* Footer under log for the Clear Log button */
+.bb-dice-tray__log-footer {
+  padding: 0.35rem 0.75rem 0.6rem;
+  border-top: 1px solid var(--bb-border-soft);
+  background: #020403;
+}
+
+.bb-dice-tray__clear-log {
+  width: 100%;
+}
+
+/* Current result highlighting */
+.bb-dice-tray__current-value {
+  position: relative;
+}
+
+.bb-dice-tray__current-value--success,
+.bb-dice-tray__current-value--crit-success {
+  color: var(--bb-accent); /* green */
+}
+
+.bb-dice-tray__current-value--failure,
+.bb-dice-tray__current-value--crit-failure {
+  color: var(--bb-danger); /* red */
+}
+
+/* EXTRA emphasis for critical results */
+.bb-dice-tray__current-value--crit-success {
+  border: 1px solid var(--bb-accent);
+  box-shadow: 0 0 8px rgba(155, 226, 123, 0.7);
+  background: rgba(9, 21, 15, 0.8);
+}
+
+.bb-dice-tray__current-value--crit-failure {
+  border: 1px solid var(--bb-danger);
+  box-shadow: 0 0 8px rgba(176, 32, 32, 0.7);
+  background: rgba(40, 5, 5, 0.8);
+}
+
+.bb-dice-tray__current-outcome {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+}
+
+/* Log outcome text */
+.bb-dice-tray__log-outcome {
+  margin-left: 0.4rem;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.bb-card__body.bb-san-luck__body {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.bb-button--san-test {
+  background: linear-gradient(145deg, #0a0f0a, #111c11);
+  border: 1px solid #3ca76a;
+  color: #9be27b;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-shadow: 0 0 6px rgba(155, 226, 123, 0.6);
+  box-shadow: 0 0 8px rgba(60, 167, 106, 0.4);
+  transition: all 0.15s ease;
+}
+
+.bb-button--san-test:hover:not(:disabled) {
+  background: #0e1f12;
+  border-color: #57ff9e;
+  box-shadow: 0 0 12px rgba(87, 255, 158, 0.7),
+              inset 0 0 10px rgba(57, 255, 158, 0.3);
+  color: #c7ffde;
+}
+
+.bb-button--san-test:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.bb-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: #cc0000;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 1000;
+}
+
+.bb-toast {
+  animation: toast-in 150ms ease-out;
+}
+
+@keyframes toast-in {
+  from {
+    transform: translateY(8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Aliases modal layout */
+.bb-aliases-modal__dialog {
+  /* piggy-back on base .bb-modal__dialog */
+  width: 96%;
+  max-width: 900px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollable area for the aliases table */
+.bb-aliases-modal__table-wrapper {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+/* Aliases table tweaks (inherits base look from .bb-weapons-table) */
+.bb-aliases-table__active-col {
+  width: 4rem;
+  text-align: center;
+}
+
+.bb-aliases-table__actions-col {
+  width: 6rem;
+  text-align: center;
+}
+
+.bb-aliases-table__active-cell,
+.bb-aliases-table__actions-cell {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Inputs should use the full cell width */
+.bb-aliases-table__name-input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.bb-aliases-table__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 2.2rem;
+}
+/* Active alias row highlight */
+.bb-aliases-table__row--active {
+  background: #06110b;              /* subtle green-ish background */
+}
+
+.bb-aliases-table__row--active td {
+  border-bottom-color: var(--bb-accent-soft); /* slightly brighter row divider */
+}
+
+/* Optional: emphasize the name of active aliases */
+.bb-aliases-table__row--active .bb-aliases-table__name-input {
+  border-color: var(--bb-accent);
+  box-shadow: 0 0 3px rgba(155, 226, 123, 0.4);
+}
+
+/* --- Terminal Tab --- */
+
+.bb-terminal-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bb-terminal-tab__header {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid var(--bb-border);
+  background: #06110b;
+}
+
+.bb-terminal-tab__body {
+  flex: 1;
+  min-height: 0;
+  padding: 0.5rem;
+  background: #020403;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* If terminal tab is active, let terminal handle scrolling, not the tab container */
+.bb-tabs__content:has(.bb-terminal-tab) {
+  overflow: hidden;
+}
+
+.bb-terminal-cursor {
+  display: inline-block;
+  width: 0.6ch;
+  background: var(--bb-accent);
+  margin-left: 2px;
+  animation: blink 1.2s steps(1) infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.bb-notes-tab {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bb-notes-tab__search {
+  margin-bottom: 0.4rem;
+  flex: 0 0 auto;
+}
+
+.bb-notes-tab__body {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 0;
+}
+
+.bb-notes-list {
+  border-right: 1px solid var(--bb-border-soft);
+  display: flex;
+  flex: 0 0 220px;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.bb-notes-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.bb-notes-list__item {
+  padding: 0.25rem 0.4rem;
+  cursor: pointer;
+}
+
+.bb-notes-list__item--active {
+  background: var(--bb-accent-soft);
+  color: #fff;
+}
+
+.bb-notes-list__add {
+  margin-top: 0.25rem;
+}
+
+.bb-notes-editor {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bb-notes-editor__title {
+  margin-bottom: 0.25rem;
+}
+
+.bb-notes-toolbar {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.bb-notes-editor__content {
+  flex: 1;
+  border: 1px solid var(--bb-border);
+  padding: 0.5rem;
+  overflow-y: auto;
+}
+
+.bb-notes-searchbar {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.bb-notes-searchbar__meta {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.bb-notes-search-results {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.bb-notes-search-results__item {
+  border: 1px solid var(--bb-border-soft);
+  background: #020403;
+  color: var(--bb-text);
+  text-align: left;
+  padding: 0.25rem 0.35rem;
+  cursor: pointer;
+}
+
+.bb-notes-search-results__item--active {
+  background: var(--bb-accent-soft);
+  color: #fff;
+}
+
+.bb-notes-search-results__title {
+  font-weight: bold;
+  display: block;
+  font-size: 0.8rem;
+}
+
+.bb-notes-search-results__preview {
+  display: block;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.bb-notes-list__ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  flex: 1 1 auto;
+}
+
+.bb-notes-list__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.25rem 0.4rem;
+  cursor: pointer;
+}
+
+.bb-notes-list__title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bb-notes-list__remove {
+  flex: 0 0 auto;
+  opacity: 0.85;
+}
+
+.bb-notes-list__item:hover .bb-notes-list__remove {
+  opacity: 1;
+}
+
+.bb-notes-hit {
+  background: rgba(176, 140, 32, 0.35); /* amber-ish */
+  border: 1px solid rgba(176, 140, 32, 0.6);
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+/* --- Damaged Veteran template rows: radio on the RIGHT --- */
+.dv-template-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dv-template-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.25rem 0.35rem;
+  border: 1px solid var(--bb-border-soft);
+  background: #020403;
+  cursor: pointer;
+}
+
+.dv-template-row:hover {
+  background: #0a1a11;
+}
+
+.dv-template-row--selected {
+  background: var(--bb-accent-soft);
+  color: #fff;
+  border-color: var(--bb-accent-soft);
+}
+
+.dv-template-row__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.dv-template-row__title {
+  font-size: 0.85rem;
+  font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dv-template-row__desc {
+  font-size: 0.75rem;
+  opacity: 0.85;
+  line-height: 1.2;
+}
+
+.dv-template-row input[type="radio"] {
+  flex: 0 0 auto;
+  margin-left: 0.5rem;
+}
+
+/* --- Player panel locked until PLAY MODE --- */
+.bb-player-panel-shell {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Wrapper now replaces .bb-player-panel in layout */
+.bb-player-panel-shell {
+  flex: 1 1 auto;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+}
+
+.bb-player-panel-shell--locked .bb-player-panel {
+  pointer-events: none;
+  opacity: 0.55;
+  filter: saturate(0.75);
+}
+
+.bb-player-panel-lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px dashed var(--bb-border-soft);
+}
+
+.bb-player-panel-lock-overlay__msg {
+  max-width: 560px;
+  color: var(--bb-warning);
+  font-size: 0.9rem;
+  line-height: 1.35;
+}
+
+.bb-upgrade-modal__dialog {
+  width: 96%;
+  max-width: 720px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.bb-upgrade-table__wrap {
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.bb-upgrade-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.bb-radio-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.bb-radio-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+}
+
+.bb-radio-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.5rem;
+  row-gap: 0.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.bb-radio-desc {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  line-height: 1.25;
+}
+
+.bb-radio-grid input:disabled + div {
+  opacity: 0.5;
+}
+
+/* --- Conditions (Active Effects) --- */
+.bb-conditions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.bb-condition-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--bb-border-soft);
+  background: #020403;
+  font-size: 0.75rem;
+}
+
+.bb-condition-pill__remove {
+  background: transparent;
+  border: none;
+  color: var(--bb-text-muted);
+  cursor: pointer;
+  font-size: 0.75rem;
+  line-height: 1;
+  padding: 0 0.15rem;
+}
+
+.bb-condition-pill__remove:hover {
+  color: var(--bb-danger);
+}
+
+.bb-condition-pill--physical { border-color: #3a6b45; }
+.bb-condition-pill--combat { border-color: #b02020; }
+.bb-condition-pill--mental { border-color: #b08c20; }
+.bb-condition-pill--sanity { border-color: #8c4c20; }
+.bb-condition-pill--chemical { border-color: #4c6b8c; }
+.bb-condition-pill--social { border-color: #6b4c8c; }
+
+/* --- Condition label button inside pill (for focus + click popover) --- */
+.bb-condition-pill__labelBtn {
+  background: transparent;
+  border: none;
+  color: var(--bb-text);
+  font-family: inherit;
+  font-size: 0.75rem;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.bb-condition-pill__labelBtn:hover {
+  text-decoration: underline;
+}
+
+.bb-condition-pill__labelBtn:focus {
+  outline: 1px solid var(--bb-accent);
+  outline-offset: 2px;
+}
+
+/* --- Popover --- */
+.bb-condition-pill {
+  position: relative; /* anchor for popover */
+}
+
+.bb-condition-popover {
+  position: absolute;
+  right: 0;              /* ✅ anchor to right edge of pill */
+  left: auto;            /* ✅ disable left anchoring */
+  top: calc(100% + 6px);
+  z-index: 999;
+
+  width: 260px;
+  max-width: min(320px, calc(100vw - 24px)); /* ✅ never exceed viewport */
+  padding: 0.5rem 0.55rem;
+
+  border: 1px solid var(--bb-border);
+  background: var(--bb-panel-bg);
+  box-shadow: 0 0 12px rgba(0,0,0,0.75);
+  font-size: 0.78rem;
+
+  overflow-wrap: anywhere; /* ✅ long words won’t force overflow */
+}
+
+.bb-condition-popover__title {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-weight: bold;
+  margin-bottom: 0.25rem;
+}
+
+.bb-condition-popover__cat {
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  opacity: 0.85;
+  border: 1px solid var(--bb-border-soft);
+  padding: 0.05rem 0.25rem;
+}
+
+.bb-condition-popover__desc {
+  margin-bottom: 0.35rem;
+  line-height: 1.25;
+}
+
+.bb-condition-popover__effects {
+  margin: 0;
+  padding-left: 1.05rem;
+}
+
+.bb-condition-popover__effects li {
+  margin-bottom: 0.2rem;
+}
+
+.bb-skill-value--penalty {
+  color: #d6a14a;
+}
+
+.bb-skill-value--bonus {
+  color: #7ad67a;
+}
+
+.bb-stat-button--modified {
+  box-shadow: 0 0 6px rgba(176, 140, 32, 0.35);
+}
+
+.bb-roll-mod-inline {
+  margin-left: 0.25rem;
+  font-size: 0.7rem;
+  padding: 0 0.25rem;
+  border: 1px solid var(--bb-border-soft);
+  border-radius: 999px;
+  opacity: 0.95;
+}
+
+.bb-roll-mod-inline--penalty {
+  color: #d6a14a;
+  border-color: rgba(176, 140, 32, 0.7);
+}
+
+.bb-roll-mod-inline--bonus {
+  color: #7ad67a; /* green */
+  border-color: rgba(122, 214, 122, 0.7);
+}
+
+/* --- SANITY TEST modifier visuals --- */
+.bb-button--san-test {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* when any modifier exists */
+.bb-button--san-test.bb-button--modified {
+  box-shadow: 0 0 10px rgba(176, 140, 32, 0.35);
+}
+
+/* penalty/bonus tint */
+.bb-button--san-test.bb-button--penalty {
+  border-color: rgba(176, 140, 32, 0.85);
+  box-shadow: 0 0 12px rgba(176, 140, 32, 0.45);
+}
+
+.bb-button--san-test.bb-button--bonus {
+  border-color: rgba(122, 214, 122, 0.85);
+  box-shadow: 0 0 12px rgba(122, 214, 122, 0.45);
+}
+
+/* badge on the right side of the SAN button */
+.bb-roll-mod-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid var(--bb-border-soft);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--bb-text);
+}
+
+.bb-roll-mod-badge--penalty {
+  color: #d6a14a; /* amber */
+  border-color: rgba(176, 140, 32, 0.75);
+}
+
+.bb-roll-mod-badge--bonus {
+  color: #7ad67a; /* green */
+  border-color: rgba(122, 214, 122, 0.75);
+}
+
+/* --- Status Conditions (Dead, Unconscious, No Will, etc.) --- */
+.bb-condition-pill--status {
+  border-color: #6a6a6a;
+  background: #1b1b1b;
+  color: #cfcfcf;
+}
+
+.bb-condition-pill--status .bb-condition-pill__label {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.bb-condition-pill--status .bb-condition-pill__remove {
+  color: #9a9
+}
+
+.bb-home-scenes-modal__dialog {
+  width: 96%;
+  max-width: 900px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.bb-home-scenes-modal__body {
+  overflow-y: auto;
+  max-height: 65vh;
+}
+
+.bb-home-scenes-modal__footer {
+  display: flex;
+  justify-content: space-between;
+}

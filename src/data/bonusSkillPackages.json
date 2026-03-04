@@ -1,0 +1,349 @@
+[
+  {
+    "name": "Artist, Actor, or Musician",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "craft", "typed": true, "needsSubtype": true },
+      { "key": "disguise" },
+      { "key": "persuade" },
+      { "key": "art", "typed": true, "needsSubtype": true },
+      { "key": "art", "typed": true, "needsSubtype": true },
+      { "key": "art", "typed": true, "needsSubtype": true },
+      { "key": "humint" }
+    ]
+  },
+  {
+    "name": "Athlete",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "athletics" },
+      { "key": "dodge" },
+      { "key": "first_aid" },
+      { "key": "humint" },
+      { "key": "persuade" },
+      { "key": "swim" },
+      { "key": "unarmed_combat" }
+    ]
+  },
+  {
+    "name": "Author, Editor, or Journalist",
+    "skills": [
+      { "key": "anthropology" },
+      { "key": "art", "typed": true, "needsSubtype": true },
+      { "key": "bureaucracy" },
+      { "key": "history" },
+      { "key": "law" },
+      { "key": "occult" },
+      { "key": "persuade" },
+      { "key": "humint" }
+    ]
+  },
+  {
+    "name": "\"Black Bag\" Training",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "athletics" },
+      { "key": "craft", "typed": true, "subtype": "electrician" },
+      { "key": "craft", "typed": true, "subtype": "locksmithing" },
+      { "key": "criminology" },
+      { "key": "disguise" },
+      { "key": "search" },
+      { "key": "stealth" }
+    ]
+  },
+  {
+    "name": "Blue-Collar Worker",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "craft", "typed": true, "needsSubtype": true },
+      { "key": "craft", "typed": true, "needsSubtype": true },
+      { "key": "drive" },
+      { "key": "first_aid" },
+      { "key": "heavy_machinery" },
+      { "key": "navigate" },
+      { "key": "search" }
+    ]
+  },
+  {
+    "name": "Bureaucrat",
+    "skills": [
+      { "key": "accounting" },
+      { "key": "bureaucracy" },
+      { "key": "computer_science" },
+      { "key": "criminology" },
+      { "key": "humint" },
+      { "key": "law" },
+      { "key": "persuade" }
+    ]
+  },
+  {
+    "name": "Clergy",
+    "skills": [
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "history" },
+      { "key": "humint" },
+      { "key": "occult" },
+      { "key": "persuade" },
+      { "key": "psychotherapy" }
+    ]
+  },
+  {
+    "name": "Combat Veteran",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "dodge" },
+      { "key": "firearms" },
+      { "key": "first_aid" },
+      { "key": "heavy_weapons" },
+      { "key": "melee_weapons" },
+      { "key": "stealth" },
+      { "key": "unarmed_combat" }
+    ]
+  },
+  {
+    "name": "Computer Enthusiast or Hacker",
+    "skills": [
+      { "key": "computer_science" },
+      { "key": "craft", "typed": true, "subtype": "microelectronics" },
+      { "key": "science", "typed": true, "subtype": "mathematics" },
+      { "key": "sigint" }
+    ]
+  },
+  {
+    "name": "Counselor",
+    "skills": [
+      { "key": "bureaucracy" },
+      { "key": "first_aid" },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "humint" },
+      { "key": "law" },
+      { "key": "persuade" },
+      { "key": "psychotherapy" },
+      { "key": "search" }
+    ]
+  },
+  {
+    "name": "Criminalist",
+    "skills": [
+      { "key": "accounting" },
+      { "key": "bureaucracy" },
+      { "key": "computer_science" },
+      { "key": "criminology" },
+      { "key": "forensics" },
+      { "key": "law" },
+      { "key": "pharmacy" },
+      { "key": "search" }
+    ]
+  },
+  {
+    "name": "Firefighter",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "demolitions" },
+      { "key": "drive" },
+      { "key": "first_aid" },
+      { "key": "forensics" },
+      { "key": "heavy_machinery" },
+      { "key": "navigate" },
+      { "key": "search" }
+    ]
+  },
+  {
+    "name": "Gangster or Deep Cover",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "criminology" },
+      { "key": "dodge" },
+      { "key": "drive" },
+      { "key": "persuade" },
+      { "key": "stealth" }
+    ]
+  },
+  {
+    "name": "Interrogator",
+    "skills": [
+      { "key": "criminology" },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "humint" },
+      { "key": "law" },
+      { "key": "persuade" },
+      { "key": "pharmacy" },
+      { "key": "search" }
+    ]
+  },
+  {
+    "name": "Liberal Arts Degree",
+    "skills": [
+      { "key": "anthropology" },
+      { "key": "archeology" },
+      { "key": "art", "typed": true, "needsSubtype": true },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "history" },
+      { "key": "persuade" }
+    ]
+  },
+  {
+    "name": "Military Officer",
+    "skills": [
+      { "key": "bureaucracy" },
+      { "key": "firearms" },
+      { "key": "history" },
+      { "key": "military_science", "typed": true, "needsSubtype": true },
+      { "key": "navigate" },
+      { "key": "persuade" },
+      { "key": "unarmed_combat" }
+    ]
+  },
+  {
+    "name": "MBA",
+    "skills": [
+      { "key": "accounting" },
+      { "key": "bureaucracy" },
+      { "key": "humint" },
+      { "key": "law" },
+      { "key": "persuade" }
+    ]
+  },
+  {
+    "name": "Nurse, Paramedic, or Pre-Med",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "first_aid" },
+      { "key": "medicine" },
+      { "key": "persuade" },
+      { "key": "pharmacy" },
+      { "key": "psychotherapy" },
+      { "key": "science", "typed": true, "subtype": "biology" },
+      { "key": "search" }
+    ]
+  },
+  {
+    "name": "Occult Investigator or Conspiracy Theorist",
+    "skills": [
+      { "key": "anthropology" },
+      { "key": "archeology" },
+      { "key": "computer_science" },
+      { "key": "criminology" },
+      { "key": "history" },
+      { "key": "occult" },
+      { "key": "persuade" },
+      { "key": "search" }
+    ]
+  },
+  {
+    "name": "Outdoorsman",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "athletics" },
+      { "key": "firearms" },
+      { "key": "navigate" },
+      { "key": "ride" },
+      { "key": "search" },
+      { "key": "stealth" },
+      { "key": "survival" }
+    ]
+  },
+  {
+    "name": "Photographer",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "art", "typed": true, "subtype": "photography" },
+      { "key": "computer_science" },
+      { "key": "persuade" },
+      { "key": "search" },
+      { "key": "stealth" }
+    ]
+  },
+  {
+    "name": "Pilot or Sailor",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "craft", "typed": true, "subtype": "mechanic" },
+      { "key": "first_aid" },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "navigate" },
+      { "key": "pilot", "typed": true, "needsSubtype": true },
+      { "key": "survival" },
+      { "key": "swim" }
+    ]
+  },
+  {
+    "name": "Police Officer",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "criminology" },
+      { "key": "drive" },
+      { "key": "firearms" },
+      { "key": "humint" },
+      { "key": "law" },
+      { "key": "melee_weapons" },
+      { "key": "unarmed_combat" }
+    ]
+  },
+  {
+    "name": "Science Grad Student",
+    "skills": [
+      { "key": "bureaucracy" },
+      { "key": "computer_science" },
+      { "key": "craft", "typed": true, "needsSubtype": true },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "science", "typed": true, "needsSubtype": true },
+      { "key": "science", "typed": true, "needsSubtype": true },
+      { "key": "science", "typed": true, "needsSubtype": true }
+    ]
+  },
+  {
+    "name": "Social Worker or Criminal Justice Degree",
+    "skills": [
+      { "key": "bureaucracy" },
+      { "key": "criminology" },
+      { "key": "forensics" },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "humint" },
+      { "key": "law" },
+      { "key": "persuade" },
+      { "key": "search" }
+    ]
+  },
+  {
+    "name": "Soldier or Marine",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "artillery" },
+      { "key": "athletics" },
+      { "key": "drive" },
+      { "key": "firearms" },
+      { "key": "heavy_weapons" },
+      { "key": "military_science", "typed": true, "subtype": "land" },
+      { "key": "unarmed_combat" }
+    ]
+  },
+  {
+    "name": "Translator",
+    "skills": [
+      { "key": "anthropology" },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "foreign_language", "typed": true, "needsSubtype": true },
+      { "key": "history" },
+      { "key": "humint" },
+      { "key": "persuade" }
+    ]
+  },
+  {
+    "name": "Urban Explorer",
+    "skills": [
+      { "key": "alertness" },
+      { "key": "athletics" },
+      { "key": "craft", "typed": true, "needsSubtype": true },
+      { "key": "law" },
+      { "key": "navigate" },
+      { "key": "persuade" },
+      { "key": "search" },
+      { "key": "stealth" }
+    ]
+  }
+]

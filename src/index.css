@@ -1,0 +1,307 @@
+/* src/index.css */
+
+/* Global terminal palette */
+:root {
+  --bb-bg: #050807;
+  --bb-panel-bg: #030604;
+  --bb-panel-alt: #06110b;
+  --bb-accent: #9be27b;
+  --bb-accent-soft: #3a6b45;
+  --bb-border: #274630;
+  --bb-border-soft: #1f3b2a;
+  --bb-text: #9be27b;
+  --bb-text-muted: #8f8f8f;
+  --bb-danger: #b02020;
+  --bb-warning: #b08c20;
+}
+
+/* Global reset + terminal base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bb-bg);
+  color: var(--bb-text);
+  font-family: "Courier New", monospace;
+}
+
+html,
+body,
+#root,
+.bb-app {
+  overflow-x: hidden;
+}
+
+/* Ensure React root fills the viewport */
+#root {
+  height: 100%;
+}
+
+/* Remove CRA demo styles */
+.App,
+.App-header,
+.App-logo,
+.App-link {
+  all: unset;
+}
+
+/* Global terminal controls */
+
+button {
+  font-family: inherit;
+  font-size: 0.85rem;
+  background: #07140d;
+  color: var(--bb-accent);
+  border: 1px solid var(--bb-border);
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background: #0a1a11;
+}
+
+/* Inputs & selects baseline */
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: var(--bb-accent);
+  background: #050807;
+  border: 1px solid var(--bb-border);
+  padding: 0.15rem 0.3rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Global scrollbars with subtle glow */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--bb-accent-soft) #050807;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #050807;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: radial-gradient(circle at center, var(--bb-accent) 0, var(--bb-accent-soft) 40%, #0b120d 100%);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  box-shadow: 0 0 6px var(--bb-accent);
+}
+
+/* --- Startup screen layout --- */
+
+.startup-screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.startup-logo {
+  margin-bottom: 0.75rem;
+}
+
+.startup-logo img {
+  max-width: 260px;
+  height: auto;
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.7));
+}
+
+.startup-title {
+  margin: 0.25rem 0 0.15rem;
+  font-size: 2.4rem;
+  letter-spacing: 0.35rem;
+}
+
+.startup-subtitle {
+  margin: 0 0 1.5rem;
+  color: var(--bb-text-muted);
+  font-size: 0.9rem;
+}
+
+.startup-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.startup-buttons-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.startup-buttons-row--single {
+  justify-content: center;
+}
+
+.startup-button {
+  min-width: 9rem;
+  border-radius: 3px;
+}
+
+.startup-button--primary {
+  padding: 0.8rem 1.4rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.startup-button--secondary {
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
+}
+
+/* --- Load Agent modal layout --- */
+
+
+.bb-load-modal__dialog {
+  max-width: 1100px;   /* wider than before */
+  width: 96%;
+  max-height: 80vh;    /* taller; still avoids full screen */
+}
+
+/* Keep the two-column layout */
+.bb-load-modal__body {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+/* Optional: small confirm modal sizing */
+.bb-modal__dialog--small {
+  max-width: 420px;
+  width: 90%;
+}
+
+/* Left column: agent list */
+.bb-load-modal__list {
+  flex: 0 0 30%;
+  max-height: 360px;
+  overflow-y: auto;
+  padding-right: 0.75rem;
+  border-right: 1px solid var(--bb-border-soft);
+}
+
+/* Right column: details */
+.bb-load-modal__details {
+  flex: 1;
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+/* Agent list styles */
+.agent-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.agent-list-item {
+  padding: 0.35rem 0.5rem;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-bottom: 0.15rem;
+}
+
+.agent-list-item:hover {
+  background: #0a1a11;
+}
+
+.agent-list-item--selected {
+  background: var(--bb-accent-soft);
+  color: #ffffff;
+}
+
+.agent-main-line {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.agent-sub-line {
+  font-size: 0.75rem;
+  color: var(--bb-text-muted);
+}
+
+/* Detail panel */
+.bb-load-modal__agent-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+.bb-load-modal__fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.4rem 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.bb-load-modal__field-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--bb-text-muted);
+}
+
+.bb-load-modal__field-value {
+  font-size: 0.9rem;
+}
+
+/* Tracks summary (HP / WP / SAN / BP) */
+.bb-load-modal__track-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.bb-load-modal__track-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid var(--bb-border-soft);
+  background: #030604;
+}
+
+.bb-load-modal__track-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: var(--bb-text-muted);
+}
+
+.bb-load-modal__track-value {
+  font-size: 0.85rem;
+}
+
+.bb-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}

@@ -1,0 +1,462 @@
+[
+  {
+    "name": "Anthropologist or Historian",
+    "description": "You study humanity across cultures, languages, history, and time.",
+    "bonds": 4,
+    "fixedSkills": [
+      {"key": "anthropology", "proficiency": 50},
+      {"key": "bureaucracy", "proficiency": 40},
+      {"key": "foreign_language", "proficiency": 50, "typed": true},
+      {"key": "foreign_language", "proficiency": 40, "typed": true},
+      {"key": "history", "proficiency": 60},
+      {"key": "occult", "proficiency": 40},
+      {"key": "persuade", "proficiency": 40}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 2,
+        "options": [
+          {"key": "anthropology", "proficiency": 40},
+          {"key": "archeology", "proficiency": 40},
+          {"key": "humint", "proficiency": 50},
+          {"key": "navigate", "proficiency": 50},
+          {"key": "ride", "proficiency": 50},
+          {"key": "search", "proficiency": 60},
+          {"key": "survival", "proficiency": 50}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Computer Scientist or Engineer",
+    "description": "A specialist in computing or machinery with deep technical expertise.",
+    "bonds": 3,
+    "fixedSkills": [
+      {"key": "computer_science", "proficiency": 60},
+      {"key": "craft", "proficiency": 30, "typed": true, "subtype": "electrician"},
+      {"key": "craft", "proficiency": 30, "typed": true, "subtype": "mechanic"},
+      {"key": "craft", "proficiency": 40, "typed": true, "subtype": "microelectronics"},
+      {"key": "science", "proficiency": 40, "typed": true, "subtype": "mathematics"},
+      {"key": "sigint", "proficiency": 40}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 4,
+        "options": [
+          {"key": "accounting", "proficiency": 50},
+          {"key": "bureaucracy", "proficiency": 50},
+          {"key": "craft", "proficiency": 40, "typed": true},
+          {"key": "foreign_language", "proficiency": 40, "typed": true},
+          {"key": "heavy_machinery", "proficiency": 50},
+          {"key": "law", "proficiency": 40},
+          {"key": "science", "proficiency": 40, "typed": true}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Federal Agent",
+    "description": "Federal law enforcement trained to confront the unnatural.",
+    "bonds": 3,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 50},
+      {"key": "bureaucracy", "proficiency": 40},
+      {"key": "criminology", "proficiency": 50},
+      {"key": "drive", "proficiency": 50},
+      {"key": "firearms", "proficiency": 50},
+      {"key": "forensics", "proficiency": 30},
+      {"key": "humint", "proficiency": 60},
+      {"key": "law", "proficiency": 30},
+      {"key": "persuade", "proficiency": 50},
+      {"key": "search", "proficiency": 50},
+      {"key": "unarmed_combat", "proficiency": 60}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 1,
+        "options": [
+          {"key": "accounting", "proficiency": 60},
+          {"key": "computer_science", "proficiency": 50},
+          {"key": "foreign_language", "proficiency": 50, "typed": true},
+          {"key": "heavy_weapons", "proficiency": 50},
+          {"key": "pharmacy", "proficiency": 50}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Physician",
+    "description": "Medical doctor trained to diagnose, treat, and identify biological threats.",
+    "bonds": 3,
+    "fixedSkills": [
+      {"key": "bureaucracy", "proficiency": 50},
+      {"key": "first_aid", "proficiency": 60},
+      {"key": "medicine", "proficiency": 60},
+      {"key": "persuade", "proficiency": 40},
+      {"key": "pharmacy", "proficiency": 50},
+      {"key": "science", "proficiency": 60, "typed": true, "subtype": "biology"},
+      {"key": "search", "proficiency": 40}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 2,
+        "options": [
+          {"key": "forensics", "proficiency": 50},
+          {"key": "psychotherapy", "proficiency": 60},
+          {"key": "science", "proficiency": 50, "typed": true},
+          {"key": "surgery", "proficiency": 50}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Scientist",
+    "description": "Academic or research scientist specializing in a core scientific discipline.",
+    "bonds": 4,
+    "fixedSkills": [
+      {"key": "bureaucracy", "proficiency": 40},
+      {"key": "computer_science", "proficiency": 40},
+      {"key": "science", "proficiency": 60, "typed": true},
+      {"key": "science", "proficiency": 50, "typed": true},
+      {"key": "science", "proficiency": 50, "typed": true}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 3,
+        "options": [
+          {"key": "accounting", "proficiency": 50},
+          {"key": "craft", "proficiency": 40, "typed": true},
+          {"key": "foreign_language", "proficiency": 40, "typed": true},
+          {"key": "forensics", "proficiency": 40},
+          {"key": "law", "proficiency": 40},
+          {"key": "pharmacy", "proficiency": 40}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Special Operator",
+    "description": "Elite military or paramilitary operative trained for extreme conditions.",
+    "bonds": 2,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 60},
+      {"key": "athletics", "proficiency": 60},
+      {"key": "demolitions", "proficiency": 40},
+      {"key": "firearms", "proficiency": 60},
+      {"key": "heavy_weapons", "proficiency": 50},
+      {"key": "melee_weapons", "proficiency": 50},
+      {"key": "military_science", "proficiency": 60, "typed": true, "subtype": "land"},
+      {"key": "navigate", "proficiency": 50},
+      {"key": "stealth", "proficiency": 50},
+      {"key": "survival", "proficiency": 50},
+      {"key": "swim", "proficiency": 50},
+      {"key": "unarmed_combat", "proficiency": 60}
+    ],
+    "choiceSkills": []
+  },
+  {
+    "name": "Criminal",
+    "description": "A hardened criminal skilled in violence, deception, and survival.",
+    "bonds": 4,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 50},
+      {"key": "criminology", "proficiency": 60},
+      {"key": "dodge", "proficiency": 40},
+      {"key": "drive", "proficiency": 50},
+      {"key": "firearms", "proficiency": 40},
+      {"key": "law", "proficiency": 40},
+      {"key": "melee_weapons", "proficiency": 40},
+      {"key": "persuade", "proficiency": 50},
+      {"key": "stealth", "proficiency": 50},
+      {"key": "unarmed_combat", "proficiency": 50}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 2,
+        "options": [
+          {"key": "craft", "proficiency": 40, "typed": true, "subtype": "locksmithing"},
+          {"key": "demolitions", "proficiency": 40},
+          {"key": "disguise", "proficiency": 50},
+          {"key": "foreign_language", "proficiency": 40, "typed": true},
+          {"key": "forensics", "proficiency": 40},
+          {"key": "humint", "proficiency": 50},
+          {"key": "navigate", "proficiency": 50},
+          {"key": "occult", "proficiency": 50},
+          {"key": "pharmacy", "proficiency": 40}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Firefighter",
+    "description": "A trained emergency responder skilled in rescue and hazardous environments.",
+    "bonds": 3,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 50},
+      {"key": "athletics", "proficiency": 60},
+      {"key": "craft", "proficiency": 40, "typed": true, "subtype": "electrician"},
+      {"key": "craft", "proficiency": 40, "typed": true, "subtype": "mechanic"},
+      {"key": "demolitions", "proficiency": 50},
+      {"key": "drive", "proficiency": 50},
+      {"key": "first_aid", "proficiency": 50},
+      {"key": "forensics", "proficiency": 40},
+      {"key": "heavy_machinery", "proficiency": 50},
+      {"key": "navigate", "proficiency": 50},
+      {"key": "search", "proficiency": 40}
+    ],
+    "choiceSkills": []
+  },
+  {
+    "name": "Foreign Service Officer",
+    "description": "Diplomatic professional skilled in language, negotiation, and analysis.",
+    "bonds": 3,
+    "fixedSkills": [
+      {"key": "accounting", "proficiency": 40},
+      {"key": "anthropology", "proficiency": 40},
+      {"key": "bureaucracy", "proficiency": 60},
+      {"key": "foreign_language", "proficiency": 50, "typed": true},
+      {"key": "foreign_language", "proficiency": 50, "typed": true},
+      {"key": "foreign_language", "proficiency": 40, "typed": true},
+      {"key": "history", "proficiency": 40},
+      {"key": "humint", "proficiency": 50},
+      {"key": "law", "proficiency": 40},
+      {"key": "persuade", "proficiency": 50}
+    ],
+    "choiceSkills": []
+  },
+  {
+    "name": "Intelligence Analyst",
+    "description": "An intelligence professional who parses complex data to identify threats.",
+    "bonds": 3,
+    "fixedSkills": [
+      {"key": "anthropology", "proficiency": 40},
+      {"key": "bureaucracy", "proficiency": 50},
+      {"key": "computer_science", "proficiency": 40},
+      {"key": "criminology", "proficiency": 40},
+      {"key": "foreign_language", "proficiency": 50, "typed": true},
+      {"key": "foreign_language", "proficiency": 50, "typed": true},
+      {"key": "foreign_language", "proficiency": 40, "typed": true},
+      {"key": "history", "proficiency": 40},
+      {"key": "humint", "proficiency": 50},
+      {"key": "sigint", "proficiency": 40}
+    ],
+    "choiceSkills": []
+  },
+  {
+    "name": "Intelligence Case Officer",
+    "description": "A handler of foreign intelligence assets, skilled in deception and persuasion.",
+    "bonds": 2,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 50},
+      {"key": "bureaucracy", "proficiency": 40},
+      {"key": "criminology", "proficiency": 50},
+      {"key": "disguise", "proficiency": 50},
+      {"key": "drive", "proficiency": 40},
+      {"key": "firearms", "proficiency": 40},
+      {"key": "foreign_language", "proficiency": 50, "typed": true},
+      {"key": "foreign_language", "proficiency": 40, "typed": true},
+      {"key": "humint", "proficiency": 60},
+      {"key": "persuade", "proficiency": 60},
+      {"key": "sigint", "proficiency": 40},
+      {"key": "stealth", "proficiency": 50},
+      {"key": "unarmed_combat", "proficiency": 50}
+    ],
+    "choiceSkills": []
+  },
+  {
+    "name": "Lawyer or Business Executive",
+    "description": "A professional negotiator and decision-maker in law or business.",
+    "bonds": 4,
+    "fixedSkills": [
+      {"key": "accounting", "proficiency": 50},
+      {"key": "bureaucracy", "proficiency": 50},
+      {"key": "humint", "proficiency": 40},
+      {"key": "persuade", "proficiency": 60}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 4,
+        "options": [
+          {"key": "computer_science", "proficiency": 50},
+          {"key": "criminology", "proficiency": 60},
+          {"key": "foreign_language", "proficiency": 50, "typed": true},
+          {"key": "law", "proficiency": 50},
+          {"key": "pharmacy", "proficiency": 50}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Media Specialist",
+    "description": "Author, journalist, researcher, or scholar who uncovers hidden truths.",
+    "bonds": 4,
+    "fixedSkills": [
+      {"key": "art", "proficiency": 60, "typed": true},
+      {"key": "history", "proficiency": 40},
+      {"key": "humint", "proficiency": 40},
+      {"key": "persuade", "proficiency": 50}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 5,
+        "options": [
+          {"key": "anthropology", "proficiency": 40},
+          {"key": "archeology", "proficiency": 40},
+          {"key": "art", "proficiency": 40, "typed": true},
+          {"key": "bureaucracy", "proficiency": 50},
+          {"key": "computer_science", "proficiency": 40},
+          {"key": "criminology", "proficiency": 50},
+          {"key": "foreign_language", "proficiency": 40, "typed": true},
+          {"key": "law", "proficiency": 40},
+          {"key": "military_science", "proficiency": 40, "typed": true},
+          {"key": "occult", "proficiency": 50},
+          {"key": "science", "proficiency": 40, "typed": true}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Nurse or Paramedic",
+    "description": "A trained medical professional who stabilizes patients under crisis.",
+    "bonds": 4,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 40},
+      {"key": "bureaucracy", "proficiency": 40},
+      {"key": "first_aid", "proficiency": 60},
+      {"key": "humint", "proficiency": 40},
+      {"key": "medicine", "proficiency": 40},
+      {"key": "persuade", "proficiency": 40},
+      {"key": "pharmacy", "proficiency": 40},
+      {"key": "science", "proficiency": 40, "typed": true, "subtype": "biology"}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 2,
+        "options": [
+          {"key": "drive", "proficiency": 60},
+          {"key": "forensics", "proficiency": 40},
+          {"key": "navigate", "proficiency": 50},
+          {"key": "psychotherapy", "proficiency": 50},
+          {"key": "search", "proficiency": 60}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Pilot or Sailor",
+    "description": "An operator of air or sea vehicles trained for crisis response.",
+    "bonds": 3,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 60},
+      {"key": "bureaucracy", "proficiency": 30},
+      {"key": "craft", "proficiency": 40, "typed": true, "subtype": "electrician"},
+      {"key": "craft", "proficiency": 40, "typed": true, "subtype": "mechanic"},
+      {"key": "navigate", "proficiency": 50},
+      {"key": "pilot", "proficiency": 60, "typed": true},
+      {"key": "science", "proficiency": 40, "typed": true, "subtype": "meteorology"},
+      {"key": "swim", "proficiency": 40}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 2,
+        "options": [
+          {"key": "foreign_language", "proficiency": 50, "typed": true},
+          {"key": "pilot", "proficiency": 50, "typed": true},
+          {"key": "heavy_weapons", "proficiency": 50},
+          {"key": "military_science", "proficiency": 50, "typed": true}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Police Officer",
+    "description": "A law enforcement officer skilled in investigation, combat, and patrol work.",
+    "bonds": 3,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 60},
+      {"key": "bureaucracy", "proficiency": 40},
+      {"key": "criminology", "proficiency": 40},
+      {"key": "drive", "proficiency": 50},
+      {"key": "firearms", "proficiency": 40},
+      {"key": "first_aid", "proficiency": 30},
+      {"key": "humint", "proficiency": 50},
+      {"key": "law", "proficiency": 30},
+      {"key": "melee_weapons", "proficiency": 50},
+      {"key": "navigate", "proficiency": 40},
+      {"key": "persuade", "proficiency": 40},
+      {"key": "search", "proficiency": 40},
+      {"key": "unarmed_combat", "proficiency": 60}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 1,
+        "options": [
+          {"key": "forensics", "proficiency": 50},
+          {"key": "heavy_machinery", "proficiency": 60},
+          {"key": "heavy_weapons", "proficiency": 50},
+          {"key": "ride", "proficiency": 60}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Program Manager",
+    "description": "A leader who directs budgets, resources, and organizational strategy.",
+    "bonds": 4,
+    "fixedSkills": [
+      {"key": "accounting", "proficiency": 60},
+      {"key": "bureaucracy", "proficiency": 60},
+      {"key": "computer_science", "proficiency": 50},
+      {"key": "criminology", "proficiency": 30},
+      {"key": "foreign_language", "proficiency": 50, "typed": true},
+      {"key": "history", "proficiency": 40},
+      {"key": "law", "proficiency": 40},
+      {"key": "persuade", "proficiency": 50}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 1,
+        "options": [
+          {"key": "anthropology", "proficiency": 30},
+          {"key": "art", "proficiency": 30, "typed": true},
+          {"key": "craft", "proficiency": 30, "typed": true},
+          {"key": "science", "proficiency": 30, "typed": true}
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Soldier or Marine",
+    "description": "A trained military professional experienced in combat and field operations.",
+    "bonds": 4,
+    "fixedSkills": [
+      {"key": "alertness", "proficiency": 50},
+      {"key": "athletics", "proficiency": 50},
+      {"key": "bureaucracy", "proficiency": 30},
+      {"key": "drive", "proficiency": 40},
+      {"key": "firearms", "proficiency": 40},
+      {"key": "first_aid", "proficiency": 40},
+      {"key": "military_science", "proficiency": 40, "typed": true, "subtype": "land"},
+      {"key": "navigate", "proficiency": 40},
+      {"key": "persuade", "proficiency": 30},
+      {"key": "unarmed_combat", "proficiency": 50}
+    ],
+    "choiceSkills": [
+      {
+        "choose": 3,
+        "options": [
+          {"key": "artillery", "proficiency": 40},
+          {"key": "computer_science", "proficiency": 40},
+          {"key": "craft", "proficiency": 40, "typed": true},
+          {"key": "demolitions", "proficiency": 40},
+          {"key": "foreign_language", "proficiency": 40, "typed": true},
+          {"key": "heavy_machinery", "proficiency": 50},
+          {"key": "heavy_weapons", "proficiency": 40},
+          {"key": "search", "proficiency": 60},
+          {"key": "sigint", "proficiency": 40},
+          {"key": "swim", "proficiency": 60}
+        ]
+      }
+    ]
+  }
+]

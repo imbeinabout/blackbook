@@ -1,0 +1,40 @@
+[
+    {
+        "name": "Riot Helmet",
+        "description": "Effective only against melee weapons, thrown weapons, and unarmed attacks. Cannot be concealed",
+        "protection": "head",
+        "armor_rating": 1,
+        "expense": "standard"
+    },
+    {
+        "name": "Kevlar Helmet",
+        "description": "Cannot be concealed",
+        "protection": "head",
+        "armor_rating": 1,
+        "expense": "standard"
+    },{
+        "name": "Kevlar Vest",
+        "description": "If warm beneath clothing, requires an alertness test to notice",
+        "protection": "body",
+        "armor_rating": 3,
+        "expense": "standard"
+    },{
+        "name": "Reinforced Kevlar Vest",
+        "description": "If warm beneath clothing, requires an alertness test (+20%) to notice",
+        "protection": "body",
+        "armor_rating": 4,
+        "expense": "unusual"
+    },{
+        "name": "Tactical Body Armor",
+        "description": "Cannot be concealed",
+        "protection": "body",
+        "armor_rating": 5,
+        "expense": "unusual"
+    },{
+        "name": "Bomb Suit",
+        "description": "Helmet and body protection. Cannot be concealed",
+        "protection": "both",
+        "armor_rating": 10,
+        "expense": "extreme"
+    }
+]
