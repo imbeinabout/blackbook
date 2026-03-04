@@ -707,6 +707,7 @@ const MainPage: React.FC<MainPageProps> = ({
         sidebar={isSidebarOpen ? sidebarNode : null}
         playerPanel={playerPanelNode}
         footer={footerNode}
+        isSidebarOpen={isSidebarOpen}
       />
 
       <StatusAdjustModal
@@ -745,6 +746,14 @@ const MainPage: React.FC<MainPageProps> = ({
           {toast}
         </div>
       )}
+      
+      {!isSidebarOpen && (
+        <div
+          className="bb-sidebar-overlay"
+          onClick={() => setIsSidebarOpen(true)}
+        />
+      )}
+
     </>
   );
 };

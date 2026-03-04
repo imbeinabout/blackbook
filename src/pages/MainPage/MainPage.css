@@ -369,6 +369,64 @@
   text-align: center;
 }
 
+/* === Sidebar Drawer Shell === */
+
+.bb-sidebar-drawer {
+  position: relative;
+  transition: transform 0.2s ease-out, width 0.2s ease-out;
+  will-change: transform, width;
+  z-index: 900;
+}
+
+.bb-sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 800;
+}
+
+/* =========================
+   Desktop behavior
+   ========================= */
+
+@media (min-width: 900px) {
+  .bb-sidebar-drawer {
+    width: 260px;
+    flex-shrink: 0;
+    transform: translateX(0);
+  }
+
+  /* Closed: collapse width so content expands */
+  .bb-sidebar-drawer:not(.bb-sidebar-drawer--open) {
+    width: 0;
+    transform: translateX(0);
+    overflow: hidden;
+  }
+
+  .bb-sidebar-overlay {
+    display: none;
+  }
+}
+
+/* =========================
+   Mobile behavior
+   ========================= */
+
+@media (max-width: 899px) {
+  .bb-sidebar-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: 260px;
+    transform: translateX(-100%);
+  }
+
+  .bb-sidebar-drawer.bb-sidebar-drawer--open {
+    transform: translateX(0);
+  }
+}
+
 /* --- Sidebar generic typography --- */
 .bb-section-title {
   margin: 0 0 0.5rem 0;
@@ -888,7 +946,8 @@
 
 /* PLAYER PANEL */
 .bb-player-panel {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-height: 0;
