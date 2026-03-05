@@ -15,6 +15,14 @@
   overflow: hidden;
 }
 
+@media (max-width: 899px) {
+  .bb-sidebar-drawer,
+  .bb-main,
+  .bb-app {
+    min-height: 0;
+  }
+}
+
 /* Basic reset-ish */
 .bb-app {
   height: 100vh;
@@ -49,6 +57,11 @@
   padding: 0.25rem 0.5rem;
   cursor: pointer;
   font-size: 1.1rem;
+}
+
+.bb-header__hamburger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 /* Wrapper so the dropdown can be positioned relative to the settings button */
@@ -378,13 +391,6 @@
   z-index: 900;
 }
 
-.bb-sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 800;
-}
-
 /* =========================
    Desktop behavior
    ========================= */
@@ -402,28 +408,50 @@
     transform: translateX(0);
     overflow: hidden;
   }
-
-  .bb-sidebar-overlay {
-    display: none;
-  }
 }
 
 /* =========================
    Mobile behavior
    ========================= */
-
 @media (max-width: 899px) {
-  .bb-sidebar-drawer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100dvh;
-    width: 260px;
+  .bb-main {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .bb-sidebar-drawer:not(.bb-sidebar-drawer--open) {
     transform: translateX(-100%);
   }
 
-  .bb-sidebar-drawer.bb-sidebar-drawer--open {
-    transform: translateX(0);
+  .bb-sidebar-drawer {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    display: block;        /* ✅ NOT flex */
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  .bb-sidebar {
+    /* COMPLETE RESET */
+    all: unset;
+
+    /* Rebuild explicitly */
+    position: relative;
+    display: block;
+
+    width: 100vw;
+    height: 100dvh;
+
+    box-sizing: border-box;
+    padding: 0.25rem;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    background: #030604;
   }
 }
 
@@ -1910,30 +1938,38 @@
 }
 
 /* FOOTER */
-.bb-footer {
-  border-top: 1px solid #1f3b2a;
-  padding: 0.25rem 0.5rem;
-  display: flex;
-  align-items: center;
-  font-size: 0.75rem;
-  flex-shrink: 0;
+@media (max-width: 899px) {
+  .bb-footer {
+    display: none;
+  }
 }
 
-.bb-footer__left {
-  width: 160px;
-}
+@media (min-width: 900px) {
+  .bb-footer {
+    border-top: 1px solid #1f3b2a;
+    padding: 0.25rem 0.5rem;
+    display: flex;
+    align-items: center;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
 
-.bb-footer__center {
-  flex: 1;
-  text-align: center;
-  opacity: 0.8;
-}
+  .bb-footer__left {
+    width: 160px;
+  }
 
-.bb-footer__right {
-  width: 100px;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.25rem;
+  .bb-footer__center {
+    flex: 1;
+    text-align: center;
+    opacity: 0.8;
+  }
+
+  .bb-footer__right {
+    width: 100px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.25rem;
+  }
 }
 
 .bb-status-light {
@@ -3145,4 +3181,14 @@ input[type="number"]:disabled + .bb-spinner .bb-spinner-btn {
 .bb-home-scenes-modal__footer {
   display: flex;
   justify-content: space-between;
+}
+
+@media (max-width: 899px) {
+  .bb-main > .bb-player-panel-shell {
+    display: none;
+  }
+
+  body.bb-play-mode .bb-main > .bb-player-panel-shell {
+    display: flex;
+  }
 }

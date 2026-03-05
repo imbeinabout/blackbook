@@ -74,6 +74,7 @@ const MainPage: React.FC<MainPageProps> = ({
   const emptyVeteran: Record<string, number> = {};
   const baseSkills = React.useMemo(() => buildBaseSkills(), []);
 
+  const [isPlayMode, setIsPlayMode] = React.useState(false);
   const [toast, setToast] = React.useState<string | null>(null);
 
   const [isAddDisorderOpen, setIsAddDisorderOpen] = React.useState(false);
@@ -85,6 +86,12 @@ const MainPage: React.FC<MainPageProps> = ({
   const closeAddDisorderModal = React.useCallback(() => {
     setIsAddDisorderOpen(false);
   }, []);
+
+  React.useEffect(() => {
+    if (isPlayMode) {
+      setIsSidebarOpen(false);
+    }
+  }, [isPlayMode]);
 
   React.useEffect(() => {
     if (toast) {
@@ -275,6 +282,8 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const enterPlayMode = () => {
     if (!activeAgentId || !agent) return;
+    setIsPlayMode(true);
+    document.body.classList.add("bb-play-mode");
 
     // Snapshot current agent as baseline
     const baselineJson = JSON.stringify(agent);
@@ -303,6 +312,8 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const exitPlayMode = () => {
     if (!activeAgentId || !agent) return;
+    setIsPlayMode(false);
+    document.body.classList.remove("bb-play-mode");
 
     const creation = getCreationMeta(agent);
     if (!creation.playMode?.isPlaying) return;
@@ -524,6 +535,9 @@ const MainPage: React.FC<MainPageProps> = ({
       ? `Body AR ${bodyArmorRating} from: ${bodyArmorSources.join(", ")}`
       : `Body AR ${bodyArmorRating}`;
 
+  //const isMobile = useLayoutMode() === "mobile";
+  //const canDismissSidebar = !isMobile || isPlayMode;
+  
   const headerNode = (
     <Header
       agents={agents}
@@ -542,6 +556,7 @@ const MainPage: React.FC<MainPageProps> = ({
       onExit={onCloseAgent}
       onImportRequested={() => fileInputRef.current?.click()}
       onToggleSidebar={() => setIsSidebarOpen(v => !v)}
+      isPlayMode={isPlayMode}
     />
   );
 
@@ -704,7 +719,7 @@ const MainPage: React.FC<MainPageProps> = ({
     <>
       <MainPageLayout
         header={headerNode}
-        sidebar={isSidebarOpen ? sidebarNode : null}
+        sidebar={sidebarNode}
         playerPanel={playerPanelNode}
         footer={footerNode}
         isSidebarOpen={isSidebarOpen}
@@ -745,13 +760,6 @@ const MainPage: React.FC<MainPageProps> = ({
         <div className="bb-toast">
           {toast}
         </div>
-      )}
-      
-      {!isSidebarOpen && (
-        <div
-          className="bb-sidebar-overlay"
-          onClick={() => setIsSidebarOpen(true)}
-        />
       )}
 
     </>

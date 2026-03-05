@@ -8,6 +8,7 @@ export type HeaderProps = {
   agents: Record<string, DeltaGreenAgent>;
   activeAgentId: string | null;
   openAgentIds: string[];
+  isPlayMode: boolean;
 
   onSetActiveAgent: (id: string) => void;
   onCloseAgentTab: (id: string) => void;
@@ -27,6 +28,7 @@ const Header: React.FC<HeaderProps> = ({
   agents,
   activeAgentId,
   openAgentIds,
+  isPlayMode,
   onSetActiveAgent,
   onCloseAgentTab,
   onNewAgent,
@@ -85,6 +87,7 @@ const Header: React.FC<HeaderProps> = ({
           className="bb-header__hamburger"
           aria-label="Toggle sidebar"
           type="button"
+          disabled={!isPlayMode}
           onClick={onToggleSidebar}
         >
           ☰
