@@ -34,8 +34,7 @@ const DamagedVeteranSection: React.FC<DamagedVeteranSectionProps> = ({
   onTemplateApplied,
   onTemplateReset,
 }) => {
-  const [selectedOption, setSelectedOption] =
-    useState<DamagedVeteranOption>("none");
+  const [selectedOption, setSelectedOption] = useState<DamagedVeteranOption>("none");
   const [hardSkills, setHardSkills] = useState<string[]>([]);
   const [templateApplied, setTemplateApplied] = useState(false);
   const [bondToRemoveId, setBondToRemoveId] = React.useState<string | null>(
@@ -134,7 +133,6 @@ const DamagedVeteranSection: React.FC<DamagedVeteranSectionProps> = ({
       return;
     }
     if (selectedOption === "none") {
-      alert("No Damaged Veteran option selected.");
       return;
     }
     if (selectedOption === "hard_experience") {
@@ -595,7 +593,7 @@ const DamagedVeteranSection: React.FC<DamagedVeteranSectionProps> = ({
             applyTemplate();
             onTemplateApplied?.();
           }}
-          disabled={templateApplied}
+          disabled={selectedOption === "none" || templateApplied}
           title={
             templateApplied
               ? "Template already applied. Reset this section to change it."
