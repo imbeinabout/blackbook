@@ -8,7 +8,6 @@ const Header = (props: HeaderProps) => {
 
   
     if (isMobile) {
-        console.log("In Mobile Version")
         return (
         <MobileHeader
             isPlayMode={props.isPlayMode}

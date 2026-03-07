@@ -91,7 +91,7 @@ const MotivationsSection: React.FC<MotivationsSectionProps> = ({
   };
 
   return (
-    <div className="bb-identity-section">
+    <div className="bb-motivations-section">
       <p className="bb-section-help">
         As you play, your Agent can have up to five motivations that
         serve as driving factors (e.g. “Stand up for the little guy”, “Serve my
@@ -121,14 +121,6 @@ const MotivationsSection: React.FC<MotivationsSectionProps> = ({
                 handleNameChange(mot._id, e.target.value)
               }
               className="bb-input"
-              style={{
-                width: "100%",
-                boxSizing: "border-box",
-                backgroundColor: "#101010",
-                color: "#c4f0c4",
-                border: "1px solid #3a3a3a",
-                padding: "0.25rem 0.5rem",
-              }}
               maxLength={120}
               placeholder='e.g. "Serve my country"'
             />
@@ -136,7 +128,6 @@ const MotivationsSection: React.FC<MotivationsSectionProps> = ({
           <button
             type="button"
             className="bb-button bb-button--small"
-            style={{ alignSelf: "flex-end", marginTop: "0.15rem" }}
             onClick={() => handleRemove(mot._id)}
           >
             Remove
@@ -147,7 +138,6 @@ const MotivationsSection: React.FC<MotivationsSectionProps> = ({
       <button
         type="button"
         className="bb-button bb-button--primary"
-        style={{ marginTop: "0.5rem", width: "100%" }}
         disabled={motivations.length >= MAX_MOTIVATIONS}
         onClick={handleAdd}
       >

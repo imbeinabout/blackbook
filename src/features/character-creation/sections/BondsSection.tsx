@@ -65,8 +65,8 @@ const BondsSection: React.FC<BondsSectionProps> = ({ agent, updateAgent }) => {
   const cha = agent.system.statistics.cha.value;
 
   return (
-    <section style={{ marginTop: "1.0rem" }}>
-      <p style={{ fontSize: "0.9rem", opacity: 0.8 }}>
+    <section className="bb-bonds-section">
+      <p className="bb-bonds-description">
         Your profession gives you {bonds.length} Bond
         {bonds.length === 1 ? "" : "s"}. Each Bond’s starting score equals your
         Charisma ({cha}). Use this section to name and describe each Bond.
@@ -74,29 +74,15 @@ const BondsSection: React.FC<BondsSectionProps> = ({ agent, updateAgent }) => {
       {bonds.map((bond, idx) => (
         <div
           key={bond._id ?? idx}
-          style={{
-            border: "1px solid #3a3a3a",
-            padding: "0.5rem",
-            marginBottom: "0.5rem",
-            borderRadius: "4px",
-            boxSizing: "border-box",
-          }}
+          className="bb-bond-area"
         >
-          <label style={{ display: "block", marginBottom: "0.25rem" }}>
+          <label className="bb-bond-label">
             Name
             <input
               type="text"
               value={bond.system?.name ?? bond.name ?? ""}
               onChange={(e) => handleBondNameChange(idx, e.target.value)}
-              style={{
-                width: "100%",
-                boxSizing: "border-box",
-                marginTop: "0.25rem",
-                backgroundColor: "#101010",
-                color: "#c4f0c4",
-                border: "1px solid #3a3a3a",
-                padding: "0.25rem 0.5rem",
-              }}
+              className="bb-bond-input"
             />
           </label>
 
@@ -107,17 +93,8 @@ const BondsSection: React.FC<BondsSectionProps> = ({ agent, updateAgent }) => {
               onChange={(e) =>
                 handleBondDescriptionChange(idx, e.target.value)
               }
+              className="bb-bond-textarea"
               rows={2}
-              style={{
-                width: "100%",
-                boxSizing: "border-box",
-                marginTop: "0.25rem",
-                backgroundColor: "#101010",
-                color: "#c4f0c4",
-                border: "1px solid #3a3a3a",
-                padding: "0.25rem 0.5rem",
-                resize: "vertical",
-              }}
             />
           </label>
 

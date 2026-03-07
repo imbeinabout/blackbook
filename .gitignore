@@ -22,6 +22,7 @@
 .env.test.local
 .env.production.local
 .repo-to-text-settings.yaml
+repo-to-text*
 
 npm-debug.log*
 yarn-debug.log*

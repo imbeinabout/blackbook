@@ -292,7 +292,7 @@ const SkillsSection: React.FC<SkillsSectionProps> = ({
         <div className="bb-form-row bb-form-row--inline">
           <span className="bb-form-label__text">Skill Type</span>
           <select
-            className="bb-select"
+            className="bb-select bb-select--skills-package"
             value={bonusCustomType}
             onChange={(e) => setBonusCustomType(e.target.value)}
           >

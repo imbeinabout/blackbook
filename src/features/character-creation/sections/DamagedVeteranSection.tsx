@@ -431,8 +431,8 @@ const DamagedVeteranSection: React.FC<DamagedVeteranSectionProps> = ({
   };
 
   return (
-    <section>
-      <p style={{ fontSize: "0.9rem", opacity: 0.8 }}>
+    <section className="bb-dv-section">
+      <p className="bb-dv-p">
         If this Agent is already part of Delta Green, choose one Damaged
         Veteran option to represent the past operation that broke them. This
         will permanently adjust SAN, stats, skills, and Bonds.

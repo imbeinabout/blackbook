@@ -2,11 +2,6 @@
   overflow: hidden;
 }
 
-.bb-sidebar {
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
 .bb-sidebar * {
   white-space: normal;
 }
@@ -265,6 +260,53 @@
   color: #b02020; /* red-ish, similar to main tab close hover */
 }
 
+.bb-modal__dialog {
+  width: 260px;
+  max-width: 90vw;
+  border: 1px solid #274630;
+  background: #030604;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
+  padding: 0.75rem;
+}
+
+/* Make the Load Agent modal much larger than the default tiny dialog */
+.bb-modal__dialog.bb-load-modal__dialog {
+  width: 96%;
+  max-width: 1100px;
+  max-height: 80vh;
+}
+
+.bb-modal__title {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bb-load-modal__dialog .bb-modal__title {
+  text-align: center;
+}
+
+.bb-modal__body {
+  margin-bottom: 0.5rem;
+}
+
+.bb-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+/* Wider, scrollable dialog for StatusAdjustModal (SAN flow) */
+.bb-modal__dialog.bb-status-adjust-modal__dialog {
+  width: 96%;
+  max-width: 450px;
+  min-width: 0;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
 /* MAIN BODY */
 .bb-main {
   flex: 1;
@@ -276,10 +318,14 @@
 
 /* SIDEBAR */
 .bb-sidebar {
+  display: flex;
   flex: 0 0 auto;      /* do NOT grow, do NOT shrink */
+  flex-direction: column;
   width: max-content;  /* size to content */
   max-width: 260px;    /* safety cap (adjust if you want) */
   min-width: 260px;
+  height: 100%;
+  min-height: 5rem;
 
   border-right: 1px solid #1f3b2a;
   padding: 0.25rem;
@@ -311,12 +357,15 @@
 }
 
 .bb-sidebar-section {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 0.5rem;
 }
 
 .bb-sidebar-section__header {
   width: 100%;
   display: flex;
+  flex: 0 0 auto;
   flex-wrap: nowrap;
   align-items: center;
   gap: 0.5rem;
@@ -326,6 +375,7 @@
   padding-left: 0;
   padding-right: 0;
   cursor: pointer;
+  min-height: 3rem;
 }
 
 /* Make the title take the left side */
@@ -341,6 +391,7 @@
 }
 
 .bb-sidebar-section__body {
+  flex: 0 0 auto;
   border: 1px solid #274630;
   border-top: none;
   padding: 0.5rem;
@@ -370,11 +421,13 @@
 }
 
 .bb-sidebar-play-controls {
-  margin-top: 0.75rem;                  /* space from last section */
+  position: static;
+  margin-top: 0.75rem;
   padding-top: 0.75rem;
-  border-top: 1px solid #1f3b2a;        /* subtle divider */
+  border-top: 1px solid #1f3b2a;
   display: flex;
-  justify-content: center;              /* center the button */
+  justify-content: center;
+  background: transparent;
 }
 
 .bb-sidebar-play-controls .bb-button {
@@ -440,10 +493,12 @@
 
     /* Rebuild explicitly */
     position: relative;
-    display: block;
+    display: flex;
+    flex-direction: column;
 
     width: 100vw;
-    height: 100dvh;
+    height: 100%;
+    min-height: 0;
 
     box-sizing: border-box;
     padding: 0.25rem;
@@ -453,6 +508,10 @@
 
     background: #030604;
   }
+
+  
+
+
 }
 
 /* --- Sidebar generic typography --- */
@@ -971,6 +1030,751 @@
   min-width: 2.5rem;
   text-align: right;
 }
+
+/* ================================
+   Custom Profession Modal (layout)
+   ================================ */
+
+.bb-cp-dialog {
+  width: 96%;
+  max-width: 900px;        /* ✅ desktop-usable width */
+  max-height: 85vh;        /* ✅ never exceed viewport */
+  min-width: 0;
+
+  display: flex;           /* ✅ enables scroll layout */
+  flex-direction: column;
+
+  padding: 0.75rem;
+}
+
+/* Header stays fixed */
+.bb-cp-header {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Main content scrolls */
+.bb-cp-builder {
+  flex: 1 1 auto;
+  min-height: 0;           /* ✅ REQUIRED for scrolling */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.25rem; /* avoids scrollbar overlap */
+}
+
+/* Optional: status messages should not push layout */
+.bb-cp-status {
+  flex: 0 0 auto;
+}
+
+.bb-cp-modal {
+  font-size: 0.85rem;
+}
+
+.bb-cp-close-btn {
+  border: 1px solid #3a6b45;
+  background: #07140d;
+  color: #9be27b;
+  cursor: pointer;
+}
+
+.bb-cp-status {
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.bb-cp-select {
+  width: 100%;
+}
+
+.bb-cp-name-input {
+  width: 100%;
+  max-width: 100%;
+}
+
+.bb-cp-skill-btn {
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* === Custom Profession Modal allocation row layout === */
+
+.bb-cp-alloc-row {
+  display: grid;
+  grid-template-columns: 220px auto 44px; /* label column, select, remove */
+  align-items: center;
+  column-gap: 0.5rem;
+  row-gap: 0;
+  min-width: 0;
+}
+
+.bb-cp-alloc-label {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Do NOT force 100% width here */
+.bb-cp-alloc-select {
+  width: auto;
+  min-width: 84px;
+}
+
+.bb-cp-alloc-row + .bb-cp-alloc-row {
+  border-top: 1px solid #1f3b2a; /* same tone you use elsewhere */
+  padding-top: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+.bb-cp-delete-btn {
+  margin-left: 0.5rem;
+  background: #440000;
+  color: #ffdddd;
+  border: 1px solid #aa0000;
+}
+
+.bb-cp-add-typed-btn {
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 899px) {
+  /* === Mobile sidebar ergonomics === */
+
+  /* Section headers: big, tappable */
+  .bb-sidebar-section__header {
+    min-height: 48px;
+    padding: 0.75rem 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  /* Give sections breathing room */
+  .bb-sidebar-section {
+    margin-bottom: 1rem;
+  }
+
+  .bb-sidebar p {
+    font-size: 1rem;
+  }
+
+  /* Primary buttons (ENTER PLAY MODE, APPLY, etc.) */
+  .bb-sidebar .bb-button {
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+
+  /* Inline +/- controls */
+  .bb-skill-alloc-button {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 1.1rem;
+  }
+
+  /* Toggle pills */
+  .bb-toggle__pill {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.85rem;
+  }
+
+  /* Checkbox rows */
+  .bb-checkbox {
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .bb-identity-section {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .bb-identity-section .bb-form-label__text {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    opacity: 0.9;
+  }
+
+  .bb-identity-section input,
+  .bb-identity-section select,
+  .bb-identity-section textarea {
+    min-height: 44px;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+  }
+  
+  .bb-identity-section .bb-form-row--inline {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .bb-motivations-section {
+    padding: 0.5rem 0.25rem;
+  }
+  
+  .bb-motivations-section .bb-form-label__text {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    opacity: 0.9;
+  }
+
+  .bb-motivations-section input,
+  .bb-motivations-section select,
+  .bb-motivations-section textarea {
+    min-height: 44px;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+  }
+  
+  .bb-motivations-section .bb-form-row--inline {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .bb-motivations-section .bb-button {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+
+  .bb-motivations-section .bb-button {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+
+  .bb-form-row--sex {
+    gap: 0.5rem;
+  }
+
+  .bb-form-row--sex .bb-toggle__pill {
+    min-height: 44px;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+  
+  .bb-toggle__pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  
+  .bb-input.bb-input--sex-other {
+    margin-top: 0.5rem;
+  }
+  
+  .bb-toggle-group {
+    margin-bottom: 0.75rem;
+  }
+  
+  .bb-form-row--stat {
+    padding: 0.75rem 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 6px;
+    background: #020403;
+  }
+
+  .bb-form-row--stat .bb-form-label__text {
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+  }
+  
+  .bb-select.bb-select--stat,
+  .bb-input.bb-input--df {
+    min-height: 44px;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.6rem;
+  }
+  
+  .bb-form-row--stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  
+  .bb-derived-stats {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+
+  .bb-derived-stats__title {
+    font-size: 1rem;
+  }
+
+  .bb-derived-stats__line {
+    margin-bottom: 0.25rem;
+  }
+
+  .bb-skills-section {
+    margin-top: 0.5rem;
+  }
+
+  .bb-skills-card {
+    padding: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .bb-skill-alloc-row {
+    min-height: 48px;
+    padding: 0.4rem 0.25rem;
+    align-items: center;
+  }
+  
+  .bb-skill-alloc-label {
+    font-size: 1rem;
+    line-height: 1.25;
+    padding-right: 0.5rem;
+  }
+  
+  .bb-skill-alloc-controls {
+    gap: 0.4rem;
+  }
+
+  .bb-skill-alloc-controls {
+    gap: 0.4rem;
+  }
+  
+  .bb-skill-alloc-row + .bb-skill-alloc-row {
+    border-top: 1px solid #1f3b2a;
+  }
+  
+  .bb-skills-section .bb-select.bb-select--skills-package {
+    min-height: 44px;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+  }
+  
+  .bb-skills-section .bb-skills-apply-btn,
+  .bb-skills-section .bb-skills-add-btn {
+    width: 100%;
+    min-height: 44px;
+    margin-top: 0.5rem;
+  }
+  
+  .bb-skills-section .bb-skills-card {
+    margin-bottom: 1rem;
+  }
+  
+  .bb-skills-section .bb-form-row--inline {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .bb-skills-section .bb-input.bb-input--subtype {
+    min-height: 44px;
+    font-size: 0.9rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .bb-skills-section .bb-input[type="number"] {
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+
+  .bb-skills-section .bb-skills-add-btn {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  .bb-skills-section .bb-skills-card--inline,
+  .bb-skills-section .bb-skills-card:has(.bb-input--subtype) {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #1f3b2a;
+  }
+
+  /* Force vertical layout for custom skill inputs */
+  .bb-skills-section .bb-form-row--inline {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+
+  /* Typed skill name input: bigger + readable */
+  .bb-skills-section .bb-input.bb-input--subtype {
+    min-height: 48px;
+    font-size: 1rem;          /* ✅ larger text */
+    padding: 0.6rem 0.75rem;
+    letter-spacing: 0.02em;
+  }
+
+  /* Numeric value input: same visual weight */
+  .bb-skills-section .bb-input {
+    min-height: 48px;
+    font-size: 1rem;          /* ✅ larger text */
+    padding: 0.6rem 0.75rem;
+  }
+
+  /* Add Skill button: primary action feel */
+  .bb-skills-section .bb-skills-add-btn {
+    min-height: 48px;
+    font-size: 1rem;          /* ✅ larger text */
+    font-weight: 600;
+    margin-top: 0.25rem;
+  }
+
+  /* Optional: make labels clearer if present */
+  .bb-skills-section .bb-form-label__text {
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+    opacity: 0.9;
+  }
+
+  /* Give the whole section breathing room */
+  .bb-profession-section {
+    padding: 0.5rem 0.25rem;
+  }
+
+  /* Profession select: primary decision control */
+  .bb-select.bb-select--profession {
+    min-height: 48px;
+    font-size: 1rem;          /* ✅ slightly larger */
+    padding: 0.6rem 0.75rem;
+  }
+
+  /* Help / instructional text */
+  .bb-profession-section .bb-section-help {
+    font-size: 0.85rem;
+    line-height: 1.35;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
+  }
+
+  /* Profession selector container */
+  .bb-profession-selector {
+    padding: 0.75rem;
+  }
+
+  /* Manage button: full-width, touch friendly */
+  .bb-profession-selector__manage-btn {
+    min-height: 44px;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  /* Meta block (bonds, description, etc.) */
+  .bb-profession-meta {
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+  }
+
+  .bb-profession-meta__line {
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+
+  .bb-profession-meta__description {
+    font-size: 0.85rem;
+    line-height: 1.35;
+    margin-top: 0.35rem;
+    opacity: 0.9;
+  }
+
+  /* Action buttons (apply / reset) */
+  .bb-profession-actions {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .bb-profession-actions .bb-button {
+    min-height: 44px;
+    font-size: 0.95rem;
+  }
+
+/* Overall meta text (description, bonds, notes) */
+  .bb-profession-meta {
+    font-size: 0.95rem;          /* ✅ larger body text */
+    line-height: 1.4;
+  }
+
+  .bb-profession-meta__description {
+    font-size: 0.95rem;          /* ✅ readable paragraph size */
+    line-height: 1.45;
+    margin-top: 0.5rem;
+  }
+
+  /* Profession blocks (fixed skills, choice groups) */
+  .bb-profession-block {
+    margin-top: 1rem;
+  }
+
+  .bb-profession-block__title {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.06em;
+  }
+
+  /* Choice groups (radio / checkbox lists) */
+  .bb-choice-group {
+    margin-top: 0.75rem;
+  }
+
+  .bb-choice-group__item {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Checkboxes inside profession section */
+  .bb-profession-section .bb-checkbox {
+    min-height: 44px;
+    font-size: 0.95rem;          /* ✅ bigger label text */
+    align-items: center;
+  }
+
+  .bb-profession-section .bb-checkbox__box {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* Any text inputs / selects shown after profession selection */
+  .bb-profession-section input,
+  .bb-profession-section select,
+  .bb-profession-section textarea {
+    min-height: 44px;
+    font-size: 0.95rem;          /* ✅ consistent with Identity */
+    padding: 0.5rem 0.6rem;
+  }
+
+/* Overall section padding */
+  .bb-bonds-section {
+    padding: 0.5rem 0.25rem;
+  }
+
+  /* Bond table text (labels + values) */
+  .bb-bonds-section,
+  .bb-bonds-section .bb-bonds-table {
+    font-size: 0.95rem;       /* ✅ larger, readable body text */
+    line-height: 1.4;
+  }
+
+  /* Table cells: add breathing room */
+  .bb-bonds-section .bb-bonds-table td {
+    padding: 0.5rem 0.25rem;
+    vertical-align: top;
+  }
+
+  /* Bond name / score inputs */
+  .bb-bonds-section input,
+  .bb-bonds-section select {
+    min-height: 44px;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .bb-bond-label {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0.25rem;
+    background-color: #101010;
+    color: #c4f0c4;
+    border: 1px solid #3a3a3a;
+    padding: 0.25rem 0.5rem;
+  }
+
+ .bb-bond-area {
+    border: 1px solid #3a3a3a;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  /* Bond description / notes textarea */
+  .bb-bonds-section textarea {
+    min-height: 96px;         /* ✅ comfortable typing height */
+    font-size: 0.95rem;
+    line-height: 1.4;
+    padding: 0.6rem 0.75rem;
+    resize: vertical;
+  }
+
+  /* Add / Remove / Reset buttons */
+  .bb-bonds-section .bb-button {
+    min-height: 44px;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .bb-bond-input {
+    min-height: 44px;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .bb-bond-textarea {
+    min-height: 120px;       /* ✅ real typing comfort */
+    font-size: 0.95rem;
+    line-height: 1.45;
+    padding: 0.6rem 0.75rem;
+    resize: vertical;
+  }
+
+  /* Overall text size bump */
+  .bb-motivations-section p {
+    font-size: 1rem;
+    line-height: 1.4;
+    padding: 0.5rem 0.25rem;
+  }
+
+  /* Individual motivation rows */
+  .bb-motivations-section li,
+  .bb-motivations-section .bb-motivation-label {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  /* Motivation input fields */
+  .bb-motivations-section input,
+  .bb-motivations-section textarea {
+    min-height: 44px;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  /* Textareas: give room to think */
+  .bb-motivations-section textarea {
+    min-height: 96px;
+    line-height: 1.45;
+    resize: vertical;
+  }
+
+  /* Add / remove buttons */
+  .bb-motivations-section .bb-button {
+    min-height: 44px;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+
+  .bb-dv-section {
+    padding: 0.5rem 0.25rem;
+    font-size: 1rem; /* baseline bump */
+  }
+
+  /* Intro paragraph */
+  .bb-dv-p {
+    font-size: 1rem;
+    line-height: 1.45;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Radio / checkbox rows */
+  .bb-dv-section .bb-radio-grid {
+    min-height: 48px;
+    padding: 0.4rem 0.25rem;
+    column-gap: 0.75rem;
+    align-items: flex-start;
+  }
+
+  /* Primary option title */
+  .bb-dv-section .bb-radio-grid > div > div:first-child,
+  .bb-dv-section .bb-radio-grid > div:not(.bb-radio-desc) {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  /* Description text */
+  .bb-dv-section .bb-radio-desc {
+    font-size: 0.9rem;
+    line-height: 1.35;
+    margin-top: 0.15rem;
+    opacity: 0.9;
+  }
+
+  /* Radios & checkboxes: make thumb-friendly */
+  .bb-dv-section input[type="radio"],
+  .bb-dv-section input[type="checkbox"] {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.2rem;
+  }
+
+  /* Hard Experience subheading */
+  .bb-dv-section .dv-section__subheading {
+    font-size: 0.95rem;
+    margin-top: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Scrollable skill list in Hard Experience */
+  .bb-dv-section div[style*="overflow-y: auto"] {
+    max-height: 14rem; /* more comfortable */
+    padding-right: 0.25rem;
+  }
+
+  /* Apply / Reset buttons stack */
+  .bb-dv-section .dv-button-stack .bb-button {
+    min-height: 44px;
+    font-size: 0.95rem;
+  }
+
+  .bb-cp-modal {
+    font-size: 1rem;
+  }
+  
+  .bb-cp-dialog {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100dvh;
+    border-radius: 0;      /* full-screen feel on mobile */
+  }
+
+
+  .bb-cp-modal h3,
+  .bb-cp-modal h4,
+  .bb-cp-modal h5 {
+    font-size: 1.05rem;
+  }
+
+  .bb-cp-select,
+  .bb-cp-name-input {
+    min-height: 44px;
+    font-size: 1rem;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .bb-cp-skill-btn {
+    min-height: 44px;
+    font-size: 0.95rem;
+  }
+
+  .bb-cp-add-typed-btn,
+  .bb-cp-delete-btn,
+  .bb-cp-close-btn {
+    min-height: 44px;
+    font-size: 0.95rem;
+  }
+
+  .bb-cp-remove-btn {
+    font-size: 1.1rem;
+  }
+
+  .bb-cp-status {
+    font-size: 0.95rem;
+  }
+
+  .bb-cp-alloc-row {
+    grid-template-columns: 1fr auto 48px; /* label grows, select, remove */
+    column-gap: 0.4rem;
+  }
+
+  .bb-cp-remove-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+  }
+
+  .bb-cp-alloc-select {
+    min-height: 44px;
+    font-size: 1rem;
+  }
+}
+
 
 /* PLAYER PANEL */
 .bb-player-panel {
@@ -2061,53 +2865,6 @@
   z-index: 930;
 }
 
-.bb-modal__dialog {
-  width: 260px;
-  max-width: 90vw;
-  border: 1px solid #274630;
-  background: #030604;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.7);
-  padding: 0.75rem;
-}
-
-/* Make the Load Agent modal much larger than the default tiny dialog */
-.bb-modal__dialog.bb-load-modal__dialog {
-  width: 96%;
-  max-width: 1100px;
-  max-height: 80vh;
-}
-
-.bb-modal__title {
-  margin: 0 0 0.5rem 0;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.bb-load-modal__dialog .bb-modal__title {
-  text-align: center;
-}
-
-.bb-modal__body {
-  margin-bottom: 0.5rem;
-}
-
-.bb-modal__footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
-
-/* Wider, scrollable dialog for StatusAdjustModal (SAN flow) */
-.bb-modal__dialog.bb-status-adjust-modal__dialog {
-  width: 96%;
-  max-width: 450px;
-  min-width: 0;
-  max-height: 80vh;
-  display: flex;
-  flex-direction: column;
-}
-
 /* Make body scroll when content is tall */
 .bb-status-adjust-modal__body {
   max-height: 60vh;
@@ -2805,60 +3562,6 @@ input[type="number"]:disabled + .bb-spinner .bb-spinner-btn {
   border: 1px solid rgba(176, 140, 32, 0.6);
   padding: 0 1px;
   border-radius: 2px;
-}
-
-/* --- Damaged Veteran template rows: radio on the RIGHT --- */
-.dv-template-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.dv-template-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 0.25rem 0.35rem;
-  border: 1px solid var(--bb-border-soft);
-  background: #020403;
-  cursor: pointer;
-}
-
-.dv-template-row:hover {
-  background: #0a1a11;
-}
-
-.dv-template-row--selected {
-  background: var(--bb-accent-soft);
-  color: #fff;
-  border-color: var(--bb-accent-soft);
-}
-
-.dv-template-row__text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  min-width: 0;
-}
-
-.dv-template-row__title {
-  font-size: 0.85rem;
-  font-weight: bold;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.dv-template-row__desc {
-  font-size: 0.75rem;
-  opacity: 0.85;
-  line-height: 1.2;
-}
-
-.dv-template-row input[type="radio"] {
-  flex: 0 0 auto;
-  margin-left: 0.5rem;
 }
 
 /* --- Player panel locked until PLAY MODE --- */
