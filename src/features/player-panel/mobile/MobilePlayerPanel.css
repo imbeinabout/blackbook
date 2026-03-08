@@ -1,0 +1,49 @@
+.bb-player-panel--mobile {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bb-mobile-section-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--bb-border);
+  background: var(--bb-bg);
+}
+
+.bb-mobile-section-nav__btn {
+  flex: 1;
+  font-size: 0.7rem;
+  padding: 0.5rem 0;
+  opacity: 0.6;
+}
+
+.bb-mobile-section-nav__btn.is-active {
+  opacity: 1;
+  border-bottom: 2px solid var(--bb-accent);
+}
+
+.bb-mobile-section-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bb-mobile-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bb-bg);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+}
+
+.bb-player-panel--mobile .bb-card {
+  border-radius: 6px;
+}

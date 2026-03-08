@@ -1,13 +1,13 @@
 // src/components/layout/Header/index.tsx
-import { Console } from "console";
 import DesktopHeader, {type HeaderProps} from "./DesktopHeader";
 import MobileHeader from "./MobileHeader";
+import { useLayoutMode } from "../../../hooks/useLayoutMode";
 
 const Header = (props: HeaderProps) => {
-  const isMobile = window.matchMedia("(max-width: 899px)").matches;
+  const layoutMode = useLayoutMode();
 
   
-    if (isMobile) {
+    if (layoutMode === "mobile") {
         return (
         <MobileHeader
             isPlayMode={props.isPlayMode}

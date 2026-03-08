@@ -4,6 +4,7 @@ import React from "react";
 import "./MainPage.css"
 
 import { MainPageLayout } from "./MainPage.layout";
+import { useLayoutMode } from "../../hooks/useLayoutMode";
 
 import { useAgentStore } from "../../store/agentStore";
 import type { CreationMeta, DeltaGreenAgent } from "../../models/DeltaGreenAgent";
@@ -535,8 +536,8 @@ const MainPage: React.FC<MainPageProps> = ({
       ? `Body AR ${bodyArmorRating} from: ${bodyArmorSources.join(", ")}`
       : `Body AR ${bodyArmorRating}`;
 
-  //const isMobile = useLayoutMode() === "mobile";
-  //const canDismissSidebar = !isMobile || isPlayMode;
+  const layoutMode = useLayoutMode();
+  const isMobile = layoutMode === "mobile";
   
   const headerNode = (
     <Header
