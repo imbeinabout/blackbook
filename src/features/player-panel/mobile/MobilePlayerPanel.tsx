@@ -53,8 +53,55 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
   const [section, setSection] = React.useState<MobileSection>("persona");
   const [isTerminalOpen, setIsTerminalOpen] = React.useState(false);
 
+  const sectionOrder = React.useMemo(
+    () => MOBILE_SECTIONS.map(s => s.key),
+    []
+  );
+  const touchStartX = React.useRef<number | null>(null);
+  const touchStartY = React.useRef<number | null>(null);
+
+  const [transitionDir, setTransitionDir] = React.useState<"left" | "right" | null>(null);
+
   if (!agent) {
     return <main className="bb-player-panel">No agent loaded.</main>;
+  }
+
+  function handleTouchStart(e: React.TouchEvent) {
+  const touch = e.touches[0];
+  touchStartX.current = touch.clientX;
+  touchStartY.current = touch.clientY;
+}
+
+  function handleTouchEnd(e: React.TouchEvent) {
+    if (touchStartX.current === null || touchStartY.current === null) {
+      return;
+    }
+
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartX.current;
+    const dy = touch.clientY - touchStartY.current;
+
+    touchStartX.current = null;
+    touchStartY.current = null;
+
+    const HORIZONTAL_THRESHOLD = 50;
+
+    // Ignore mostly-vertical gestures
+    if (Math.abs(dx) < HORIZONTAL_THRESHOLD || Math.abs(dx) < Math.abs(dy)) {
+      return;
+    }
+
+    const currentIndex = sectionOrder.indexOf(section);
+
+    if (dx < 0 && currentIndex < sectionOrder.length - 1) {
+      setTransitionDir("left");
+      setSection(sectionOrder[currentIndex + 1]);
+    }
+
+    if (dx > 0 && currentIndex > 0) {
+      setTransitionDir("right");
+      setSection(sectionOrder[currentIndex - 1]);
+    }
   }
 
   function TerminalOverlay({ onClose }: { onClose: () => void }) {
@@ -70,10 +117,23 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
     <main className="bb-player-panel bb-player-panel--mobile">
       <MobileSectionNav
         active={section}
-        onSelect={setSection}
+        onSelect={(next) => {
+          const currentIndex = sectionOrder.indexOf(section);
+          const nextIndex = sectionOrder.indexOf(next);
+          setTransitionDir(nextIndex > currentIndex ? "left" : "right");
+          setSection(next);
+        }}
       />
 
-      <div className="bb-mobile-section-content">
+      <div         
+        className={`bb-mobile-section-content ${
+            transitionDir ? `is-${transitionDir}` : ""
+          }`}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onAnimationEnd={() => setTransitionDir(null)}
+      >
+        <div className="bb-mobile-section-inner">
         {section === "persona" && (
           <>
             <PersonalDataCard agent={agent} openStatRoll={openStatRoll} />
@@ -175,6 +235,7 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
             <NotesTab agent={agent} updateAgent={updateAgent} />
           </>
         )}
+        </div>
       </div>
 
       {isTerminalOpen && (

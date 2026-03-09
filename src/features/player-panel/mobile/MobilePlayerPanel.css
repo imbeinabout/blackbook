@@ -6,12 +6,6 @@
   --safe-left: env(safe-area-inset-left, 0px);
 }
 
-.bb-mobile-section-nav {
-  padding-top: calc(0.5rem + var(--safe-top));
-  padding-left: calc(0.5rem + var(--safe-left));
-  padding-right: calc(0.5rem + var(--safe-right));
-}
-
 .bb-player-panel--mobile {
   display: flex;
   flex-direction: column;
@@ -20,12 +14,22 @@
 }
 
 .bb-mobile-section-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
   display: flex;
   justify-content: space-between;
   gap: 0.25rem;
-  padding: 0.5rem;
-  border-bottom: 1px solid var(--bb-border);
+
+  /* Existing padding + safe area */
+  padding-top: calc(0.5rem + var(--safe-top));
+  padding-left: calc(0.5rem + var(--safe-left));
+  padding-right: calc(0.5rem + var(--safe-right));
+  padding-bottom: 0.5rem;
+
   background: var(--bb-bg);
+  border-bottom: 1px solid var(--bb-border);
 }
 
 .bb-mobile-section-nav__btn {
@@ -51,6 +55,45 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.bb-mobile-section-content {
+  position: relative;
+  overflow: hidden;
+}
+
+.bb-mobile-section-inner {
+  animation: section-enter 160ms ease-out;
+}
+
+.bb-mobile-section-content.is-left .bb-mobile-section-inner {
+  animation-name: section-enter-left;
+}
+
+.bb-mobile-section-content.is-right .bb-mobile-section-inner {
+  animation-name: section-enter-right;
+}
+
+@keyframes section-enter-left {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes section-enter-right {
+  from {
+    transform: translateX(-16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .bb-mobile-overlay {
