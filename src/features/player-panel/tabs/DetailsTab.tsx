@@ -1,6 +1,7 @@
 // src/features/player-panel/tabs/DetailsTab.tsx
 import React from "react";
 import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
+import { useLayoutMode } from "../../../hooks/useLayoutMode";
 
 type DetailsTabProps = {
   agent: DeltaGreenAgent;
@@ -43,6 +44,8 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
     },
     [agent, details, updateAgent]
   );
+
+  const isMobile = useLayoutMode() === "mobile";
 
   const aliases: AgentAlias[] = (details as any).aliases ?? [];
 
@@ -150,7 +153,9 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               />
             ) : (
               <div className="bb-photo-dropzone__placeholder">
-                <p>Drag & drop an image here, or click to choose a file.</p>
+                <p className="bb-photo-dropzone__hint">
+                  {isMobile ? "Tap to add a photo" : "Drag & drop an image here, or click to choose a file."}
+                </p>
               </div>
             )}
           </div>
