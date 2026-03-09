@@ -75,7 +75,6 @@ const MainPage: React.FC<MainPageProps> = ({
   const emptyVeteran: Record<string, number> = {};
   const baseSkills = React.useMemo(() => buildBaseSkills(), []);
 
-  const [isPlayMode, setIsPlayMode] = React.useState(false);
   const [toast, setToast] = React.useState<string | null>(null);
 
   const [isAddDisorderOpen, setIsAddDisorderOpen] = React.useState(false);
@@ -87,12 +86,6 @@ const MainPage: React.FC<MainPageProps> = ({
   const closeAddDisorderModal = React.useCallback(() => {
     setIsAddDisorderOpen(false);
   }, []);
-
-  React.useEffect(() => {
-    if (isPlayMode) {
-      setIsSidebarOpen(false);
-    }
-  }, [isPlayMode]);
 
   React.useEffect(() => {
     if (toast) {
@@ -125,6 +118,15 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const creationMeta = getCreationMeta(agent);
   const inPlay = creationMeta.playMode?.isPlaying === true;
+
+  React.useEffect(() => {
+    if (inPlay) {
+      document.body.classList.add("bb-play-mode");
+      setIsSidebarOpen(false);
+    } else {
+      document.body.classList.remove("bb-play-mode");
+    }
+  }, [inPlay]);
 
   // Creation meta derived from the active agent; falls back to empty maps.
   const bonusSkillPoints: Record<string, number> = creationMeta.bonusSkillPointsByKey;
@@ -283,7 +285,6 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const enterPlayMode = () => {
     if (!activeAgentId || !agent) return;
-    setIsPlayMode(true);
     document.body.classList.add("bb-play-mode");
 
     // Snapshot current agent as baseline
@@ -292,8 +293,8 @@ const MainPage: React.FC<MainPageProps> = ({
     updateCreationMeta(activeAgentId, (prev) => ({
       ...prev,
       playMode: {
-      isPlaying: true,
-      baselineAgentJson: baselineJson,
+        isPlaying: true,
+        baselineAgentJson: baselineJson,
       },
     }));
 
@@ -313,7 +314,6 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const exitPlayMode = () => {
     if (!activeAgentId || !agent) return;
-    setIsPlayMode(false);
     document.body.classList.remove("bb-play-mode");
 
     const creation = getCreationMeta(agent);
@@ -557,7 +557,7 @@ const MainPage: React.FC<MainPageProps> = ({
       onExit={onCloseAgent}
       onImportRequested={() => fileInputRef.current?.click()}
       onToggleSidebar={() => setIsSidebarOpen(v => !v)}
-      isPlayMode={isPlayMode}
+      isPlayMode={inPlay}
     />
   );
 
