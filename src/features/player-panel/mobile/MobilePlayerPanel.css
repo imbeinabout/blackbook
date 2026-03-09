@@ -217,4 +217,124 @@
     display: flex;
     align-items: center;
   }
+  
+  .bb-card__header {
+    font-size: 1rem;
+  }
+
+}
+
+@media (max-width: 899px) {
+
+  /* -----------------------------
+     PERSONAL DATA CARD
+  ----------------------------- */
+
+  /* Table text size */
+  .bb-personal-table {
+    font-size: 0.95rem;
+  }
+
+  .bb-personal-table__label {
+    font-size: 0.7rem;
+    opacity: 0.9;
+  }
+
+  .bb-personal-table__value {
+    font-size: 1rem;
+  }
+
+  /* Stack rows with breathing room */
+  .bb-personal-table td {
+    padding: 0.35rem 0.25rem;
+    white-space: normal;
+  }
+
+  /* -----------------------------
+     STAT BUTTON GRID (MOBILE)
+  ----------------------------- */
+
+  .bb-personal-stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+  }
+
+  /* Stat buttons: uniform size */
+  .bb-stat-button {
+    min-height: 56px;
+    padding: 0.5rem 0.4rem;
+    font-size: 0.9rem;
+  }
+
+  .bb-stat-button__label {
+    font-size: 0.85rem;
+  }
+
+  .bb-stat-button__value {
+    font-size: 1.2rem;
+  }
+
+  .bb-stat-button__x5 {
+    font-size: 0.75rem;
+    opacity: 0.85;
+  }
+
+  /* Optional: distinguishing feature text */
+  .bb-stat-button__df {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  /* -----------------------------
+     PERSONAL DATA TABLE (MOBILE)
+  ----------------------------- */
+
+  .bb-card--personal-data .bb-card__body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .bb-card--personal-data .bb-personal-table {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .bb-personal-table {
+    display: block;
+    width: 100%;
+    flex: 1 1 auto;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  .bb-personal-table tr {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .bb-personal-table td {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.75rem;
+    width: 100%;
+    padding: 0.4rem 0;
+    box-sizing: border-box;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .bb-personal-table__label {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    opacity: 0.7;
+    white-space: nowrap;
+  }
+
+  .bb-personal-table__value {
+    font-size: 1rem;
+    font-weight: 500;
+    text-align: left;          /* ✅ KEY CHANGE */
+  }
+
 }
