@@ -229,7 +229,10 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
                       type="checkbox"
                       className="bb-checkbox__input"
                       checked={recalcHP}
-                      onChange={(e) => setRecalcHP(e.target.checked)}
+                      onChange={(e) => {
+                        setRecalcHP(e.target.checked);
+                        e.currentTarget.blur();
+                      }}
                     />
                     <span className="bb-checkbox__box" />
                     <span className="bb-checkbox__label">
@@ -242,7 +245,10 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
                       type="checkbox"
                       className="bb-checkbox__input"
                       checked={recalcWP}
-                      onChange={(e) => setRecalcWP(e.target.checked)}
+                      onChange={(e) => {
+                        setRecalcWP(e.target.checked);
+                        e.currentTarget.blur();
+                      }}
                     />
                     <span className="bb-checkbox__box" />
                     <span className="bb-checkbox__label">

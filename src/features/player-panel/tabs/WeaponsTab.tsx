@@ -427,7 +427,10 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                       type="checkbox"
                       className="bb-checkbox__input"
                       checked={isEquipped}
-                      onChange={() => handleToggleEquipped(item._id)}
+                      onChange={(e) => {
+                        handleToggleEquipped(item._id);
+                        e.currentTarget.blur();
+                      }}
                     />
                     <span className="bb-checkbox__box" />
                   </label>
@@ -925,11 +928,12 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                         className="bb-checkbox__input"
                         checked={customIsLethal}
                         onChange={(e) => {
-                        const checked = e.target.checked;
-                        setCustomIsLethal(checked);
-                        if (!checked) {
-                            setCustomLethalityPct(0);
-                        }
+                          const checked = e.target.checked;
+                          setCustomIsLethal(checked);
+                          if (!checked) {
+                              setCustomLethalityPct(0);
+                          }
+                          e.currentTarget.blur();
                         }}
                     />
                     <span className="bb-checkbox__box" />

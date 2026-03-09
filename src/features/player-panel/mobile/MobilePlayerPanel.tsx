@@ -1,6 +1,7 @@
 import React from "react";
 
 import "./MobilePlayerPanel.css"
+import { CardShell } from "../../../components/ui/CardShell";
 
 import type { PlayerPanelProps } from "../PlayerPanel";
 import { MOBILE_SECTIONS, MobileSection } from "./mobileSections";
@@ -137,7 +138,9 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
         {section === "persona" && (
           <>
             <PersonalDataCard agent={agent} openStatRoll={openStatRoll} />
-            <DetailsTab agent={agent} updateAgent={updateAgent} />
+            <CardShell>
+              <DetailsTab agent={agent} updateAgent={updateAgent} />
+            </CardShell>
             <PlayerMotivationsCard
               agent={agent}
               updateAgent={updateAgent}
@@ -165,7 +168,9 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
               agent={agent}
               updateAgentViaMutator={updateAgentViaMutator}
             />
-            <WoundsTab agent={agent}/>
+            <CardShell>
+              <WoundsTab agent={agent}/>
+            </CardShell>
           </>
         )}
 
@@ -198,14 +203,20 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
 
         {section === "gear" && (
           <>
-            <WeaponsTab
-              agent={agent}
-              onRollSkill={openSkillRoll}
-              onRollDamage={openDamageRoll}
-              onRollLethality={openLethalityRoll}
-            />
-            <ArmorTab agent={agent} />
-            <GearTab agent={agent} />
+            <CardShell>
+              <WeaponsTab
+                agent={agent}
+                onRollSkill={openSkillRoll}
+                onRollDamage={openDamageRoll}
+                onRollLethality={openLethalityRoll}
+              />
+            </CardShell>
+            <CardShell>
+              <ArmorTab agent={agent} />
+            </CardShell>
+            <CardShell>
+              <GearTab agent={agent} />
+            </CardShell>
           </>
         )}
 
@@ -231,8 +242,9 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
             >
               Open Terminal
             </button>
-
-            <NotesTab agent={agent} updateAgent={updateAgent} />
+            <CardShell>
+              <NotesTab agent={agent} updateAgent={updateAgent} />
+            </CardShell>
           </>
         )}
         </div>

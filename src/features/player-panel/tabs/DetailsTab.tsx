@@ -306,13 +306,14 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                               <input
                                 type="checkbox"
                                 checked={alias.active}
-                                onChange={(e) =>
+                                onChange={(e) => {
                                   handleAliasChange(
                                     index,
                                     "active",
                                     e.target.checked
-                                  )
-                                }
+                                  );
+                                  e.currentTarget.blur();
+                                }}
                               />
                             </label>
                           </td>

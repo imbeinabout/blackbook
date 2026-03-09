@@ -546,7 +546,10 @@ const AddConditionModal: React.FC<AddConditionModalProps> = ({
                       type="checkbox"
                       className="bb-checkbox__input"
                       checked={advStatsOpen}
-                      onChange={(e) => setAdvStatsOpen(e.target.checked)}
+                      onChange={(e) => {
+                        setAdvStatsOpen(e.target.checked);
+                        e.currentTarget.blur();
+                      }}
                     />
                     <span className="bb-checkbox__box" />
                     <span className="bb-checkbox__label">Advanced… Stats overrides</span>
@@ -581,7 +584,10 @@ const AddConditionModal: React.FC<AddConditionModalProps> = ({
                       type="checkbox"
                       className="bb-checkbox__input"
                       checked={advSkillsOpen}
-                      onChange={(e) => setAdvSkillsOpen(e.target.checked)}
+                      onChange={(e) => {
+                        setAdvSkillsOpen(e.target.checked);
+                        e.currentTarget.blur();
+                      }}
                     />
                     <span className="bb-checkbox__box" />
                     <span className="bb-checkbox__label">Advanced… Skill overrides</span>

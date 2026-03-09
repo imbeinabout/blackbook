@@ -935,6 +935,7 @@
   position: absolute;
   opacity: 0;
   pointer-events: none;
+  scroll-margin: 0;
 }
 
 .bb-checkbox__box {
@@ -3894,4 +3895,9 @@ input[type="number"]:disabled + .bb-spinner .bb-spinner-btn {
   body.bb-play-mode .bb-main > .bb-player-panel-shell {
     display: flex;
   }
+}
+
+.bb-card__body {
+  min-height: 0;
+  contain: layout paint;
 }

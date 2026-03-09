@@ -545,7 +545,10 @@ const DamagedVeteranSection: React.FC<DamagedVeteranSectionProps> = ({
                   <input
                     type="checkbox"
                     checked={checked}
-                    onChange={() => toggleHardSkill(s.key)}
+                    onChange={(e) => {
+                      toggleHardSkill(s.key);
+                      e.currentTarget.blur();
+                    }}
                     disabled={!checked && hardSkills.length >= 4}
                   />
                   <div>

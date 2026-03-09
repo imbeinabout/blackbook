@@ -207,6 +207,7 @@ const ProfessionSelector: React.FC<ProfessionSelectorProps> = ({
                                 },
                               };
                             });
+                            e.currentTarget.blur();
                           }}
                         />
                         <span className="bb-checkbox__box" />

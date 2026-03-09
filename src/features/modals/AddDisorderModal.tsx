@@ -132,7 +132,10 @@ const AddDisorderModal: React.FC<AddDisorderModalProps> = ({
                 type="checkbox"
                 className="bb-checkbox__input"
                 checked={strikeOnAdd}
-                onChange={(e) => setStrikeOnAdd(e.target.checked)}
+                onChange={(e) => {
+                  setStrikeOnAdd(e.target.checked);
+                  e.currentTarget.blur();
+                }}
               />
               <span className="bb-checkbox__box" />
               <span className="bb-checkbox__label">

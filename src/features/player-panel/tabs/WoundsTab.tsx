@@ -138,7 +138,10 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
                       type="checkbox"
                       className="bb-checkbox__input"
                       checked={checked}
-                      onChange={() => toggleFirstAid(item._id)}
+                      onChange={(e) => {
+                        toggleFirstAid(item._id);
+                        e.currentTarget.blur();
+                      }}
                     />
                     <span className="bb-checkbox__box" />
                     <span className="bb-checkbox__label">Applied</span>
@@ -226,7 +229,10 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
                       type="checkbox"
                       className="bb-checkbox__input"
                       checked={woundFirstAid}
-                      onChange={(e) => setWoundFirstAid(e.target.checked)}
+                      onChange={(e) => {
+                        setWoundFirstAid(e.target.checked);
+                        e.currentTarget.blur();
+                      }}
                     />
                     <span className="bb-checkbox__box" />
                     <span className="bb-checkbox__label">

@@ -260,7 +260,10 @@ export const ArmorTab: React.FC<ArmorTabProps> = ({ agent }) => {
                         type="checkbox"
                         className="bb-checkbox__input"
                         checked={isEquipped}
-                        onChange={() => handleToggleEquipped(item._id)}
+                        onChange={(e) => {
+                          handleToggleEquipped(item._id);
+                          e.currentTarget.blur();
+                        }}
                     />
                     <span className="bb-checkbox__box" />
                     </label>

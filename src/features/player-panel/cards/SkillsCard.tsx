@@ -66,6 +66,7 @@ const SkillsCard: React.FC<SkillsCardProps> = ({
                             copy.system.skills[key].failure = checked;
                           }
                         });
+                        e.currentTarget.blur();
                       }}
                     />
                     <span className="bb-checkbox__box" />
@@ -141,6 +142,7 @@ const SkillsCard: React.FC<SkillsCardProps> = ({
                             copy.system.typedSkills[key].failure = checked;
                           }
                         });
+                        e.currentTarget.blur();
                       }}
                     />
                     <span className="bb-checkbox__box" />

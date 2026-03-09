@@ -224,7 +224,10 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
             className="bb-checkbox__input"
             checked={a.incident1}
             disabled={disabled}
-            onChange={onToggle(1)}
+            onChange={(e) => {
+              onToggle(1);
+              e.currentTarget.blur();
+            }}
             />
             <span className="bb-checkbox__box" />
         </label>
@@ -234,7 +237,10 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
             className="bb-checkbox__input"
             checked={a.incident2}
             disabled={disabled}  
-            onChange={onToggle(2)}
+            onChange={(e) => {
+              onToggle(2);
+              e.currentTarget.blur();
+            }}
             />
             <span className="bb-checkbox__box" />
         </label>
@@ -244,7 +250,10 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
             className="bb-checkbox__input"
             checked={a.incident3}
             disabled={disabled}
-            onChange={onToggle(3)}
+            onChange={(e) => {
+              onToggle(3);
+              e.currentTarget.blur();
+            }}
             />
             <span className="bb-checkbox__box" />
         </label>

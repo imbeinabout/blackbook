@@ -123,9 +123,10 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
                         type="checkbox"
                         className="bb-checkbox__input"
                         checked={bond.system?.hasBeenDamagedSinceLastHomeScene ?? false}
-                        onChange={(e) =>
-                          handleToggleDamaged(bond._id, e.target.checked)
-                        }
+                        onChange={(e) => {
+                          handleToggleDamaged(bond._id, e.target.checked);
+                          e.currentTarget.blur();
+                        }}
                       />
                       <span className="bb-checkbox__box" />
                     </label>

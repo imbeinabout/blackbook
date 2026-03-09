@@ -132,7 +132,10 @@ const PlayerMotivationsCard: React.FC<PlayerMotivationsCardProps> = ({
                           type="checkbox"
                           className="bb-checkbox__input"
                           checked={mot.system?.crossedOut ?? false}
-                          onChange={e => handleToggleCrossed(mot._id, e.target.checked)}
+                          onChange={(e) => {
+                            handleToggleCrossed(mot._id, e.target.checked);
+                            e.currentTarget.blur();
+                          }}
                         />
                         <span className="bb-checkbox__box" />
                       </label>
@@ -160,7 +163,10 @@ const PlayerMotivationsCard: React.FC<PlayerMotivationsCardProps> = ({
                               type="checkbox"
                               className="bb-checkbox__input"
                               checked={cured}
-                              onChange={e => handleToggleCured(mot._id, e.target.checked)}
+                              onChange={(e) => {
+                                handleToggleCured(mot._id, e.target.checked);
+                                e.currentTarget.blur();
+                              }}
                             />
                             <span className="bb-checkbox__box" />
                           </label>
