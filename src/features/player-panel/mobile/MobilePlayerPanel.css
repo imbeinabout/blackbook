@@ -52,18 +52,29 @@
   }
 
   .bb-mobile-section-content {
-    padding-bottom: calc(0.75rem + var(--safe-bottom));
-  }
-
-  .bb-mobile-section-content {
     flex: 1;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+
+    /* Use normal flow so scrollHeight includes everything */
+    display: block;
+
+    /* Padding: keep the general padding, but extend the bottom */
     padding: 0.75rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    padding-bottom: calc(0.75rem + var(--safe-bottom) + 4.5rem);
+
+    box-sizing: border-box;
+  }
+
+  /* spacing between cards without using flex gap */
+  .bb-mobile-section-content > * + * {
+    margin-top: 0.75rem;
+  }
+
+  /* Keep the inner wrapper as a normal block so animations still apply */
+  .bb-mobile-section-inner {
+    display: block;
   }
 
   .bb-mobile-section-inner {
@@ -570,6 +581,35 @@
   /* Remove the normal "field spacing" rule from affecting the Active cell */
   .bb-aliases-table__row .bb-aliases-table__active-cell + td {
     margin-top: 0; /* since Active already has its own separator spacing */
+  }
+
+  /*-----------------
+    MOTIVATIONS CARD
+  ------------------*/
+
+  /* Stack motivations + disorders vertically */
+  .bb-motdis-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Ensure columns don’t try to size themselves side-by-side */
+  .bb-motdis-col {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .bb-card--mot-dis {
+    margin-bottom: 1.25rem;
+  }
+
+  .bb-player-panel--mobile .bb-card--mot-dis {
+    display: block; /* stop the desktop flex constraints */
+  }
+
+  .bb-player-panel--mobile .bb-card--mot-dis .bb-card__body {
+    overflow: visible; /* disable nested scroll on mobile */
   }
 }
 
