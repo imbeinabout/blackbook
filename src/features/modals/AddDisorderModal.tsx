@@ -96,7 +96,7 @@ const AddDisorderModal: React.FC<AddDisorderModalProps> = ({
 
   return createPortal(
     <div className="bb-modal">
-      <div className="bb-modal__dialog">
+      <div className="bb-modal__dialog bb-add-disorder-dialog">
         <h3 className="bb-modal__title">Add Disorder</h3>
 
         <div className="bb-modal__body">
