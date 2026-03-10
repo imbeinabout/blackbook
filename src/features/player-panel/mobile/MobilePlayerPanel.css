@@ -140,7 +140,7 @@
   .bb-player-panel--mobile .bb-card p,
   .bb-player-panel--mobile .bb-card li,
   .bb-player-panel--mobile .bb-card label {
-    font-size: 0.85rem;
+    font-size: 1rem;
     line-height: 1.4;
   }
 
@@ -370,7 +370,7 @@
 
   .bb-details-tab__grid label,
   .bb-details-tab__grid .bb-field-label {
-    font-size: 0.85rem;
+    font-size: 1rem;
     margin-bottom: 0.25rem;
     opacity: 0.9;
   }
@@ -382,4 +382,204 @@
     min-height: 96px;
     padding: 0.6rem 0.75rem;
   }
+  
+  /* Turn the modal overlay into a bottom-sheet container */
+  .bb-modal {
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  /* Alias modal becomes a bottom sheet */
+  .bb-aliases-modal__dialog {
+    width: 100%;
+    max-width: 100%;
+    max-height: 90dvh;
+
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.6);
+
+    padding-bottom: env(safe-area-inset-bottom);
+
+    animation: bb-alias-sheet-in 220ms ease-out;
+  }
+
+  /* Scrollable table area gets priority */
+  .bb-aliases-modal__table-wrapper {
+    max-height: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .bb-aliases-modal__dialog {
+    font-size: 0.95rem;
+  }
+
+  .bb-aliases-table__name-input,
+  .bb-aliases-table__textarea {
+    font-size: 1rem;
+    min-height: 44px;
+    padding: 0.5rem 0.6rem;
+  }
+
+  .bb-aliases-table__textarea {
+    min-height: 96px;
+    line-height: 1.45;
+  }
+
+  /* Hide the table header on mobile */
+  .bb-aliases-table thead {
+    display: none;
+  }
+
+  /* Make the table behave like a list */
+  .bb-aliases-table,
+  .bb-aliases-table tbody,
+  .bb-aliases-table tr,
+  .bb-aliases-table td {
+    display: block;
+    width: 100%;
+  }
+
+  /* Each row becomes a card */
+  .bb-aliases-table__row {
+    border: 1px solid var(--bb-border-soft);
+    background: #020403;
+    padding: 0.75rem;
+    border-radius: 10px;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Slight emphasis for NEW rows (optional) */
+  .bb-aliases-table__row--new {
+    box-shadow: 0 0 0 1px rgba(155, 226, 123, 0.25);
+  }
+
+  /* Each cell stacks label + control */
+  .bb-aliases-table__row td {
+    padding: 0;
+    border: none;
+    margin: 0;
+  }
+
+  .bb-aliases-table__row td + td {
+    margin-top: 0.75rem;
+  }
+
+  /* Label shown above each field */
+  .bb-aliases-table__row td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--bb-text-muted);
+    opacity: 0.9;
+    margin-bottom: 0.35rem;
+  }
+
+  /* Inputs: mobile readable and tappable */
+  .bb-aliases-table__name-input,
+  .bb-aliases-table__textarea {
+    font-size: 1rem;
+    min-height: 48px;
+    padding: 0.6rem 0.75rem;
+  }
+
+  .bb-aliases-table__textarea {
+    min-height: 96px;
+    line-height: 1.45;
+  }
+
+  /* Active + Actions row layout tweaks */
+  .bb-aliases-table__active-cell::before,
+  .bb-aliases-table__actions-cell::before {
+    margin-bottom: 0.25rem;
+  }
+
+  .bb-aliases-table__actions-cell button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Make dialog a proper fixed-height flex column */
+  .bb-modal__dialog.bb-aliases-modal__dialog {
+    display: flex;
+    flex-direction: column;
+    max-height: 90dvh; /* bottom sheet height */
+    min-height: 0;     /* IMPORTANT for nested scrolling */
+  }
+
+  /* The body must be the scrolling region */
+  .bb-modal__dialog.bb-aliases-modal__dialog .bb-modal__body {
+    flex: 1 1 auto;
+    min-height: 0;          /* IMPORTANT */
+    overflow-y: auto;        /* ✅ makes modal scroll */
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Don’t cap the wrapper; let the body control scrolling */
+  .bb-aliases-modal__table-wrapper {
+    max-height: none;
+    overflow: visible; /* scroll happens on .bb-modal__body now */
+  }
+
+  .bb-aliases-modal__dialog input[type="checkbox"] {
+    width: auto;
+    max-width: none;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+    transform: scale(1.1);
+  }
+
+  /* --- Make the Active cell a header row inside the card --- */
+  .bb-aliases-table__row .bb-aliases-table__active-cell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    /* visually separate from the fields below */
+    padding-bottom: 0.6rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Put the "Active" label inline (not above) */
+  .bb-aliases-table__row .bb-aliases-table__active-cell::before {
+    content: attr(data-label);
+    display: inline;
+    margin: 0;
+
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--bb-text-muted);
+    opacity: 0.9;
+  }
+
+  /* Ensure the checkbox doesn't stretch and sits on the right */
+  .bb-aliases-modal__dialog .bb-aliases-table__active-cell input[type="checkbox"] {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin: 0;
+    flex: 0 0 auto;
+  }
+
+  /* Remove the normal "field spacing" rule from affecting the Active cell */
+  .bb-aliases-table__row .bb-aliases-table__active-cell + td {
+    margin-top: 0; /* since Active already has its own separator spacing */
+  }
 }
+
+@keyframes bb-alias-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+

@@ -28,6 +28,10 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
   const [isAliasModalOpen, setIsAliasModalOpen] = React.useState(false);
 
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
+  const aliasListRef = React.useRef<HTMLDivElement | null>(null);
+  const aliasModalBodyRef = React.useRef<HTMLDivElement | null>(null);
+  const newAliasRowRef = React.useRef<HTMLTableRowElement | null>(null);
+  const [pendingScrollToNewAlias, setPendingScrollToNewAlias] = React.useState(false);
 
   const updateDetails = React.useCallback(
     (partial: Partial<typeof details>) => {
@@ -49,6 +53,22 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
 
   const aliases: AgentAlias[] = (details as any).aliases ?? [];
 
+  React.useLayoutEffect(() => {
+    if (!pendingScrollToNewAlias) return;
+    if (!isAliasModalOpen) return;
+
+    // Run after layout so the new row exists and has a position
+    const row = newAliasRowRef.current;
+    const container = aliasModalBodyRef.current;
+
+    if (row && container) {
+      // Ensure container is the scroll context
+      row.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    }
+
+    setPendingScrollToNewAlias(false);
+  }, [pendingScrollToNewAlias, isAliasModalOpen, aliases.length]);
+
   const handleAliasChange = (
     index: number,
     field: keyof AgentAlias,
@@ -63,13 +83,17 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
   const handleAddAlias = () => {
     const updated = [
       ...aliases,
-      {
-        active: true,
-        name: "",
-      } as AgentAlias,
+      { active: true, name: "" } as AgentAlias,
     ];
     updateDetails({ aliases: updated });
     setIsAliasModalOpen(true);
+    setPendingScrollToNewAlias(true);
+
+    // Scroll to newly added row after render
+    requestAnimationFrame(() => {
+      const el = aliasListRef.current;
+      if (el) el.scrollTop = el.scrollHeight;
+    });
   };
 
   const handleRemoveAlias = (index: number) => {
@@ -280,7 +304,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               <h3 className="bb-modal__title">Manage Aliases</h3>
             </div>
 
-            <div className="bb-modal__body">
+            <div className="bb-modal__body" ref={aliasModalBodyRef}>
               {aliases.length === 0 && (
                 <p className="bb-text-muted">
                   No aliases yet. Add one below.
@@ -288,7 +312,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               )}
 
               {aliases.length > 0 && (
-                <div className="bb-aliases-modal__table-wrapper">
+                <div ref={aliasListRef} className="bb-aliases-modal__table-wrapper">
                   <table className="bb-weapons-table bb-aliases-table">
                     <thead>
                       <tr>
@@ -300,13 +324,23 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                       </tr>
                     </thead>
                     <tbody>
-                      {aliases.map((alias, index) => (
-                        <tr 
+                      {aliases.map((alias, index) => {
+                        const isNew =
+                          !alias.name?.trim() &&
+                          !(alias.description ?? "").trim() &&
+                          !(alias.credentials ?? "").trim();
+                        return (
+                        <tr
                           key={index}
-                          className={alias.active ? "bb-aliases-table__row--active" : ""}  
+                          className={
+                            "bb-aliases-table__row" +
+                            (alias.active ? " bb-aliases-table__row--active" : "") +
+                            (isNew ? " bb-aliases-table__row--new" : "")
+                          }
                         >
+
                           {/* Active */}
-                          <td className="bb-aliases-table__active-cell">
+                          <td className="bb-aliases-table__active-cell" data-label="Active">
                             <label className="bb-checkbox-label">
                               <input
                                 type="checkbox"
@@ -324,7 +358,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                           </td>
 
                           {/* Name */}
-                          <td>
+                          <td data-label="Name">
                             <input
                               type="text"
                               className="bb-input bb-aliases-table__name-input"
@@ -341,7 +375,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                           </td>
 
                           {/* Description */}
-                          <td>
+                          <td data-label="Description">
                             <textarea
                               className="bb-textarea bb-aliases-table__textarea"
                               rows={2}
@@ -358,7 +392,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                           </td>
 
                           {/* Credentials */}
-                          <td>
+                          <td data-label="Credentials">
                             <textarea
                               className="bb-textarea bb-aliases-table__textarea"
                               rows={2}
@@ -375,7 +409,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                           </td>
 
                           {/* Remove */}
-                          <td className="bb-aliases-table__actions-cell">
+                          <td className="bb-aliases-table__actions-cell" data-label="Actions">
                             <button
                               type="button"
                               className="bb-btn bb-btn--ghost bb-btn--small"
@@ -385,7 +419,8 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                             </button>
                           </td>
                         </tr>
-                      ))}
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
