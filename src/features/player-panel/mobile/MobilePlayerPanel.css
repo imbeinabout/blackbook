@@ -1,4 +1,212 @@
 @media (max-width: 899px) {
+  /* -----------------------------
+     ROOT MOBILE PANEL
+  ----------------------------- */
+
+  .bb-player-panel--mobile {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  /* -----------------------------
+     SECTION NAV (STICKY)
+  ----------------------------- */
+
+  .bb-mobile-section-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    display: flex;
+    gap: 0.25rem;
+
+    padding:
+      calc(0.5rem + var(--safe-top))
+      calc(0.5rem + var(--safe-right))
+      0.5rem
+      calc(0.5rem + var(--safe-left));
+
+    background: var(--bb-bg);
+    border-bottom: 1px solid var(--bb-border);
+  }
+
+  .bb-mobile-section-nav__btn {
+    flex: 1;
+    font-size: 0.7rem;
+    padding: 0.5rem 0;
+    opacity: 0.6;
+  }
+
+  .bb-mobile-section-nav__btn.is-active {
+    opacity: 1;
+    border-bottom: 2px solid var(--bb-accent);
+  }
+
+  /* -----------------------------
+     SCROLL CONTAINER (THE IMPORTANT PART)
+  ----------------------------- */
+
+  .bb-mobile-section-content {
+    flex: 1;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+
+    display: block;
+    box-sizing: border-box;
+
+    padding: 0.75rem;
+    padding-bottom: calc(
+      0.75rem + var(--safe-bottom) + 4.5rem
+    );
+  }
+
+  /* Vertical rhythm without flex gap */
+  .bb-mobile-section-content > * + * {
+    margin-top: 0.75rem;
+  }
+
+  /* -----------------------------
+     SECTION ANIMATION WRAPPER
+  ----------------------------- */
+
+  .bb-mobile-section-inner {
+    display: block;
+    animation: section-enter 160ms ease-out;
+  }
+
+  .bb-mobile-section-content.is-left .bb-mobile-section-inner {
+    animation-name: section-enter-left;
+  }
+
+  .bb-mobile-section-content.is-right .bb-mobile-section-inner {
+    animation-name: section-enter-right;
+  }
+
+  @keyframes section-enter-left {
+    from { transform: translateX(16px); opacity: 0; }
+    to   { transform: translateX(0);  opacity: 1; }
+  }
+
+  @keyframes section-enter-right {
+    from { transform: translateX(-16px); opacity: 0; }
+    to   { transform: translateX(0);   opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bb-mobile-section-inner {
+      animation: none;
+    }
+  }
+
+  /* -----------------------------
+     FULLSCREEN OVERLAY (TERMINAL)
+  ----------------------------- */
+
+  .bb-mobile-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    flex-direction: column;
+
+    background: var(--bb-bg);
+    padding:
+      var(--safe-top)
+      var(--safe-right)
+      var(--safe-bottom)
+      var(--safe-left);
+  }
+}
+
+@media (max-width: 899px) {
+  /* -----------------------------
+     MOBILE CARD BASE
+  ----------------------------- */
+
+  .bb-player-panel--mobile .bb-card {
+    background: var(--bb-card-bg);
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+
+    padding: 0.75rem 0.9rem;
+
+    /* Cards size to content */
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Vertical rhythm between cards */
+  .bb-player-panel--mobile .bb-card + .bb-card {
+    margin-top: 0.75rem;
+  }
+
+  /* -----------------------------
+     CARD HEADER
+  ----------------------------- */
+
+  .bb-player-panel--mobile .bb-card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+
+    border-bottom: 1px solid var(--bb-border-subtle);
+
+    font-size: 1rem;
+    letter-spacing: 0.04em;
+  }
+
+  /* -----------------------------
+     CARD BODY (NEVER SCROLLS ON MOBILE)
+  ----------------------------- */
+
+  .bb-player-panel--mobile .bb-card__body,
+  .bb-player-panel--mobile .bb-card__content {
+    overflow: visible;
+    max-height: none;
+  }
+
+  /* -----------------------------
+     CARD TYPOGRAPHY
+  ----------------------------- */
+
+  .bb-player-panel--mobile .bb-card h2,
+  .bb-player-panel--mobile .bb-card h3 {
+    font-size: 0.9rem;
+    letter-spacing: 0.04em;
+  }
+
+  .bb-player-panel--mobile .bb-card p,
+  .bb-player-panel--mobile .bb-card li,
+  .bb-player-panel--mobile .bb-card label {
+    font-size: 1rem;
+    line-height: 1.4;
+  }
+
+  /* -----------------------------
+     CARD CONTROLS
+  ----------------------------- */
+
+  .bb-player-panel--mobile button,
+  .bb-player-panel--mobile .bb-button {
+    min-height: 40px;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+@media (max-width: 899px) {
   @media (prefers-reduced-motion: reduce) {
     .bb-mobile-section-inner {
       animation: none;
@@ -51,44 +259,6 @@
     border-bottom: 2px solid var(--bb-accent);
   }
 
-  .bb-mobile-section-content {
-    flex: 1;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-
-    /* Use normal flow so scrollHeight includes everything */
-    display: block;
-
-    /* Padding: keep the general padding, but extend the bottom */
-    padding: 0.75rem;
-    padding-bottom: calc(0.75rem + var(--safe-bottom) + 4.5rem);
-
-    box-sizing: border-box;
-  }
-
-  /* spacing between cards without using flex gap */
-  .bb-mobile-section-content > * + * {
-    margin-top: 0.75rem;
-  }
-
-  /* Keep the inner wrapper as a normal block so animations still apply */
-  .bb-mobile-section-inner {
-    display: block;
-  }
-
-  .bb-mobile-section-inner {
-    animation: section-enter 160ms ease-out;
-  }
-
-  .bb-mobile-section-content.is-left .bb-mobile-section-inner {
-    animation-name: section-enter-left;
-  }
-
-  .bb-mobile-section-content.is-right .bb-mobile-section-inner {
-    animation-name: section-enter-right;
-  }
-
   @keyframes section-enter-left {
     from {
       transform: translateX(16px);
@@ -109,37 +279,6 @@
       transform: translateX(0);
       opacity: 1;
     }
-  }
-
-  .bb-mobile-overlay {
-    padding-top: var(--safe-top);
-    padding-bottom: var(--safe-bottom);
-    padding-left: var(--safe-left);
-    padding-right: var(--safe-right);
-  }
-
-  .bb-mobile-overlay {
-    position: fixed;
-    inset: 0;
-    background: var(--bb-bg);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .bb-player-panel--mobile .bb-card {
-    border-radius: 10px;
-    padding: 0.75rem 0.9rem;
-    background: var(--bb-card-bg);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-    margin-bottom: 0.75rem;
-  }
-
-  .bb-player-panel--mobile .bb-card,
-  .bb-player-panel--mobile .bb-card__body,
-  .bb-player-panel--mobile .bb-card__content {
-    overflow: visible;
-    max-height: none;
   }
 
   .bb-player-panel--mobile .bb-card h2,
@@ -175,10 +314,6 @@
     padding: 0;
     background: none;
     border: none;
-  }
-
-  .bb-player-panel--mobile {
-    --mobile-gap: 0.75rem;
   }
 
   .bb-player-panel--mobile .bb-card + .bb-card {
