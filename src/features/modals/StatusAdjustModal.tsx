@@ -544,35 +544,40 @@ export default function StatusAdjustModal({
 
           <div
             className="bb-modal__footer"
-            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "0.5rem",
+            }}
           >
+            {track === "SAN" && (
+              <button
+                type="button"
+                className="bb-button bb-button--small bb-button--ghost"
+                title="Recalculate Breaking Point from current SAN and POW"
+                onClick={handleRecalculateBP}
+              >
+                Recalculate BP
+              </button>
+            )}
+
             <button
               type="button"
-              className="bb-button bb-button--small bb-button--ghost"
-              title="Recalculate Breaking Point from current SAN and POW"
-              onClick={handleRecalculateBP}
+              className="bb-button bb-button--small"
+              onClick={onClose}
             >
-              Recalculate BP
+              Cancel
             </button>
 
-            <div style={{ display: "flex", gap: "0.5rem" }}>
-              <button
-                type="button"
-                className="bb-button bb-button--small"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                className="bb-button bb-button--small"
-                onClick={handleApply}
-                disabled={!validDelta}
-              >
-                Apply
-              </button>
-            </div>
+            <button
+              type="button"
+              className="bb-button bb-button--small bb-button--primary"
+              onClick={handleApply}
+              disabled={!validDelta}
+            >
+              Apply
+            </button>
           </div>
         </div>
       </div>
