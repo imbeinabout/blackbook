@@ -910,6 +910,67 @@
   .bb-status-adjust-modal__dialog .bb-alert--error {
     font-size: 0.95rem;  
   }
+
+  .bb-apply-adaptation-modal {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 100%;
+    height: 90dvh;
+
+    border-radius: 16px 16px 0 0;
+  }
+
+  .bb-apply-adaptation-modal .bb-modal__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bb-apply-adaptation-modal .bb-modal__footer {
+    position: sticky;
+    bottom: 0;
+
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+
+    padding: 0.75rem;
+    background: var(--bb-bg);
+    border-top: 1px solid var(--bb-border-soft);
+  }
+
+  .bb-apply-adaptation-modal .bb-modal__footer .bb-button {
+    min-height: 44px;
+    flex: 1;
+  }
+
+  .bb-apply-adaptation-modal p {
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .bb-apply-adaptation-modal .bb-modal__header {
+    font-size: 1rem;
+  }
+
+  .bb-apply-adaptation-modal__roll-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.75rem;
+  }
+
+  .bb-apply-adaptation-modal__roll-row .bb-button {
+    min-height: 44px;
+    padding: 0 1rem;
+  }
 }
 
 @keyframes bb-alias-sheet-in {

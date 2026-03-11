@@ -225,7 +225,7 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
             checked={a.incident1}
             disabled={disabled}
             onChange={(e) => {
-              onToggle(1);
+              onToggle(1)(e);
               e.currentTarget.blur();
             }}
             />
@@ -238,7 +238,7 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
             checked={a.incident2}
             disabled={disabled}  
             onChange={(e) => {
-              onToggle(2);
+              onToggle(2)(e);
               e.currentTarget.blur();
             }}
             />
@@ -251,7 +251,7 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
             checked={a.incident3}
             disabled={disabled}
             onChange={(e) => {
-              onToggle(3);
+              onToggle(3)(e);
               e.currentTarget.blur();
             }}
             />
@@ -295,7 +295,7 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
       {/* Apply adaptation modal */}
       {agent && pendingAdaptation && (
         <div className="bb-modal">
-          <div className="bb-modal__dialog">
+          <div className="bb-modal__dialog bb-apply-adaptation-modal">
             <div className="bb-modal__header">
               {pendingAdaptation === "helplessness"
                 ? "Apply Adaptation: Helplessness"
@@ -318,33 +318,19 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
                 </p>
               )}
 
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                  alignItems: "center",
-                  marginTop: "0.75rem",
-                }}
-              >
+              <div className="bb-apply-adaptation__roll-row">
                 <NumberSpinner
                   label="Result (1–6)"
                   min={1}
                   max={6}
                   value={pendingDie !== null ? String(pendingDie) : ""}
                   onChange={(val: string) => {
-                    if (!val) {
-                      setPendingDie(null);
-                      return;
-                    }
+                    if (!val) return setPendingDie(null);
                     const n = Number(val);
-                    if (Number.isNaN(n)) {
-                      setPendingDie(null);
-                      return;
-                    }
+                    if (Number.isNaN(n)) return setPendingDie(null);
                     setPendingDie(clamp(n, 1, 6));
                   }}
                 />
-
                 <button
                   type="button"
                   className="bb-button bb-button--small bb-adaptation-modal__d6-btn"
