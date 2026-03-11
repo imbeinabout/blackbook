@@ -4,6 +4,7 @@ import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import type { ConditionTemplate } from "../../../models/conditions";
 import { removeCondition } from "../conditions.logic";
 import conditionsDataJson from "../../../data/conditions.json";
+import { useLayoutMode } from "../../../hooks/useLayoutMode";
 
 type ConditionsCardProps = {
   agent: DeltaGreenAgent;
@@ -41,6 +42,14 @@ export const ConditionsCard: React.FC<ConditionsCardProps> = ({
   }, []);
 
   const [openId, setOpenId] = React.useState<string | null>(null);
+  const isMobile = useLayoutMode() === "mobile";
+
+  const active = React.useMemo(() => {
+    if (!openId) return null;
+    const c = conditions.find((x) => x.id === openId) ?? null;
+    const tmpl = c ? templateById.get(c.id) : undefined;
+    return c ? { c, tmpl } : null;
+  }, [openId, conditions, templateById]);
 
   React.useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -69,8 +78,8 @@ export const ConditionsCard: React.FC<ConditionsCardProps> = ({
                 <span
                   key={c.id}
                   className={`bb-condition-pill bb-condition-pill--${c.category}`}
-                  onMouseEnter={() => setOpenId(c.id)}
-                  onMouseLeave={() => setOpenId((prev) => (prev === c.id ? null : prev))}
+                  onMouseEnter={!isMobile ? () => setOpenId(c.id) : undefined}
+                  onMouseLeave={!isMobile ? () => setOpenId((prev) => (prev === c.id ? null : prev)) : undefined}
                 >
                   <button
                     type="button"
@@ -99,7 +108,7 @@ export const ConditionsCard: React.FC<ConditionsCardProps> = ({
                     ✕
                   </button>
 
-                  {show && (
+                  {show && !isMobile && (
                     <div
                       id={popoverId}
                       role="dialog"
@@ -137,6 +146,30 @@ export const ConditionsCard: React.FC<ConditionsCardProps> = ({
                 </span>
               );
             })}
+            {isMobile && active && (
+              <div className="bb-condition-details" role="region" aria-label="Condition details">
+                <div className="bb-condition-details__title">
+                  {active.tmpl?.label ?? active.c.label}
+                  <span className="bb-condition-details__cat">
+                    {(active.tmpl?.category ?? active.c.category).toUpperCase()}
+                  </span>
+                </div>
+
+                <div className="bb-condition-details__desc">
+                  {active.tmpl?.description ? active.tmpl.description : "No description available."}
+                </div>
+
+                {active.tmpl?.effects && active.tmpl.effects.length > 0 ? (
+                  <ul className="bb-condition-details__effects">
+                    {active.tmpl.effects.map((e, idx) => (
+                      <li key={idx}>{e}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="bb-condition-details__empty">No effect lines available.</div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
