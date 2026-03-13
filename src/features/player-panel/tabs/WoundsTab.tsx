@@ -180,20 +180,14 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
         </button>
       </div>
       <div className="bb-weapons-tab__body">{renderWoundsTable()}</div>     
-        <p
-        style={{
-            marginTop: "0.5rem",
-            fontSize: "0.75rem",
-            opacity: 0.8,
-        }}
-        >
+        <p className="bb-wounds-footnote">
         If first aid has already been attempted, only Medicine, Surgery, or
         long-term rest can help further.
         </p>
       {isModalOpen && (
         <div className="bb-modal" onClick={() => setIsModalOpen(false)}>
           <div
-            className="bb-modal__dialog bb-modal__dialog--small bb-weapons-custom-modal__dialog"
+            className="bb-modal__dialog bb-modal__dialog--small bb-weapons-custom-modal__dialog bb-add-wound-dialog"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="bb-modal__title">Add Wound / Ailment</h2>

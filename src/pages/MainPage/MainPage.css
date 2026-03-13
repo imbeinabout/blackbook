@@ -2227,6 +2227,12 @@
   opacity: 0.8;
 }
 
+.bb-wounds-footnote {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
 /* 2x2 grid for action buttons in the modals card */
 .bb-modals__buttons {
   display: grid;
