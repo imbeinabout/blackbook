@@ -218,7 +218,7 @@ const SpecialTrainingCard: React.FC<SpecialTrainingCardProps> = ({
 
       {isModalOpen && (
         <div className="bb-modal">
-          <div className="bb-modal__dialog">
+          <div className="bb-modal__dialog bb-manage-training-dialog">
             <div className="bb-modal__header">Manage Special Training</div>
             <div className="bb-modal__body">
               {/* Existing entries */}
