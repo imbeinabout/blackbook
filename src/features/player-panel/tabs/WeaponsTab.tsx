@@ -421,7 +421,7 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                   (isEquipped ? " bb-weapons-table__row--equipped" : "")
                 }
               >
-                <td>
+                <td data-label="Equipped">
                   <label className="bb-checkbox bb-checkbox--tiny">
                     <input
                       type="checkbox"
@@ -435,8 +435,156 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                     <span className="bb-checkbox__box" />
                   </label>
                 </td>
-                <td>{item.name}</td>
-                <td>
+                <td data-label="Name">
+                  <div className="bb-weapon-name">{item.name}</div>
+
+                  {/* Mobile-only compact labeled meta strip */}
+                  <div className="bb-weapon-mobile-meta bb-only-mobile" aria-label="Weapon details">
+                    {/* Skill */}
+                    <div className="bb-wm-chip">
+                      <span className="bb-wm-k">SK</span>
+                      <span className="bb-wm-v">
+                        <button
+                          type="button"
+                          className="bb-button bb-button--small bb-wm-btn"
+                          onClick={() => {
+                            if (!agent) return;
+                            const base = getSkillProficiencyForLabel(agent, sys.skill) ?? 0;
+                            const modified = base + (sys.skillModifier ?? 0);
+                            const chance = Math.max(0, Math.min(100, modified));
+                            onRollSkill(sys.skill, chance);
+                          }}
+                        >
+                          {sys.skill}
+                          {sys.skillModifier
+                            ? ` (${sys.skillModifier >= 0 ? "+" : ""}${sys.skillModifier})`
+                            : ""}
+                        </button>
+                      </span>
+                    </div>
+
+                    {/* Range */}
+                    <div className="bb-wm-chip">
+                      <span className="bb-wm-k">RNG</span>
+                      <span className="bb-wm-v">{sys.range ?? "—"}</span>
+                    </div>
+
+                    {/* Damage */}
+                    <div className="bb-wm-chip">
+                      <span className="bb-wm-k">DMG</span>
+                      <span className="bb-wm-v">
+                        {(() => {
+                          const isUA = isUnarmedAttack(item.name);
+                          const strVal = agent.system.statistics.str.value ?? 0;
+                          const strMod = getStrengthModifier(strVal);
+                          const damageFormula = isUA ? getUnarmedDamageFormula() : (sys.damage ?? "");
+                          const tooltip = isUA
+                            ? `Unarmed Attack = 1D4 + STR mod. STR ${strVal} ⇒ ${strMod >= 0 ? "+" : ""}${strMod}. Rolling: ${damageFormula}`
+                            : `Rolling: ${damageFormula}`;
+
+                          return (
+                            <button
+                              type="button"
+                              className="bb-button bb-button--small bb-wm-btn"
+                              title={tooltip}
+                              onClick={() => {
+                                if (!damageFormula) return;
+                                onRollDamage(item.name, damageFormula);
+                              }}
+                            >
+                              {damageFormula || "—"}
+                            </button>
+                          );
+                        })()}
+                      </span>
+                    </div>
+
+                    {/* AP */}
+                    <div className="bb-wm-chip">
+                      <span className="bb-wm-k">AP</span>
+                      <span className="bb-wm-v">
+                        {sys.armorPiercing || sys.armorPiercing === 0 ? sys.armorPiercing : "—"}
+                      </span>
+                    </div>
+
+                    {/* Lethality */}
+                    <div className="bb-wm-chip">
+                      <span className="bb-wm-k">LETH</span>
+                      <span className="bb-wm-v">
+                        {(() => {
+                          const hasLethality = !!sys.lethality && sys.lethality > 0;
+                          return (
+                            <button
+                              type="button"
+                              className="bb-button bb-button--small bb-wm-btn"
+                              disabled={!hasLethality}
+                              onClick={() => {
+                                if (!hasLethality) return;
+                                onRollLethality(item.name, Math.round(sys.lethality * 100));
+                              }}
+                            >
+                              {formatLethality(sys.lethality)}
+                            </button>
+                          );
+                        })()}
+                      </span>
+                    </div>
+
+                    {/* Kill Radius */}
+                    <div className="bb-wm-chip">
+                      <span className="bb-wm-k">KR</span>
+                      <span className="bb-wm-v">{sys.killRadius ?? "—"}</span>
+                    </div>
+
+                    {/* Ammo + spend */}
+                    <div className="bb-wm-chip bb-wm-chip--ammo">
+                      <span className="bb-wm-k">AMMO</span>
+                      <span className="bb-wm-v">
+                        <div className="bb-wm-ammo">
+                          <button
+                            type="button"
+                            className="bb-button bb-button--small bb-wm-btn"
+                            onClick={() => handleSpendAmmo(item._id)}
+                            disabled={
+                              !sys.ammo ||
+                              parseInt(sys.ammo ?? "0", 10) <= 0 ||
+                              (typeof sys.currentAmmo === "number" ? sys.currentAmmo <= 0 : false)
+                            }
+                            title="Spend 1 ammo"
+                          >
+                            −
+                          </button>
+                          <span className="bb-wm-ammo-label" title={sys.ammo ? "Current / Max ammo" : ""}>
+                            {ammoLabel}
+                          </span>
+                        </div>
+                      </span>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="bb-wm-actions">
+                      <button
+                        type="button"
+                        className="bb-button bb-button--small bb-wm-btn"
+                        onClick={() => handleReload(item._id)}
+                        disabled={!sys.ammo}
+                        title="Reload to full magazine"
+                      >
+                        Reload
+                      </button>
+
+                      <button
+                        type="button"
+                        className="bb-button bb-button--small bb-button--danger bb-wm-btn"
+                        onClick={() => handleDeleteWeapon(item._id)}
+                        title="Remove this weapon"
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td data-label="Skill">
                   <button
                     type="button"
                     className="bb-button bb-button--small"
@@ -456,8 +604,8 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                       : ""}
                   </button>
                 </td>
-                <td>{sys.range || "—"}</td>
-                <td>
+                <td data-label="Range">{sys.range || "—"}</td>
+                <td data-label="Damage">
                   {(() => {
                     const isUA = isUnarmedAttack(item.name);
                     const strVal = agent.system.statistics.str.value ?? 0;
@@ -484,12 +632,12 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                     );
                   })()}
                 </td>
-                <td>
+                <td data-label="Armor Piercing">
                   {sys.armorPiercing || sys.armorPiercing === 0
                     ? sys.armorPiercing
                     : "—"}
                 </td>
-                <td>
+                <td data-label="Lethality">
                     {(() => {
                         const hasLethality = !!sys.lethality && sys.lethality > 0;
                         return (
@@ -507,8 +655,8 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                         );
                     })()}
                 </td>
-                <td>{sys.killRadius || "—"}</td>
-                <td>
+                <td data-label="Kill R.">{sys.killRadius || "—"}</td>
+                <td data-label="Ammo">
                   <div style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
                     <button
                       type="button"
@@ -528,7 +676,7 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                     <span title={sys.ammo ? "Current / Max ammo" : ""}>{ammoLabel}</span>
                   </div>
                 </td>
-                <td>
+                <td data-label="Reload">
                   <button
                     type="button"
                     className="bb-button bb-button--small"
@@ -539,7 +687,7 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
                     Reload
                   </button>
                 </td>                
-                <td>
+                <td data-label="Remove">
                   <button
                     type="button"
                     className="bb-button bb-button--small bb-button--danger"
@@ -961,61 +1109,53 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
 
                 {/* Damage builder */}
                 <div className="bb-form-grid">
-                <div className="bb-form-row">
+                  <div className="bb-form-row">
                     <span className="bb-form-label__text">Damage</span>
-                    <div
-                        style={{
-                        display: "flex",
-                        gap: "0.25rem",
-                        alignItems: "flex-end",
-                        flexWrap: "wrap",
-                        }}
-                    >
-                        {/* Number of dice – narrow spinner */}
-                        <div style={{ maxWidth: "3.5rem", flex: "0 0 auto" }}>
-                        <NumberSpinner
-                            value={String(customNumDice)}
-                            onChange={(val) =>
-                            setCustomNumDice(Math.max(1, Number(val) || 1))
-                            }
-                            min={1}
-                            max={20}
-                        />
-                        </div>
 
-                        {/* Die selector */}
-                        <div style={{ flex: "0 0 auto" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
+                      <label className="bb-form-label">
+                        <span className="bb-form-label__text">Number of dice</span>
+                        <NumberSpinner
+                          value={String(customNumDice)}
+                          onChange={(val) => setCustomNumDice(Math.max(1, Number(val ?? 1)))}
+                          min={1}
+                          max={20}
+                        />
+                      </label>
+
+                      <label className="bb-form-label">
+                        <span className="bb-form-label__text">Die</span>
                         <select
-                            className="bb-select"
-                            value={customDie}
-                            onChange={(e) => setCustomDie(e.target.value)}
+                          className="bb-select"
+                          value={customDie}
+                          onChange={(e) => setCustomDie(e.target.value)}
                         >
-                            <option value="d4">d4</option>
-                            <option value="d6">d6</option>
-                            <option value="d8">d8</option>
-                            <option value="d10">d10</option>
-                            <option value="d12">d12</option>
-                            <option value="d20">d20</option>
-                            <option value="d100">d100</option>
+                          <option value="d4">d4</option>
+                          <option value="d6">d6</option>
+                          <option value="d8">d8</option>
+                          <option value="d10">d10</option>
+                          <option value="d12">d12</option>
+                          <option value="d20">d20</option>
+                          <option value="d100">d100</option>
                         </select>
-                        </div>
+                      </label>
 
-                        {/* Modifier – narrow spinner, allows negatives */}
-                        <div style={{ maxWidth: "4.5rem", flex: "0 0 auto" }}>
+                      <label className="bb-form-label">
+                        <span className="bb-form-label__text">Modifier</span>
                         <NumberSpinner
-                            value={String(customDamageMod)}
-                            onChange={(val) => setCustomDamageMod(Number(val) || 0)}
-                            min={-99}
-                            max={99}
+                          value={String(customDamageMod)}
+                          onChange={(val) => setCustomDamageMod(Number(val ?? 0))}
+                          min={-99}
+                          max={99}
                         />
-                        </div>
+                      </label>
                     </div>
-                    </div>
+                  </div>
 
-                    <div className="bb-form-row">
+                  <div className="bb-form-row">
                     <span className="bb-form-label__text">Damage Preview</span>
                     <strong>{buildDamageString()}</strong>
-                </div>
+                  </div>
                 </div>
             </div>
 

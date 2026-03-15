@@ -254,7 +254,7 @@ export const ArmorTab: React.FC<ArmorTabProps> = ({ agent }) => {
                 }
                 title={sys.description} // NEW: row tooltip shows armor description
                 >
-                <td>
+                <td data-label="Equipped">
                     <label className="bb-checkbox bb-checkbox--tiny">
                     <input
                         type="checkbox"
@@ -268,10 +268,41 @@ export const ArmorTab: React.FC<ArmorTabProps> = ({ agent }) => {
                     <span className="bb-checkbox__box" />
                     </label>
                 </td>
-                <td>{item.name}</td>
-                <td>{formatProtection(sys.protection)}</td>
-                <td>{sys.armor_rating}</td>
-                <td>
+                <td data-label="Name">
+                  <div className="bb-armor-name">{item.name}</div>
+
+                  {/* Mobile-only labeled meta strip (hidden on desktop via CSS) */}
+                  <div className="bb-armor-mobile-meta bb-only-mobile" aria-label="Armor details">
+                    <div className="bb-am-chip">
+                      <span className="bb-am-k">PROT</span>
+                      <span className="bb-am-v">{formatProtection(sys.protection)}</span>
+                    </div>
+
+                    <div className="bb-am-chip">
+                      <span className="bb-am-k">AR</span>
+                      <span className="bb-am-v">{sys.armor_rating}</span>
+                    </div>
+
+                    <div className="bb-am-chip">
+                      <span className="bb-am-k">EXP</span>
+                      <span className="bb-am-v">{sys.expense ?? "—"}</span>
+                    </div>
+
+                    <div className="bb-am-actions">
+                      <button
+                        type="button"
+                        className="bb-button bb-button--small bb-button--danger"
+                        onClick={() => handleDeleteArmor(item._id)}
+                        title="Remove this armor"
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td data-label="Protection">{formatProtection(sys.protection)}</td>
+                <td data-label="AR">{sys.armor_rating}</td>
+                <td data-label="Remove">
                     <button
                     type="button"
                     className="bb-button bb-button--small bb-button--danger"
@@ -290,7 +321,7 @@ export const ArmorTab: React.FC<ArmorTabProps> = ({ agent }) => {
   };
 
   return (
-    <div className="bb-weapons-tab">
+    <div className="bb-weapons-tab bb-armor-tab">
       <div className="bb-weapons-tab__header">
         <span className="bb-weapons-tab__title">ARMOR</span>
         <button
@@ -302,13 +333,7 @@ export const ArmorTab: React.FC<ArmorTabProps> = ({ agent }) => {
         </button>
       </div>
       <div className="bb-weapons-tab__body">{renderArmorTable()}</div>
-        <p
-          style={{
-            marginTop: "0.5rem",
-            fontSize: "0.75rem",
-            opacity: 0.8,
-          }}
-        >
+        <p className="bb-armor-footnote">
           Body armor reduces the damage of all attacks except Called Shots and successful Lethality rolls.
         </p>
       {/* Add armor modal */}

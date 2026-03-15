@@ -134,28 +134,81 @@ export const GearTab: React.FC<GearTabProps> = ({ agent }) => {
             const qty = sys.quantity ?? 0;
             return (
               <tr key={item._id}>
-                <td>{item.name}</td>
-                <td>
+                {/* Item */}
+                <td data-label="Item">
+                  <div className="bb-gear-name">{item.name}</div>
+
+                  {/* Mobile-only meta strip (hidden on desktop via CSS) */}
+                  <div className="bb-gear-mobile-meta bb-only-mobile" aria-label="Gear details">
+                    <div className="bb-gm-chip bb-gm-chip--qty">
+                      <span className="bb-gm-k">QTY</span>
+                      <span className="bb-gm-v">
+                        <div className="bb-gm-qty">
+                          <button
+                            type="button"
+                            className="bb-button bb-button--small bb-gm-btn"
+                            onClick={() => adjustQuantity(item._id, -1)}
+                            title="Decrease quantity"
+                          >
+                            −
+                          </button>
+                          <span className="bb-gm-qty-val">{qty}</span>
+                          <button
+                            type="button"
+                            className="bb-button bb-button--small bb-gm-btn"
+                            onClick={() => adjustQuantity(item._id, +1)}
+                            title="Increase quantity"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </span>
+                    </div>
+
+                    <div className="bb-gm-chip bb-gm-chip--desc">
+                      <span className="bb-gm-k">DESC</span>
+                      <span className="bb-gm-v">{sys.description || "—"}</span>
+                    </div>
+
+                    <div className="bb-gm-actions">
+                      <button
+                        type="button"
+                        className="bb-button bb-button--small bb-button--danger bb-gm-btn"
+                        onClick={() => handleDeleteGear(item._id)}
+                        title="Remove this gear item"
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  </div>
+                </td>
+
+                {/* Desktop columns remain for desktop layout */}
+                <td data-label="Quantity">
                   <div className="bb-gear-qty">
                     <button
                       type="button"
                       className="bb-button bb-button--small"
                       onClick={() => adjustQuantity(item._id, -1)}
+                      title="Decrease quantity"
                     >
-                      -
+                      −
                     </button>
                     <span className="bb-gear-qty__value">{qty}</span>
                     <button
                       type="button"
                       className="bb-button bb-button--small"
                       onClick={() => adjustQuantity(item._id, +1)}
+                      title="Increase quantity"
                     >
                       +
                     </button>
                   </div>
                 </td>
-                <td>{sys.description}</td>
-                <td>
+
+                <td data-label="Description">{sys.description}</td>
+
+                <td data-label="Remove">
                   <button
                     type="button"
                     className="bb-button bb-button--small bb-button--danger"
@@ -174,7 +227,7 @@ export const GearTab: React.FC<GearTabProps> = ({ agent }) => {
   };
 
   return (
-    <div className="bb-weapons-tab">
+    <div className="bb-weapons-tab bb-gear-tab">
       <div className="bb-weapons-tab__header">
         <span className="bb-weapons-tab__title">GEAR</span>
         <button
@@ -190,7 +243,7 @@ export const GearTab: React.FC<GearTabProps> = ({ agent }) => {
       {isModalOpen && (
         <div className="bb-modal" onClick={() => setIsModalOpen(false)}>
           <div
-            className="bb-modal__dialog bb-modal__dialog--small bb-weapons-custom-modal__dialog"
+            className="bb-modal__dialog bb-modal__dialog--small bb-weapons-custom-modal__dialog bb-add-gear-dialog"
             onClick={(e) => e.stopPropagation()}
           >
             <h2 className="bb-modal__title">Add Gear</h2>

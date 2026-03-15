@@ -1,4 +1,5 @@
-@media (max-width: 899px) {
+@media (max-width: 899px) { 
+  .bb-only-mobile { display: block; } 
   /* -----------------------------
      ROOT MOBILE PANEL
   ----------------------------- */
@@ -12,7 +13,6 @@
     display: flex;
     flex-direction: column;
     height: 100dvh;
-    overflow: hidden;
   }
 
   /* -----------------------------
@@ -28,7 +28,7 @@
     gap: 0.25rem;
 
     padding:
-      calc(0.5rem + var(--safe-top))
+      calc(0.45rem + var(--safe-top))
       calc(0.5rem + var(--safe-right))
       0.5rem
       calc(0.5rem + var(--safe-left));
@@ -48,6 +48,10 @@
     opacity: 1;
     border-bottom: 2px solid var(--bb-accent);
   }
+  
+  .bb-mobile-section-nav {
+      top: var(--safe-top);
+  }
 
   /* -----------------------------
      SCROLL CONTAINER (THE IMPORTANT PART)
@@ -64,8 +68,12 @@
 
     padding: 0.75rem;
     padding-bottom: calc(
-      0.75rem + var(--safe-bottom) + 4.5rem
+      0.75rem + var(--safe-bottom) + 2.5rem
     );
+    scroll-padding-top: calc(
+      3.5rem + var(--safe-top)
+    );
+
   }
 
   /* Vertical rhythm without flex gap */
@@ -225,38 +233,7 @@
     display: flex;
     flex-direction: column;
     height: 100dvh;
-    overflow: hidden;
-  }
-
-  .bb-mobile-section-nav {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-
-    display: flex;
-    justify-content: space-between;
-    gap: 0.25rem;
-
-    /* Existing padding + safe area */
-    padding-top: calc(0.5rem + var(--safe-top));
-    padding-left: calc(0.5rem + var(--safe-left));
-    padding-right: calc(0.5rem + var(--safe-right));
-    padding-bottom: 0.5rem;
-
-    background: var(--bb-bg);
-    border-bottom: 1px solid var(--bb-border);
-  }
-
-  .bb-mobile-section-nav__btn {
-    flex: 1;
-    font-size: 0.7rem;
-    padding: 0.5rem 0;
-    opacity: 0.6;
-  }
-
-  .bb-mobile-section-nav__btn.is-active {
-    opacity: 1;
-    border-bottom: 2px solid var(--bb-accent);
+    overflow: visible;
   }
 
   @keyframes section-enter-left {
@@ -318,6 +295,34 @@
 
   .bb-player-panel--mobile .bb-card + .bb-card {
     margin-top: var(--mobile-gap);
+  }
+
+  /* Create a positioning context so the hidden input isn't anchored to the page */
+  .bb-player-panel--mobile .bb-checkbox {
+    position: relative;
+    touch-action: manipulation;
+  }
+
+  /*
+    Anchor the invisible focus target to the visible checkbox area.
+    This prevents the browser from scrolling the container to the top
+    just to "reveal" the focused input.
+  */
+  .bb-player-panel--mobile .bb-checkbox__input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0;
+    overscroll-behavior: contain;
+
+    /* keep your current behavior */
+    opacity: 0;
+    pointer-events: none;
+
+    /* override the base scroll-margin: 0 so focus doesn't tuck under sticky UI */
+    scroll-margin-top: 56px;
   }
 
   .bb-player-panel--mobile .bb-checkbox {
@@ -1182,6 +1187,578 @@
   .bb-modal__dialog.bb-manage-training-dialog .bb-table th,
   .bb-modal__dialog.bb-manage-training-dialog .bb-table td {
     font-size: 0.95rem;
+  }
+/* -----------------------------
+ TABLES → COMPACT MOBILE LISTS (STABLE)
+ (Weapons / Armor / Gear)
+ ----------------------------- */
+
+  /* Hide table headers */
+  .bb-player-panel--mobile .bb-weapons-table thead {
+    display: none;
+  }
+
+  /* Stable list structure */
+  .bb-player-panel--mobile .bb-weapons-table,
+  .bb-player-panel--mobile .bb-weapons-table tbody,
+  .bb-player-panel--mobile .bb-weapons-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  /* Row container */
+  .bb-player-panel--mobile .bb-weapons-table tr {
+    padding: 0.65rem 0.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+
+  /* Cells become inline content by default */
+  .bb-player-panel--mobile .bb-weapons-table td {
+    display: inline;
+    padding: 0;
+    border: none;
+    white-space: nowrap;
+  }
+
+  /* Force wrapping inside rows */
+  .bb-player-panel--mobile .bb-weapons-table tr {
+    white-space: normal;
+  }
+
+  /* -----------------------------
+     WEAPONS COLUMN GROUPING
+     ----------------------------- */
+
+  /* Name (2nd column) = header */
+  .bb-player-panel--mobile .bb-weapons-table td:nth-child(2) {
+    display: block;
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Meta fields inline */
+  .bb-player-panel--mobile .bb-weapons-table td:nth-child(n+3):nth-child(-n+9) {
+    display: inline-block;
+    margin-right: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Reload + Remove */
+  .bb-player-panel--mobile .bb-weapons-table td:nth-last-child(2),
+  .bb-player-panel--mobile .bb-weapons-table td:last-child {
+    display: inline-block;
+    margin-right: 0.75rem;
+  }
+
+  /* Buttons compact */
+  .bb-player-panel--mobile .bb-weapons-table .bb-button {
+    width: auto;
+    min-height: 40px;
+    padding: 0.35rem 0.6rem;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-table .bb-checkbox {
+    min-height: 40px;
+    padding: 0;
+  }
+
+  /* -----------------------------
+     ARMOR / GEAR (simpler tables)
+     ----------------------------- */
+
+  .bb-player-panel--mobile .bb-weapons-table td:first-child {
+    font-weight: 700;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-table td:last-child {
+    text-align: right;
+  }
+
+  /* =========================================
+     FINAL STABLE MOBILE COMPRESSION
+     (NO GENERATED LABELS, NO SCROLL JUMP)
+     ========================================= */
+
+  /* Weapons table rows */
+  .bb-player-panel--mobile .bb-weapons-table tr {
+    padding: 0.6rem 0.25rem;
+  }
+
+  /* Weapon name = visual header */
+  .bb-player-panel--mobile
+  .bb-weapons-tab
+  .bb-weapons-table
+  td:nth-child(2) {
+    display: block;
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Inline meta fields (order conveys meaning) */
+  .bb-player-panel--mobile
+  .bb-weapons-tab
+  .bb-weapons-table
+  td:nth-child(n+3):nth-child(-n+9) {
+    display: inline-block;
+    font-size: 0.95rem;
+    margin-right: 1.1rem;
+    margin-bottom: 0.15rem;
+    white-space: nowrap;
+    opacity: 0.95;
+  }
+
+  /* Ammo slightly deemphasized */
+  .bb-player-panel--mobile
+  .bb-weapons-tab
+  .bb-weapons-table
+  td:nth-child(9) {
+    opacity: 0.85;
+  }
+
+  /* Reload action inline */
+  .bb-player-panel--mobile
+  .bb-weapons-tab
+  .bb-weapons-table
+  td:nth-last-child(2) {
+    display: inline-block;
+    margin-right: 0.75rem;
+  }
+
+  /* Remove button: always its own line, no overlap */
+  .bb-player-panel--mobile
+  .bb-weapons-tab
+  .bb-weapons-table
+  td:last-child {
+    display: block;
+    margin-top: 0.35rem;
+    text-align: right;
+    clear: both;
+  }
+
+  /* Compact buttons */
+  .bb-player-panel--mobile .bb-weapons-table .bb-button {
+    width: auto;
+    min-height: 40px;
+    padding: 0.35rem 0.6rem;
+  }
+
+  /* =========================================
+     ARMOR & GEAR — NO WEAPON RULES APPLY
+     ========================================= */
+
+  .bb-player-panel--mobile
+  .bb-weapons-table:not(.bb-weapons-tab *) td {
+    display: block;
+  }
+
+  /* =========================================
+   ARMOR TAB — MOBILE META STRIP (WEAPONS-LIKE)
+   Desktop keeps table columns.
+   Mobile shows labeled meta strip inside Name cell.
+   ========================================= */
+
+  /* Show armor meta strip ONLY on mobile and ONLY in armor tab */
+  .bb-player-panel--mobile .bb-armor-tab .bb-armor-mobile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+    margin-top: 0.35rem;
+  }
+
+  .bb-player-panel--mobile .bb-armor-tab .bb-am-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--bb-border-soft);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .bb-player-panel--mobile .bb-armor-tab .bb-am-k {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+
+  .bb-player-panel--mobile .bb-armor-tab .bb-am-v {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+  }
+
+  .bb-player-panel--mobile .bb-armor-tab .bb-am-actions {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Keep name readable */
+  .bb-player-panel--mobile .bb-armor-tab .bb-armor-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  /* Hide redundant desktop columns on mobile (we replace them with meta strip) */
+  .bb-player-panel--mobile .bb-armor-tab .bb-weapons-table td[data-label="Protection"],
+  .bb-player-panel--mobile .bb-armor-tab .bb-weapons-table td[data-label="AR"],
+  .bb-player-panel--mobile .bb-armor-tab .bb-weapons-table td[data-label="Remove"] {
+    display: none !important;
+  }
+  
+  .bb-player-panel--mobile .bb-armor-tab .bb-armor-mobile-meta .bb-button {
+    min-height: 36px;
+    padding: 0.2rem 0.6rem;
+  }
+  /* =========================================
+   GEAR TAB — MOBILE META STRIP (WEAPONS-LIKE)
+   Desktop keeps table columns.
+   Mobile shows labeled meta strip inside Item cell.
+   ========================================= */
+   
+  /* Show gear meta strip only on mobile and only in gear tab */
+  .bb-player-panel--mobile .bb-gear-tab .bb-gear-mobile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+    margin-top: 0.35rem;
+  }
+
+  .bb-player-panel--mobile .bb-gear-tab .bb-gm-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--bb-border-soft);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 0.9rem;
+    line-height: 1.2;
+    max-width: 100%;
+  }
+
+  .bb-player-panel--mobile .bb-gear-tab .bb-gm-k {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+
+  .bb-player-panel--mobile .bb-gear-tab .bb-gm-v {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  /* Description chip should wrap instead of forcing horizontal scroll */
+  .bb-player-panel--mobile .bb-gear-tab .bb-gm-chip--desc .bb-gm-v {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .bb-player-panel--mobile .bb-gear-tab .bb-gm-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .bb-player-panel--mobile .bb-gear-tab .bb-gm-qty-val {
+    min-width: 2ch;
+    text-align: center;
+    font-weight: 600;
+    opacity: 0.95;
+  }
+
+  .bb-player-panel--mobile .bb-gear-tab .bb-gm-actions {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .bb-player-panel--mobile .bb-gear-tab .bb-gm-btn {
+    min-height: 36px;
+    padding: 0.2rem 0.55rem;
+  }
+
+  /* Item name styling */
+  .bb-player-panel--mobile .bb-gear-tab .bb-gear-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  /* Hide desktop columns on mobile (replaced by meta strip) */
+  .bb-player-panel--mobile .bb-gear-tab .bb-weapons-table td[data-label="Quantity"],
+  .bb-player-panel--mobile .bb-gear-tab .bb-weapons-table td[data-label="Description"],
+  .bb-player-panel--mobile .bb-gear-tab .bb-weapons-table td[data-label="Remove"] {
+    display: none !important;
+  }
+
+  /* ================================
+     REMOVE BUTTON – FIX CLIPPING
+     ================================ */
+
+  /* Action cell always on its own row */
+  .bb-player-panel--mobile .bb-weapons-table td:last-child {
+    display: block;
+    margin-top: 0.35rem;
+    text-align: right;
+  }
+
+  /* Make sure no float survives */
+  .bb-player-panel--mobile .bb-weapons-table td:last-child {
+    float: none;
+    clear: both;
+  }
+
+  /* -------------------------------------------------
+     WEAPONS: show mobile meta strip, hide detail columns
+     ------------------------------------------------- */
+
+  /* Only for weapons tab (prevents armor/gear bleed) */
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapon-mobile-meta {
+    margin-top: 0.35rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-wm-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--bb-border-soft);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 0.9rem;
+    line-height: 1.2;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-wm-k {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-wm-v {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-wm-btn {
+    min-height: 36px;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-wm-ammo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-wm-ammo-label {
+    white-space: nowrap;
+    opacity: 0.9;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-wm-actions {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  /* Hide desktop columns on mobile (we replace them with the meta strip) */
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Skill"],
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Range"],
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Damage"],
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Armor Piercing"],
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Lethality"],
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Kill R."],
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Ammo"],
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Reload"],
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Remove"] {
+    display: none !important;
+  }
+
+  /* Keep Equipped + Name visible */
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Equipped"] {
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapons-table td[data-label="Name"] {
+    display: block;
+  }
+
+  .bb-player-panel--mobile .bb-weapons-tab .bb-weapon-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  /* -----------------------------
+     ADD WEAPON / ADD ARMOR MODAL
+     ----------------------------- */
+
+  .bb-modal__dialog.bb-weapons-modal__dialog {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    height: 96dvh; /* Taller than other modals */
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 32px rgba(0,0,0,0.6);
+    padding-bottom: env(safe-area-inset-bottom);
+    animation: bb-alias-sheet-in 220ms ease-out;
+  }
+
+  /* Modal body is fixed; NO scrolling here */
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-modal__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* Stack list and details */
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-weapons-modal__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  /* LEFT: item list (ONLY scrollable area) */
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-weapons-modal__list {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-right: none;
+    border-bottom: 1px solid var(--bb-border-soft);
+    padding-bottom: 0.75rem;
+  }
+
+  /* Bigger list buttons */
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-weapons-modal__list-button {
+    min-height: 48px;
+    padding: 0.6rem 0.65rem;
+  }
+
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-weapons-modal__list-name {
+    font-size: 1rem;
+  }
+
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-weapons-modal__list-meta {
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  /* RIGHT / BOTTOM: details (NO scroll) */
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-weapons-modal__details {
+    flex: 0 0 auto;
+    min-height: 40dvh; /* Taller details panel */
+    overflow: hidden;
+    padding-bottom: 0.25rem;
+  }
+
+  /* Details grid uses two columns to save height */
+  .bb-modal__dialog.bb-weapons-modal__dialog
+  .bb-weapons-modal__details-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem 0.75rem;
+  }
+
+  .bb-modal__dialog.bb-weapons-modal__dialog
+  .bb-weapons-modal__weapon-desc {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  /* Sticky footer */
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-modal__footer {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--bb-bg);
+    border-top: 1px solid var(--bb-border-soft);
+  }
+
+  .bb-modal__dialog.bb-weapons-modal__dialog .bb-modal__footer .bb-button {
+    flex: 1;
+    min-height: 44px;
+  }
+
+  /* -----------------------------
+     BUILD CUSTOM WEAPON / ARMOR
+     ----------------------------- */
+
+  .bb-modal__dialog.bb-weapons-custom-modal__dialog {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    height: 96dvh;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -12px 32px rgba(0,0,0,0.6);
+    padding-bottom: env(safe-area-inset-bottom);
+    animation: bb-alias-sheet-in 220ms ease-out;
+  }
+
+  .bb-modal__dialog.bb-weapons-custom-modal__dialog .bb-modal__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bb-modal__dialog.bb-weapons-custom-modal__dialog .bb-modal__footer {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--bb-bg);
+    border-top: 1px solid var(--bb-border-soft);
+  }
+
+  .bb-modal__dialog.bb-weapons-custom-modal__dialog .bb-modal__footer .bb-button {
+    flex: 1;
+    min-height: 44px;
+  }
+
+  /* ✅ undo base 'scroll-margin:0' so focus doesn't jump under sticky nav */
+  .bb-player-panel--mobile .bb-checkbox__input {
+    scroll-margin-top: calc(3.5rem + var(--safe-top));
+    scroll-margin-bottom: 0;
+  }
+
+  /* Also cover raw inputs if any exist outside the bb-checkbox pattern */
+  .bb-player-panel--mobile input[type="checkbox"],
+  .bb-player-panel--mobile input[type="radio"] {
+    scroll-margin-top: calc(3.5rem + var(--safe-top));
   }
 }
 

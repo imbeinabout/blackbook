@@ -2233,6 +2233,12 @@
   opacity: 0.8;
 }
 
+.bb-armor-footnote {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
 /* 2x2 grid for action buttons in the modals card */
 .bb-modals__buttons {
   display: grid;
@@ -2569,6 +2575,11 @@
 .bb-weapons-tab__empty {
   font-size: 0.8rem;
   color: var(--bb-text-muted);
+}
+
+/* Hide the mobile weapon meta strip by default (desktop/tablet) */
+.bb-weapon-mobile-meta {
+  display: none;
 }
 
 /* Weapons table */
@@ -3948,3 +3959,6 @@ input[type="number"] {
   min-height: 0;
   contain: layout paint;
 }
+
+/* Utility: hidden by default */
+.bb-only-mobile { display: none; }
