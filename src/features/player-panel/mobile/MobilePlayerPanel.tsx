@@ -234,14 +234,8 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
               openSkillRoll={openSkillRoll}
               openSanityTest={openSanityTest}
               openLuckTest={openLuckTest}
+              openTerminal={() => setIsTerminalOpen(true)}
             />
-
-            <button
-              className="bb-button"
-              onClick={() => setIsTerminalOpen(true)}
-            >
-              Open Terminal
-            </button>
             <CardShell>
               <NotesTab agent={agent} updateAgent={updateAgent} />
             </CardShell>

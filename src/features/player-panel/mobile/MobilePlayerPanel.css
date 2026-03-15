@@ -1883,7 +1883,20 @@
     min-height: 44px;
     flex: 1;
   }
+
+  .bb-player-panel--mobile .bb-modals__terminalBtn {
+    display: inline-flex;
+  }
+
+  .bb-player-panel--mobile .bb-modals__terminalBtn {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-height: 44px;
+    justify-content: center;
+  }
+
 }
+
 
 @keyframes bb-alias-sheet-in {
   from {

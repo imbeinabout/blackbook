@@ -19,6 +19,7 @@ type ModalsCardProps = {
   openStatRoll: (label: string, x5: number) => void;
   openSanityTest: () => void;
   openLuckTest: () => void;
+  openTerminal?: () => void;
 };
 
 type RowState = {
@@ -36,6 +37,7 @@ const ModalsCard: React.FC<ModalsCardProps> = ({
   openStatRoll,
   openSanityTest,
   openLuckTest,
+  openTerminal,
 }) => {
   // -------------------------
   // Upgrade modal
@@ -274,6 +276,15 @@ const ModalsCard: React.FC<ModalsCardProps> = ({
           >
             Home Scenes
           </button>
+          {openTerminal && (
+            <button
+              type="button"
+              className="bb-button bb-button--small bb-modals__terminalBtn bb-only-mobile"
+              onClick={openTerminal}
+            >
+              Open Terminal
+            </button>
+          )}
         </div>
       </div>
 
