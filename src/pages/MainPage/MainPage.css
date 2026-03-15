@@ -123,6 +123,40 @@
   color: #fff;
 }
 
+@media (max-width: 899px) {
+  /* ===== Header dropdown menu (mobile) ===== */
+
+  .bb-header__menu {
+    min-width: 240px;              /* wider hit area */
+    padding: 0.5rem 0;             /* breathing room */
+    border-radius: 6px;
+  }
+
+  .bb-header__menu-item {
+    font-size: 0.95rem;            /* readable at arm’s length */
+    padding: 0.75rem 1rem;         /* ✅ ~48px tall tap target */
+    line-height: 1.2;
+  }
+
+  .bb-header__menu-item:not(:last-child) {
+    border-bottom: 1px solid var(--bb-border-soft);
+  }
+
+  .bb-header__menu-divider {
+    margin: 0.4rem 0;
+  }
+
+  /* Make danger action feel intentional, not fiddly */
+  .bb-header__menu-item--danger {
+    font-weight: 600;
+  }
+
+  /* Optional: subtle active feedback for touch */
+  .bb-header__menu-item:active {
+    background: #0f2418;
+  }
+}
+
 .bb-header__logo {
   display: flex;
   align-items: center;
