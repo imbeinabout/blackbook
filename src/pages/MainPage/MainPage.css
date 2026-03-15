@@ -2197,6 +2197,35 @@
   white-space: nowrap;
 }
 
+.bb-bond-add-form {
+  margin-top: 0.5rem;
+  border-top: 1px solid #274630;
+  padding-top: 0.5rem;
+}
+
+.bb-bond-input {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.15rem;
+  background: #101010;
+  color: #9be27b;
+  border: 1px solid #274630;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.8rem;
+}
+
+.bb-bond-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.15rem;
+  background: #101010;
+  color: #9be27b;
+  border: 1px solid #274630;
+  padding: 0.2rem 0.35rem;
+  font-size: 0.75rem;
+  resize: vertical;
+}
+
 /* Weapons table */
 .bb-bonds-table {
   width: 100%;

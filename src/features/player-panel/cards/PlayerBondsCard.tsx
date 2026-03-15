@@ -198,31 +198,15 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
           </button>
           </div>
         ) : (
-          <div
-            className="bb-bond-add-form"
-            style={{
-              marginTop: "0.5rem",
-              borderTop: "1px solid #274630",
-              paddingTop: "0.5rem",
-            }}
-          >
+          <div className="bb-bond-add-form">
             <div style={{ marginBottom: "0.25rem" }}>
               <label>
                 Name{" "}
                 <input
                   type="text"
+                  className="bb-bond-input"
                   value={newBondName}
                   onChange={(e) => setNewBondName(e.target.value)}
-                  style={{
-                    width: "100%",
-                    boxSizing: "border-box",
-                    marginTop: "0.15rem",
-                    background: "#101010",
-                    color: "#9be27b",
-                    border: "1px solid #274630",
-                    padding: "0.2rem 0.35rem",
-                    fontSize: "0.8rem",
-                  }}
                   autoFocus
                 />
               </label>
@@ -231,20 +215,10 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
               <label>
                 Description / Relationship{" "}
                 <textarea
+                  className="bb-bond-textarea"
                   value={newBondDesc}
                   onChange={(e) => setNewBondDesc(e.target.value)}
-                  rows={2}
-                  style={{
-                    width: "100%",
-                    boxSizing: "border-box",
-                    marginTop: "0.15rem",
-                    background: "#101010",
-                    color: "#9be27b",
-                    border: "1px solid #274630",
-                    padding: "0.2rem 0.35rem",
-                    fontSize: "0.75rem",
-                    resize: "vertical",
-                  }}
+                  rows={3}
                   placeholder="Spouse, child, partner, mentor, etc."
                 />
               </label>
