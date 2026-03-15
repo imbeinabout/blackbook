@@ -37,6 +37,7 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
 
   const editorRef = React.useRef<HTMLDivElement | null>(null);
   const isProgrammaticEditRef = React.useRef(false);
+  const shouldScrollToHitRef = React.useRef(false);
 
   React.useEffect(() => {
     if (editorRef.current) {
@@ -198,11 +199,7 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
 
     setHits(nextHits);
 
-    setHitIndex((prev) => {
-        if (!nextHits.length) return -1;
-        if (prev >= 0 && prev < nextHits.length) return prev;
-        return 0;
-    });
+    setHitIndex(-1);
   }, [query, notes]);
 
   const clearExistingHighlight = React.useCallback(() => {
@@ -227,7 +224,7 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
   }, []);
 
   const highlightCurrentHit = React.useCallback(
-    (needle: string) => {
+    (needle: string, shouldScroll: boolean) => {
       const el = editorRef.current;
       if (!el) return;
 
@@ -238,7 +235,6 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
       try {
         clearExistingHighlight();
 
-        // Work with text nodes to find first matching occurrence in this note
         const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
         const lowerNeedle = q.toLowerCase();
 
@@ -264,11 +260,12 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
 
           const parent = node.parentNode;
           if (!parent) return;
-
           parent.replaceChild(frag, node);
 
-          // Scroll highlight into view without triggering extra focus churn
-          span.scrollIntoView({ block: "center" });
+          // ✅ Only scroll when user explicitly navigates results
+          if (shouldScroll) {
+            scrollHitIntoEditor(el, span);
+          }
 
           return;
         }
@@ -277,7 +274,26 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
           isProgrammaticEditRef.current = false;
         });
       }
-  }, [clearExistingHighlight]);
+    },
+    [clearExistingHighlight]
+  );
+
+  function scrollHitIntoEditor(container: HTMLElement, hitEl: HTMLElement) {
+    // Ensure the container is the scrolling element
+    const cTop = container.scrollTop;
+    const cRect = container.getBoundingClientRect();
+    const hRect = hitEl.getBoundingClientRect();
+
+    // Hit position relative to container scroll area
+    const topWithin = (hRect.top - cRect.top) + cTop;
+    const centerTarget = topWithin - (container.clientHeight / 2) + (hRect.height / 2);
+
+    // Clamp
+    const max = Math.max(0, container.scrollHeight - container.clientHeight);
+    const next = Math.max(0, Math.min(max, centerTarget));
+
+    container.scrollTop = next;
+  }
 
   React.useEffect(() => {
     const q = query.trim();
@@ -294,21 +310,11 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
     }
 
     requestAnimationFrame(() => {
-      highlightCurrentHit(q);
+      const shouldScroll = shouldScrollToHitRef.current;
+      shouldScrollToHitRef.current = false; // reset immediately
+      highlightCurrentHit(q, shouldScroll);
     });
   }, [hitIndex, hits, query, activeId, highlightCurrentHit, clearExistingHighlight]);
-
-  React.useEffect(() => {
-    const q = query.trim();
-    if (!q || hitIndex < 0 || hitIndex >= hits.length) return;
-    const current = hits[hitIndex];
-    if (!activeNote || current.noteId !== activeNote.id) return;
-
-    requestAnimationFrame(() => {
-        highlightCurrentHit(q);
-        searchInputRef.current?.focus();
-    });
-  }, [activeNote?.id, query, hitIndex, hits, highlightCurrentHit, activeNote]);
 
   const goPrev = () => {
     if (!hits.length) return;
@@ -334,27 +340,31 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
             }}
             onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                e.preventDefault();
-                if (hits.length) setHitIndex(i => (i >= hits.length - 1 ? 0 : i + 1));
+                  e.preventDefault();
+                  if (hits.length) {
+                    shouldScrollToHitRef.current = true;
+                    setHitIndex(i => (i < 0 ? 0 : (i >= hits.length - 1 ? 0 : i + 1)));
+                  }
                 } else if (e.key === "Escape") {
-                e.preventDefault();
-                setQuery("");
+                  e.preventDefault();
+                  setQuery("");
                 }
             }}
             />
 
             <div className="bb-notes-searchbar__meta">
             <span className="bb-text-muted">
-                {hits.length ? `${hitIndex + 1}/${hits.length}` : "0/0"}
+                {hits.length ? `${Math.max(0, hitIndex + 1)}/${hits.length}` : "0/0"}
             </span>
 
             <button
                 type="button"
                 className="bb-btn bb-btn--ghost bb-btn--small"
                 onClick={() => {
-                if (!hits.length) return;
-                setHitIndex(i => (i <= 0 ? hits.length - 1 : i - 1));
-                searchInputRef.current?.focus();
+                  if (!hits.length) return;
+                  shouldScrollToHitRef.current = true;
+                  setHitIndex(i => (i < 0 ? hits.length - 1 : (i <= 0 ? hits.length - 1 : i - 1)));
+                  searchInputRef.current?.focus();
                 }}
                 disabled={!hits.length}
                 title="Previous result"
@@ -366,9 +376,10 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
                 type="button"
                 className="bb-btn bb-btn--ghost bb-btn--small"
                 onClick={() => {
-                if (!hits.length) return;
-                setHitIndex(i => (i >= hits.length - 1 ? 0 : i + 1));
-                searchInputRef.current?.focus();
+                  if (!hits.length) return;
+                  shouldScrollToHitRef.current = true;
+                  setHitIndex(i => (i < 0 ? 0 : (i >= hits.length - 1 ? 0 : i + 1)));
+                  searchInputRef.current?.focus();
                 }}
                 disabled={!hits.length}
                 title="Next result"
