@@ -60,6 +60,10 @@ const DiceTray: React.FC<DiceTrayProps> = ({
 
   const totalRef = React.useRef(0);
 
+  const startX = React.useRef<number | null>(null);
+  const currentX = React.useRef<number>(0);
+  const [dragX, setDragX] = React.useState(0);
+
   React.useEffect(() => {
     if (isOpen) {
         totalRef.current = 0;
@@ -102,6 +106,32 @@ const DiceTray: React.FC<DiceTrayProps> = ({
 
   const handleClearLog = () => {
     setLog([]);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    startX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (startX.current === null) return;
+
+    const delta = e.touches[0].clientX - startX.current;
+
+    if (delta > 0) {
+      currentX.current = delta;
+      setDragX(delta);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (currentX.current > 80) {
+      onClose(); // ✅ dismiss
+    }
+
+    // reset
+    setDragX(0);
+    startX.current = null;
+    currentX.current = 0;
   };
 
   // Basic free roll (no success logic)
@@ -387,6 +417,14 @@ const DiceTray: React.FC<DiceTrayProps> = ({
           "bb-dice-tray" + (isOpen ? " bb-dice-tray--open" : "")
         }
         aria-hidden={!isOpen}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        style={{
+          transform: isOpen
+            ? `translateX(${dragX}px)`
+            : undefined
+        }}
       >
         {/* HEADER */}
         <div className="bb-dice-tray__header">

@@ -247,6 +247,13 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
       {isTerminalOpen && (
         <TerminalOverlay onClose={() => setIsTerminalOpen(false)} />
       )}
+        <button
+          className="bb-dice-button bb-only-mobile"
+          onClick={() => openGenericRoll("Free Roll", "")}
+          aria-label="Roll d100"
+        >
+          d100
+        </button>
     </main>
   );
 };

@@ -3045,6 +3045,218 @@
   justify-content: flex-end;
 }
 
+@media (max-width: 899px) {
+  /* ============================
+     Load Agent Modal (mobile)
+     Stack list on top, details below
+     ============================ */
+
+  /* Make the dialog feel like the "Add Weapon" modal layout on mobile */
+  .bb-modal__dialog.bb-load-modal__dialog {
+    width: 96vw;
+    max-width: 96vw;
+    max-height: 92dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem;
+  }
+
+  /* Body becomes a vertical split */
+  .bb-load-modal__body {
+    flex: 1 1 auto;
+    min-height: 0; /* REQUIRED so children can scroll */
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
+
+  /* Top list: scrollable, with a comfortable max height */
+  .bb-load-modal__list {
+    flex: 0 0 auto;
+    max-height: 34dvh;              /* list sits on top like "Add Weapon" */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0;               /* remove desktop scrollbar padding */
+    border-right: none;             /* remove desktop divider */
+    border-bottom: 1px solid var(--bb-border-soft);
+    padding-bottom: 0.5rem;
+  }
+
+  /* Agent list items: thumb-friendly */
+  .agent-list-item {
+    padding: 0.65rem 0.75rem;
+    margin-bottom: 0.35rem;
+    border: 1px solid var(--bb-border-soft);
+    background: #020403;
+  }
+
+  .agent-list-item--selected {
+    border-color: var(--bb-accent-soft);
+    box-shadow: 0 0 0 1px rgba(155, 226, 123, 0.25);
+  }
+
+  .agent-main-line {
+    font-size: 0.95rem;
+    line-height: 1.2;
+  }
+
+  .agent-sub-line {
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+  }
+
+  /* Bottom details: fill remaining space and scroll */
+  .bb-load-modal__details {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;               /* override desktop cap */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0;
+  }
+
+  /* Details grid: slightly bigger, nicer on small screens */
+  .bb-load-modal__fields {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.5rem 0.75rem;
+  }
+
+  .bb-load-modal__agent-name {
+    font-size: 1.05rem;
+    margin: 0 0 0.6rem;
+  }
+
+  /* Track pills: wrap nicely */
+  .bb-load-modal__track-grid {
+    gap: 0.5rem;
+  }
+
+  .bb-load-modal__track-pill {
+    padding: 0.35rem 0.6rem;
+  }
+
+  .bb-load-modal__track-label {
+    font-size: 0.75rem;
+  }
+
+  .bb-load-modal__track-value {
+    font-size: 0.95rem;
+  }
+
+  /* Footer: mobile sizing */
+  .bb-load-modal__footer .bb-button {
+    min-height: 44px;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Footer regions stack more naturally on narrow screens */
+  .bb-load-modal__footer {
+    flex: 0 0 auto;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    position: sticky;
+    bottom: 0;
+    background: #030604;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--bb-border-soft);
+    z-index: 2;
+  }
+
+
+  .bb-load-modal__footer-left,
+  .bb-load-modal__footer-center,
+  .bb-load-modal__footer-right {
+    flex: 1 1 100%;
+    justify-content: stretch;
+  }
+
+  .bb-load-modal__footer-left button,
+  .bb-load-modal__footer-center button,
+  .bb-load-modal__footer-right button {
+    width: 100%;
+  }
+
+  /* Hide footer Import button on mobile */
+  .bb-load-modal__footer-left {
+    display: none;
+  }
+
+  /* Import button under agent list */
+  .bb-load-modal__import {
+    width: 100%;
+    margin-top: 0.5rem;
+    min-height: 44px;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    background: #07140d;
+    border: 1px dashed var(--bb-border-soft);
+  }
+
+  .bb-load-modal__import:hover {
+    background: #0a1a11;
+  }
+
+  /* ===============================
+     Delete Confirmation Modal (mobile)
+     =============================== */
+
+  /* Slightly darker overlay to signal danger */
+  .bb-modal.bb-modal--confirm {
+    background: rgba(0, 0, 0, 0.75);
+  }
+
+  /* Dialog sizing & spacing */
+  .bb-modal--confirm .bb-modal__dialog {
+    width: 92vw;
+    max-width: 92vw;
+    padding: 1rem 0.9rem 0.9rem;
+  }
+
+  /* Title: stronger visual warning */
+  .bb-modal--confirm .bb-modal__title {
+    font-size: 1.05rem;
+    margin-bottom: 0.6rem;
+    color: var(--bb-warning);
+  }
+
+  /* Body text: easier to read on small screens */
+  .bb-modal--confirm .bb-modal__body {
+    font-size: 0.9rem;
+    line-height: 1.35;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Footer buttons stack vertically */
+  .bb-modal--confirm .bb-modal__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* All buttons: thumb-safe */
+  .bb-modal--confirm .bb-button {
+    min-height: 48px;
+    font-size: 0.95rem;
+    padding: 0.6rem 0.75rem;
+  }
+
+  /* Cancel first (safe action) */
+  .bb-modal--confirm .bb-button:not(.bb-button--danger) {
+    order: 1;
+  }
+
+  /* Delete last, visually heavier */
+  .bb-modal--confirm .bb-button--danger {
+    order: 2;
+    font-weight: 700;
+    box-shadow: 0 0 0 1px rgba(176, 32, 32, 0.4);
+  }
+}
+
 .dv-button-stack {
   display: flex;
   flex-direction: column;
@@ -3140,6 +3352,38 @@ input[type="number"] {
 
 .bb-dice-button:hover {
   border-color: var(--bb-accent);
+}
+
+@media (max-width: 899px) {
+  /* Enable mobile-only elements */
+  .bb-only-mobile {
+    display: inline-flex;
+  }
+
+  /* Floating d100 launcher */
+  .bb-dice-button {
+    right: 1rem;
+    bottom: 1rem;
+
+    min-width: 64px;
+    min-height: 64px;
+    padding: 0;
+
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+
+    border-radius: 999px;
+    box-shadow:
+      0 0 0 2px rgba(155, 226, 123, 0.25),
+      0 6px 14px rgba(0, 0, 0, 0.6);
+
+    z-index: 850; /* above footer / panel */
+  }
+
+  .bb-dice-button:active {
+    transform: scale(0.96);
+  }
 }
 
 /* Dice tray panel */
@@ -3361,6 +3605,73 @@ input[type="number"] {
   margin-left: 0.4rem;
   font-size: 0.75rem;
   opacity: 0.85;
+}
+
+@media (max-width: 899px) {
+  /* =========================
+     Dice Tray – Mobile Ergonomics
+     ========================= */
+
+  /* Tray width: give thumbs more room */
+  .bb-dice-tray {
+    width: 360px;
+    max-width: 92vw;
+    font-size: 0.95rem;
+    touch-action: pan-y;
+    will-change: transform;
+  }
+
+  /* Header buttons (close) */
+  .bb-dice-tray__close {
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 1.2rem;
+  }
+
+  /* Reset + Clear Log buttons */
+  .bb-dice-tray__reset,
+  .bb-dice-tray__clear-log {
+    min-height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  /* Dice button grid */
+  .bb-dice-tray__dice-row {
+    gap: 0.5rem;
+  }
+
+  /* Make dice buttons big & thumbable */
+  .bb-dice-tray__die-btn {
+    flex: 1 1 calc(50% - 0.5rem); /* ✅ 2 per row */
+    min-height: 52px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    padding: 0.5rem 0;
+  }
+
+  /* Current roll display: emphasize result */
+  .bb-dice-tray__current-value {
+    font-size: 2.4rem;
+    margin: 0.5rem 0;
+  }
+
+  .bb-dice-tray__current-formula {
+    font-size: 0.9rem;
+  }
+
+  /* Log entries: easier scanning */
+  .bb-dice-tray__log-item {
+    padding: 0.4rem 0;
+  }
+
+  .bb-dice-tray__log-label {
+    font-size: 0.9rem;
+  }
+
+  .bb-dice-tray__log-result {
+    font-size: 1rem;
+  }
 }
 
 .bb-card__body.bb-san-luck__body {

@@ -161,56 +161,38 @@ const LoadAgentModal: React.FC<LoadAgentModalProps> = ({
                       </div>
                     </li>
                   ))}
-                </ul>
+                </ul>         
+                {/* Mobile-only Import button at bottom of list */}
+                <button
+                  type="button"
+                  className="bb-button bb-button--small bb-load-modal__import bb-only-mobile"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  Import Agent
+                </button>
               </div>
 
               {/* Right: details for selected agent */}
               <div className="bb-load-modal__details">
                 {selectedAgent ? (
-                  <>                  
-                    <div className="bb-load-modal__details">
-                      {selectedAgent ? (
-                        <>
-                          <h4 className="bb-load-modal__agent-name">
-                            {selectedAgent.name || "(Unnamed Agent)"}
-                          </h4>
+                  <>
+                    <h4 className="bb-load-modal__agent-name">
+                      {selectedAgent.name || "(Unnamed Agent)"}
+                    </h4>
 
-                          {/* Biography detail fields */}
-                          <div className="bb-load-modal__fields">
-                            <DetailField
-                              label="Profession"
-                              value={selectedAgent.system.biography.profession}
-                            />
-                            <DetailField
-                              label="Employer"
-                              value={selectedAgent.system.biography.employer}
-                            />
-                            <DetailField
-                              label="Nationality"
-                              value={selectedAgent.system.biography.nationality}
-                            />
-                            <DetailField
-                              label="Age / DOB"
-                              value={selectedAgent.system.biography.age}
-                            />
-                            <DetailField
-                              label="Sex"
-                              value={selectedAgent.system.biography.sex}
-                            />
-                            <DetailField
-                              label="Education"
-                              value={selectedAgent.system.biography.education}
-                            />
-                          </div>
+                    {/* Biography detail fields */}
+                    <div className="bb-load-modal__fields">
+                      <DetailField label="Profession" value={selectedAgent.system.biography.profession} />
+                      <DetailField label="Employer" value={selectedAgent.system.biography.employer} />
+                      <DetailField label="Nationality" value={selectedAgent.system.biography.nationality} />
+                      <DetailField label="Age / DOB" value={selectedAgent.system.biography.age} />
+                      <DetailField label="Sex" value={selectedAgent.system.biography.sex} />
+                      <DetailField label="Education" value={selectedAgent.system.biography.education} />
+                    </div>
 
-                          {/* Tracks summary (HP / WP / SAN / Breaking Point) */}
-                          <div className="bb-load-modal__tracks">
-                            {renderTrackSummary(selectedAgent)}
-                          </div>
-                        </>
-                      ) : (
-                        <p>No agent selected.</p>
-                      )}
+                    {/* Tracks summary (HP / WP / SAN / Breaking Point) */}
+                    <div className="bb-load-modal__tracks">
+                      {renderTrackSummary(selectedAgent)}
                     </div>
                   </>
                 ) : (
