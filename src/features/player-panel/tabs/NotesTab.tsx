@@ -15,8 +15,11 @@ type AgentNote = {
   updatedAt: number;
 };
 
+const EMPTY_NOTES: AgentNote[] = [];
+
 export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
-  const notes: AgentNote[] = (agent.system as any).notes ?? [];
+  const notesRaw = (agent.system as any).notes;
+  const notes: AgentNote[] = Array.isArray(notesRaw) ? notesRaw : EMPTY_NOTES;
 
   const initialActiveId = React.useMemo(() => {
     if (notes.length === 0) return null;
@@ -33,6 +36,7 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
   const activeNote = notes.find(n => n.id === activeId) ?? null;
 
   const editorRef = React.useRef<HTMLDivElement | null>(null);
+  const isProgrammaticEditRef = React.useRef(false);
 
   React.useEffect(() => {
     if (editorRef.current) {
@@ -82,12 +86,28 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
   const handleInput = () => {
     if (!editorRef.current || !activeNote) return;
 
+    // Ignore DOM mutations caused by search highlighting/clearing
+    if (isProgrammaticEditRef.current) return;
+
     if (saveTimeout.current) window.clearTimeout(saveTimeout.current);
+
     saveTimeout.current = window.setTimeout(() => {
-      updateActiveNote({ content: editorRef.current!.innerHTML });
+      if (!editorRef.current) return;
+
+      // Strip highlight markup before persisting
+      const raw = editorRef.current.innerHTML;
+
+      const cleaned = raw.replace(
+        /<span class="bb-notes-hit">([\s\S]*?)<\/span>/g,
+        "$1"
+      );
+
+      // Avoid unnecessary updates
+      if (cleaned === (activeNote?.content ?? "")) return;
+
+      updateActiveNote({ content: cleaned });
     }, 250);
   };
-
   // ------------------------
   // SEARCH
   // ------------------------
@@ -137,9 +157,9 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
   React.useEffect(() => {
     const q = query.trim();
     if (!q) {
-        setHits([]);
-        setHitIndex(-1);
-        return;
+      setHits((prev) => (prev.length ? [] : prev));
+      setHitIndex((prev) => (prev !== -1 ? -1 : prev));
+      return;
     }
 
     const nextHits: SearchHit[] = [];
@@ -189,76 +209,92 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
     const el = editorRef.current;
     if (!el) return;
 
-    const markers = el.querySelectorAll("span.bb-notes-hit");
-    markers.forEach((m) => {
+    isProgrammaticEditRef.current = true;
+    try {
+      const markers = el.querySelectorAll("span.bb-notes-hit");
+      markers.forEach((m) => {
         const parent = m.parentNode;
         if (!parent) return;
-        parent.replaceChild(document.createTextNode(m.textContent || ""), m);
+        parent.replaceChild(document.createTextNode(m.textContent ?? ""), m);
         parent.normalize();
-    });
-    }, []);
-
-    const highlightCurrentHit = React.useCallback((needle: string) => {
-    const el = editorRef.current;
-    if (!el) return;
-
-    const q = needle.trim();
-    if (!q) return;
-
-    clearExistingHighlight();
-
-    // Work with text nodes to find first matching occurrence in this note
-    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-    const lowerNeedle = q.toLowerCase();
-
-    let node: Node | null = null;
-    while ((node = walker.nextNode())) {
-        const text = node.nodeValue ?? "";
-        const idx = text.toLowerCase().indexOf(lowerNeedle);
-        if (idx === -1) continue;
-
-        const before = text.slice(0, idx);
-        const match = text.slice(idx, idx + q.length);
-        const after = text.slice(idx + q.length);
-
-        const frag = document.createDocumentFragment();
-        if (before) frag.appendChild(document.createTextNode(before));
-
-        const span = document.createElement("span");
-        span.className = "bb-notes-hit";
-        span.textContent = match;
-        frag.appendChild(span);
-
-        if (after) frag.appendChild(document.createTextNode(after));
-
-        const parent = node.parentNode;
-        if (!parent) return;
-
-        parent.replaceChild(frag, node);
-
-        span.scrollIntoView({ block: "center", behavior: "smooth" });
-        return;
+      });
+    } finally {
+      // release on next frame to avoid input events during mutation settling
+      requestAnimationFrame(() => {
+        isProgrammaticEditRef.current = false;
+      });
     }
+  }, []);
+
+  const highlightCurrentHit = React.useCallback(
+    (needle: string) => {
+      const el = editorRef.current;
+      if (!el) return;
+
+      const q = needle.trim();
+      if (!q) return;
+
+      isProgrammaticEditRef.current = true;
+      try {
+        clearExistingHighlight();
+
+        // Work with text nodes to find first matching occurrence in this note
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        const lowerNeedle = q.toLowerCase();
+
+        let node: Node | null = null;
+        while ((node = walker.nextNode())) {
+          const text = node.nodeValue ?? "";
+          const idx = text.toLowerCase().indexOf(lowerNeedle);
+          if (idx === -1) continue;
+
+          const before = text.slice(0, idx);
+          const match = text.slice(idx, idx + q.length);
+          const after = text.slice(idx + q.length);
+
+          const frag = document.createDocumentFragment();
+          if (before) frag.appendChild(document.createTextNode(before));
+
+          const span = document.createElement("span");
+          span.className = "bb-notes-hit";
+          span.textContent = match;
+          frag.appendChild(span);
+
+          if (after) frag.appendChild(document.createTextNode(after));
+
+          const parent = node.parentNode;
+          if (!parent) return;
+
+          parent.replaceChild(frag, node);
+
+          // Scroll highlight into view without triggering extra focus churn
+          span.scrollIntoView({ block: "center" });
+
+          return;
+        }
+      } finally {
+        requestAnimationFrame(() => {
+          isProgrammaticEditRef.current = false;
+        });
+      }
   }, [clearExistingHighlight]);
 
   React.useEffect(() => {
     const q = query.trim();
     if (!q || hitIndex < 0 || hitIndex >= hits.length) {
-        clearExistingHighlight();
-        return;
+      clearExistingHighlight();
+      return;
     }
 
     const current = hits[hitIndex];
 
     if (current.noteId !== activeId) {
-        setActiveId(current.noteId);
-        searchInputRef.current?.focus();
-        return;
+      setActiveId(current.noteId);
+      return;
     }
 
     requestAnimationFrame(() => {
-        highlightCurrentHit(q);
-        searchInputRef.current?.focus();
+      highlightCurrentHit(q);
     });
   }, [hitIndex, hits, query, activeId, highlightCurrentHit, clearExistingHighlight]);
 
@@ -295,7 +331,6 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
             value={query}
             onChange={(e) => {
                 setQuery(e.target.value);
-                requestAnimationFrame(() => searchInputRef.current?.focus());
             }}
             onKeyDown={(e) => {
                 if (e.key === "Enter") {
