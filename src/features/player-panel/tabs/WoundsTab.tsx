@@ -132,7 +132,8 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
             const checked = !!sys.firstAidApplied;
             return (
               <tr key={item._id}>
-                <td>
+                {/* First Aid checkbox */}
+                <td data-label="First Aid">
                   <label className="bb-checkbox bb-checkbox--tiny">
                     <input
                       type="checkbox"
@@ -147,9 +148,41 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
                     <span className="bb-checkbox__label">Applied</span>
                   </label>
                 </td>
-                <td>{item.name}</td>
-                <td>{sys.description}</td>
-                <td>
+
+                {/* Name + mobile meta strip */}
+                <td data-label="Name">
+                  <div className="bb-wound-name">{item.name}</div>
+
+                  {/* Mobile-only meta strip (hidden on desktop via CSS) */}
+                  <div className="bb-wound-mobile-meta bb-only-mobile" aria-label="Wound details">
+                    <div className="bb-wm-chip">
+                      <span className="bb-wm-k">FA</span>
+                      <span className="bb-wm-v">{checked ? "Applied" : "No"}</span>
+                    </div>
+
+                    <div className="bb-wm-chip bb-wm-chip--desc">
+                      <span className="bb-wm-k">DESC</span>
+                      <span className="bb-wm-v">{sys.description || "—"}</span>
+                    </div>
+
+                    <div className="bb-wm-actions">
+                      <button
+                        type="button"
+                        className="bb-button bb-button--small bb-button--danger"
+                        onClick={() => handleDeleteWound(item._id)}
+                        title="Remove this wound/ailment"
+                      >
+                        ✖
+                      </button>
+                    </div>
+                  </div>
+                </td>
+
+                {/* Desktop Description column */}
+                <td data-label="Description">{sys.description}</td>
+
+                {/* Desktop Remove column */}
+                <td data-label="Remove">
                   <button
                     type="button"
                     className="bb-button bb-button--small bb-button--danger"
@@ -168,7 +201,7 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
   };
 
   return (
-    <div className="bb-weapons-tab">
+    <div className="bb-weapons-tab bb-wounds-tab">
       <div className="bb-weapons-tab__header">
         <span className="bb-weapons-tab__title">WOUNDS / AILMENTS</span>
         <button

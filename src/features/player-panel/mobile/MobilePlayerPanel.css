@@ -1424,7 +1424,7 @@
    Desktop keeps table columns.
    Mobile shows labeled meta strip inside Item cell.
    ========================================= */
-   
+
   /* Show gear meta strip only on mobile and only in gear tab */
   .bb-player-panel--mobile .bb-gear-tab .bb-gear-mobile-meta {
     display: flex;
@@ -1759,6 +1759,68 @@
   .bb-player-panel--mobile input[type="checkbox"],
   .bb-player-panel--mobile input[type="radio"] {
     scroll-margin-top: calc(3.5rem + var(--safe-top));
+  }
+/* =========================================
+   WOUNDS TAB — MOBILE META STRIP (WEAPONS-LIKE)
+   Desktop keeps table columns.
+   Mobile shows labeled meta strip inside Name cell.
+   ========================================= */
+
+  /* Show wounds meta only on mobile and only in wounds tab */
+  .bb-player-panel--mobile .bb-wounds-tab .bb-wound-mobile-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+    margin-top: 0.35rem;
+  }
+
+  .bb-player-panel--mobile .bb-wounds-tab .bb-wound-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.25;
+  }
+
+  .bb-player-panel--mobile .bb-wounds-tab .bb-wm-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--bb-border-soft);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 0.9rem;
+    line-height: 1.2;
+    max-width: 100%;
+  }
+
+  .bb-player-panel--mobile .bb-wounds-tab .bb-wm-k {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+
+  .bb-player-panel--mobile .bb-wounds-tab .bb-wm-v {
+    min-width: 0;
+  }
+
+  /* Description should wrap, never force horizontal scroll */
+  .bb-player-panel--mobile .bb-wounds-tab .bb-wm-chip--desc .bb-wm-v {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .bb-player-panel--mobile .bb-wounds-tab .bb-wm-actions {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Hide redundant desktop columns on mobile */
+  .bb-player-panel--mobile .bb-wounds-tab .bb-weapons-table td[data-label="Description"],
+  .bb-player-panel--mobile .bb-wounds-tab .bb-weapons-table td[data-label="Remove"] {
+    display: none !important;
   }
 }
 
