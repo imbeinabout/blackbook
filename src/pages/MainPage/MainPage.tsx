@@ -538,6 +538,12 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const layoutMode = useLayoutMode();
   const isMobile = layoutMode === "mobile";
+
+  React.useEffect(() => {
+    if (!inPlay && !isMobile) {
+      setIsSidebarOpen(true);
+    }
+  }, [inPlay, isMobile, activeAgentId]);
   
   const headerNode = (
     <Header
