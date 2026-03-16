@@ -44,22 +44,37 @@ From the project root (where the `build/` folder exists):
 #### Python 3
 
 ```bash
-python -m http.server 8080 --directory build
+mkdir -p local/blackbook
+cp -r build/* local/blackbook/
+cd local
+python -m http.server 8080
 ````
 
 Then open your browser to:
 
-    http://localhost:8080
+    http://localhost:8080/blackbook/
 
 #### Python 2 (legacy)
 
 ```bash
-cd build
+mkdir -p local/blackbook
+cp -r build/* local/blackbook/
+cd local
 python -m SimpleHTTPServer 8080
 ```
 
-That’s it.  
-No tooling, no dependencies, no dev server.
+#### Windows Note
+If `cp` is not recognized use:  
+  
+```bat
+xcopy build\* local\blackbook\ /E /I
+```
+
+#### Troubleshooting  
+If the page is blank, make sure the URL ends with `/blackbook/`.
+
+>That’s it.  
+>No tooling, no dependencies, no dev server.
 
 ***
 
