@@ -429,14 +429,26 @@ const DiceTray: React.FC<DiceTrayProps> = ({
         {/* HEADER */}
         <div className="bb-dice-tray__header">
           <div className="bb-dice-tray__title">{headerLabel}</div>
-          <button
-            type="button"
-            className="bb-dice-tray__close"
-            onClick={onClose}
-            aria-label="Close dice tray"
-          >
-            ×
-          </button>
+          <div className="bb-dice-tray__header-actions">        
+            <button
+              type="button"
+              className="bb-button bb-button--small bb-dice-tray__clear-log bb-only-mobile"
+              onClick={handleClearLog}
+              disabled={log.length === 0}
+              aria-label="Clear roll log"
+              title="Clear roll log"
+            >
+              Clear Log
+            </button>
+            <button
+              type="button"
+              className="bb-dice-tray__close"
+              onClick={onClose}
+              aria-label="Close dice tray"
+            >
+              ×
+            </button>
+          </div>
         </div>
 
         {/* RESET + DICE BUTTONS */}

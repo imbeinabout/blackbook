@@ -3419,6 +3419,47 @@ input[type="number"] {
   background: var(--bb-panel-alt);
 }
 
+@media (max-width: 899px) {
+  /* Dice tray header: allow multiple actions */
+  .bb-dice-tray__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .bb-dice-tray__header-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* Mobile-only utility enabled */
+  .bb-only-mobile {
+    display: inline-flex;
+  }
+
+  /* Clear Log button in header: thumb-friendly */
+  .bb-dice-tray__clear-log {
+    min-height: 44px;
+    padding: 0 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+
+  /* Ensure close button remains easy to hit */
+  .bb-dice-tray__close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .bb-dice-tray__log-footer {
+    display: none;
+  }
+}
+
 .bb-dice-tray__title {
   text-transform: uppercase;
   letter-spacing: 0.06em;
