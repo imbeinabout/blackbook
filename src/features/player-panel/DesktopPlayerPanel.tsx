@@ -39,6 +39,7 @@ const DesktopPlayerPanel: React.FC<PlayerPanelProps> = ({
   updateAgentViaMutator,
   requestAddDisorder,
   setEditTrack,
+  setSkillAdjustmentOpen,
   setOpenAddDisorderFromTemplate,
 }) => {
   if (!agent) {
@@ -128,6 +129,7 @@ const DesktopPlayerPanel: React.FC<PlayerPanelProps> = ({
       veteranSkillPoints={veteranSkillPoints}
       onRollSkill={openSkillRoll}
       updateAgentViaMutator={updateAgentViaMutator}
+      setSkillAdjustmentOpen={setSkillAdjustmentOpen}
     />
   );
 

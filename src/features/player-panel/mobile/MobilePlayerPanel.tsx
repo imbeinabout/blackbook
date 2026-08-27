@@ -49,6 +49,7 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
     updateAgentViaMutator,
     requestAddDisorder,
     setEditTrack,
+    setSkillAdjustmentOpen,
   } = props;
 
   const [section, setSection] = React.useState<MobileSection>("persona");
@@ -188,6 +189,7 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
               veteranSkillPoints={veteranSkillPoints}
               onRollSkill={openSkillRoll}
               updateAgentViaMutator={updateAgentViaMutator}
+              setSkillAdjustmentOpen={setSkillAdjustmentOpen}
             />
             <SpecialTrainingCard
               agent={agent}

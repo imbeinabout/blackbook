@@ -12,6 +12,7 @@ type SkillsCardProps = {
   veteranSkillPoints: Record<string, number>;
   onRollSkill: (label: string, chance: number) => void;
   updateAgentViaMutator: (mutate: (copy: DeltaGreenAgent) => void) => void;
+  setSkillAdjustmentOpen: (open: boolean) => void;
 };
 
 const SkillsCard: React.FC<SkillsCardProps> = ({
@@ -20,11 +21,23 @@ const SkillsCard: React.FC<SkillsCardProps> = ({
   bonusSkillPoints,
   veteranSkillPoints,
   onRollSkill,
-  updateAgentViaMutator
+  updateAgentViaMutator,
+  setSkillAdjustmentOpen,
 }) => {
   return (
     <div className="bb-card bb-card--skills-list">
-      <div className="bb-card__header">SKILLS</div>
+      <div className="bb-card__header bb-card__header--actions" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span>SKILLS</span>
+
+        <button
+          type="button"
+          className="bb-button bb-skill-adjust-btn"
+          onClick={() => setSkillAdjustmentOpen(true)}
+          title="Adjust Skills"
+        >
+          ⚙
+        </button>
+      </div>
       <div className="bb-card__body">
         <div className="bb-skills-grid">
           {/* Standard skills */}

@@ -17,6 +17,7 @@ import Footer from "../../components/layout/Footer"
 import { getCreationMeta, getSectionLock } from "../../features/character-creation/creation.logic";
 
 import StatusAdjustModal, { TrackType } from "../../features/modals/StatusAdjustModal";
+import SkillAdjustModal from "../../features/modals/SkillAdjustModal";
 import DiceTray from "../../features/dice/DiceTray";
 import { getEffectiveSanTestChance } from "../../features/player-panel/conditionRolls";
 import AddDisorderModal from "../../features/modals/AddDisorderModal";
@@ -213,6 +214,8 @@ const MainPage: React.FC<MainPageProps> = ({
 
   const [editTrack, setEditTrack] = React.useState<null | TrackType>(null);
   const [editValue, setEditValue] = React.useState<string>("");
+
+  const [skillAdjustmentOpen, setSkillAdjustmentOpen] = React.useState(false);
 
   const [openAddDisorderFromTemplate, setOpenAddDisorderFromTemplate] =
    React.useState<(() => void) | null>(null);
@@ -699,6 +702,7 @@ const MainPage: React.FC<MainPageProps> = ({
       updateAgentViaMutator={updateActiveAgentViaMutator}
       requestAddDisorder={openAddDisorderModal}
       setEditTrack={setEditTrack}
+      setSkillAdjustmentOpen={setSkillAdjustmentOpen}
       setOpenAddDisorderFromTemplate={setOpenAddDisorderFromTemplate}
       updateAgent={(updated) => {
         if (!activeAgentId) return;
@@ -741,6 +745,18 @@ const MainPage: React.FC<MainPageProps> = ({
           updateActiveAgentViaMutator(copy => Object.assign(copy, updated));
         }}
         onGenericRoll={openGenericRoll}
+      />
+
+      <SkillAdjustModal
+        open={skillAdjustmentOpen}
+        agent={agent ?? null}
+        onClose={() => setSkillAdjustmentOpen(false)}
+        updateAgent={(updated) => {
+          if (!activeAgentId) return;
+
+          const { updateAgent } = useAgentStore.getState();
+          updateAgent(activeAgentId, updated);
+        }}
       />
 
       <DiceTray

@@ -46,6 +46,7 @@ export type PlayerPanelProps = {
 
   // UI hooks
   setEditTrack: (t: TrackType) => void;
+  setSkillAdjustmentOpen: (open: boolean) => void;
   setOpenAddDisorderFromTemplate: (fn: (() => void) | null) => void;
   requestAddDisorder: () => void;
 };
