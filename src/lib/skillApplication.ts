@@ -12,6 +12,7 @@ export type SkillBreakdown = {
   bonus: number;
   veteran: number;
   advancement: number;
+  manual: number;
   total: number;
   breakdownText: string; 
 };
@@ -30,15 +31,16 @@ export function getSkillBreakdown(
   const bonus = bonusSkillPoints[key] ?? 0;
   const veteran = veteranSkillPoints[key] ?? 0;
   const advancement = agent.system.creation?.advancementPointsByKey?.[key] ?? 0;
+  const manual = agent.system.creation?.manualSkillAdjustments?.[key] ?? 0;
 
   if (!isTyped) {
     // ----- Standard skills -----
     const base0 = baseSkills[key]?.proficiency ?? 0;
 
     const totalFromAgent =
-      agent.system.skills[key]?.proficiency ?? (base0 + bonus + veteran + advancement);
+      agent.system.skills[key]?.proficiency ?? (base0 + bonus + veteran + advancement + manual);
 
-    const baselineSaved = Math.max(totalFromAgent - bonus - veteran - advancement, 0);
+    const baselineSaved = Math.max(totalFromAgent - bonus - veteran - advancement - manual, 0);
 
     let base = 0;
     let profession = 0;
@@ -61,16 +63,17 @@ export function getSkillBreakdown(
     if (bonus > 0) parts.push(`${bonus} Bonus`);
     if (veteran > 0) parts.push(`${veteran} Veteran`);
     if (advancement > 0) parts.push(`${advancement} Advancement`);
+    if (manual > 0) parts.push(`${manual} Manual`);
 
     const breakdownText = parts.length ? ` (${parts.join(" + ")})` : "";
 
-    return { base, profession, bonus, veteran, advancement, total, breakdownText };
+    return { base, profession, bonus, veteran, advancement, manual, total, breakdownText };
   } else {
     // ----- Typed skills -----
     const totalFromAgent =
-      agent.system.typedSkills[key]?.proficiency ?? (0 + bonus + veteran + advancement);
+      agent.system.typedSkills[key]?.proficiency ?? (0 + bonus + veteran + advancement + manual);
 
-    const baselineSaved = Math.max(totalFromAgent - bonus - veteran - advancement, 0);
+    const baselineSaved = Math.max(totalFromAgent - bonus - veteran - advancement - manual, 0);
 
     const base = 0;
     const profession = baselineSaved;
@@ -81,10 +84,11 @@ export function getSkillBreakdown(
     if (bonus > 0) parts.push(`${bonus} Bonus`);
     if (veteran > 0) parts.push(`${veteran} Veteran`);
     if (advancement > 0) parts.push(`${advancement} Advancement`);
+    if (manual > 0) parts.push(`${manual} Manual`);
 
     const breakdownText = parts.length ? ` (${parts.join(" + ")})` : "";
 
-    return { base, profession, bonus, veteran, advancement, total, breakdownText };
+    return { base, profession, bonus, veteran, advancement, manual, total, breakdownText };
   }
 }
 

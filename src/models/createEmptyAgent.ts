@@ -31,6 +31,7 @@ const emptyCreationMeta: CreationMeta = {
   bonusSkillPointsByKey: {},
   veteranSkillPointsByKey: {},
   advancementPointsByKey: {},
+  manualSkillAdjustments: {},
   professionLockedByBonus: false,
   damagedVeteranTemplateApplied: false,
   playMode: {

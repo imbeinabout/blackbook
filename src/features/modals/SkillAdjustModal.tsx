@@ -70,11 +70,12 @@ const SkillAdjustModal: React.FC<SkillAdjustModalProps> = ({
     agent.system.skills[selectedSkillKey] ??
     agent.system.typedSkills[selectedSkillKey];
 
-  const currentValue = selectedSkill?.proficiency ?? 0;
+  const manualAdjustment =
+    agent.system.creation?.manualSkillAdjustments?.[selectedSkillKey] ?? 0;
 
-  const projectedValue = Math.max(
+  const projectedAdjustment = Math.max(
     0,
-    Math.min(99, currentValue + adjustment)
+    Math.min(99, manualAdjustment + adjustment)
   );
 
   const handleSave = () => {
@@ -84,13 +85,40 @@ const SkillAdjustModal: React.FC<SkillAdjustModalProps> = ({
       JSON.stringify(agent)
     );
 
-    const skill =
-      updated.system.skills[selectedSkillKey] ??
-      updated.system.typedSkills[selectedSkillKey];
+    if (!updated.system.creation) {
+      return;
+    }
 
-    if (!skill) return;
+    updated.system.creation.manualSkillAdjustments ??= {};
 
-    skill.proficiency = projectedValue;
+    const existingManual =
+      updated.system.creation.manualSkillAdjustments[selectedSkillKey] ?? 0;
+    
+    updated.system.creation.manualSkillAdjustments[selectedSkillKey] = 
+      existingManual + adjustment;
+    
+    if (updated.system.skills[selectedSkillKey]) {
+        updated.system.skills[selectedSkillKey].proficiency =
+            Math.max(
+            0,
+            Math.min(
+                99,
+                (updated.system.skills[selectedSkillKey].proficiency ?? 0)
+                + adjustment
+            )
+            );
+        }
+        else if (updated.system.typedSkills[selectedSkillKey]) {
+        updated.system.typedSkills[selectedSkillKey].proficiency =
+            Math.max(
+            0,
+            Math.min(
+                99,
+                (updated.system.typedSkills[selectedSkillKey].proficiency ?? 0)
+                + adjustment
+            )
+            );
+    }
 
     // Future-proof history storage
     const anyAgent = updated as any;
@@ -102,10 +130,10 @@ const SkillAdjustModal: React.FC<SkillAdjustModalProps> = ({
     anyAgent.system.skillHistory.push({
       timestamp: new Date().toISOString(),
       skillKey: selectedSkillKey,
-      skillLabel: skill.label,
-      oldValue: currentValue,
+      skillLabel: selectedSkill?.label ?? selectedSkillKey,
+      oldManualAdjustment: manualAdjustment,
       adjustment,
-      newValue: projectedValue,
+      newManualAdjustment: projectedAdjustment,
       reason: reason.trim(),
     });
 
@@ -186,7 +214,7 @@ const SkillAdjustModal: React.FC<SkillAdjustModalProps> = ({
               border: "1px solid #666",
             }}
           >
-            <strong>Current:</strong> {currentValue}
+            <strong>Current Manual:</strong> {manualAdjustment}
             <br />
             <strong>Adjustment:</strong>{" "}
             {adjustment >= 0
@@ -194,7 +222,7 @@ const SkillAdjustModal: React.FC<SkillAdjustModalProps> = ({
               : adjustment}
             <br />
             <strong>New Value:</strong>{" "}
-            {projectedValue}
+            {projectedAdjustment}
           </div>
         </div>
 

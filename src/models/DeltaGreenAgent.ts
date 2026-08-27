@@ -143,6 +143,7 @@ export interface CreationMeta {
   };
 
   advancementPointsByKey?: Record<string, number>;
+  manualSkillAdjustments?: Record<string, number>;
 
 }
 
