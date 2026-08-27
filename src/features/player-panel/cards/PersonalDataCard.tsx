@@ -185,13 +185,13 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
           {isEditOpen && (
             <div className="bb-modal" onClick={() => setIsEditOpen(false)}>
               <div
-                className="bb-modal__dialog"
+                className="bb-modal__dialog bb-personal-stats-edit-modal__dialog"
                 onClick={(e) => e.stopPropagation()}
                 style={{ maxWidth: "520px" }}
               >
                 <h3 className="bb-modal__title">Edit Permanent Stats</h3>
 
-                <div className="bb-modal__body">
+                <div className="bb-modal__body bb-personal-stats-edit-modal__body">
                   <div className="bb-form-grid">
                     {(
                       [

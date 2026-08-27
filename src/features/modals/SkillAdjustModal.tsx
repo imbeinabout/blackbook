@@ -240,7 +240,7 @@ const SkillAdjustModal: React.FC<SkillAdjustModalProps> = ({
             className="bb-button bb-button--primary"
             onClick={handleSave}
           >
-            Save
+            Apply
           </button>
         </div>
       </div>
