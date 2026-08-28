@@ -10,6 +10,7 @@
 /old-components
 /tools
 /public/models
+/local
 
 # production
 # /build Don't ignore so that users can download /build to run locally
