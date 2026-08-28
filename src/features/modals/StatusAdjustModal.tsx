@@ -2,7 +2,7 @@
 import React from "react";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../models/DeltaGreenAgent";
 import NumberSpinner from "../../components/ui/NumberSpinner";
-import { addAgentEvent } from "../../lib/eventLogger";
+import { addAgentEvent, buildSanEventSummary } from "../../lib/eventLogger";
 
 export type TrackType = "HP" | "WP" | "SAN";
 type SanDamageType = "helplessness" | "violence" | "unnatural";
@@ -373,7 +373,7 @@ export default function StatusAdjustModal({
           category: "sanity",
           action: "san-change",
           source: "play",
-          summary: `"Recovered" ${Math.abs(after - before)} SAN`,
+          summary: `Recovered ${Math.abs(after - before)} SAN`,
           before,
           after,
           metadata: {
@@ -436,22 +436,26 @@ export default function StatusAdjustModal({
 
         const nowComplete = ad.incident1 && ad.incident2 && ad.incident3;
 
+        const selectedBond = updated.items.find(
+          (it) => it.type === "bond" && it._id === selectedBondId
+        );
+        const sanMetadata = {
+          actualSanLoss: sanLossToSan,
+          projectedLoss: proj,
+          actualSan: after,
+          bondName: selectedBond?.name,
+          crossedBreakingPoint: crossesBP,
+          temporaryInsanity: sanLossToSan >= 5,
+          sanType,
+        };
         addAgentEvent(updated, {
           category: "sanity",
           action: "san-change",
           source: "play",
-          summary: `${mode === "damage" ? "Lost" : "Recovered"} ${Math.abs(after - before)} SAN`,
+          summary: buildSanEventSummary(sanMetadata),
           before,
           after,
-          metadata: {
-            mode,
-            sanType,
-            projectedToBond: projectToBond,
-            projectedAmount: proj,
-            bondId: selectedBondId || null,
-            crossedBreakingPoint: crossesBP,
-            temporaryInsanity: sanLossToSan >= 5,
-          },
+          metadata: sanMetadata,
         });
         updateAgent(updated);
 
@@ -466,22 +470,26 @@ export default function StatusAdjustModal({
         return;
       }
 
+      const selectedBond = updated.items.find(
+        (it) => it.type === "bond" && it._id === selectedBondId
+      );
+      const sanMetadata = {
+        actualSanLoss: sanLossToSan,
+        projectedLoss: proj,
+        actualSan: after,
+        bondName: selectedBond?.name,
+        crossedBreakingPoint: crossesBP,
+        temporaryInsanity: sanLossToSan >= 5,
+        sanType,
+      };
       addAgentEvent(updated, {
         category: "sanity",
         action: "san-change",
         source: "play",
-        summary: `${mode === "damage" ? "Lost" : "Recovered"} ${Math.abs(after - before)} SAN`,
+        summary: buildSanEventSummary(sanMetadata),
         before,
         after,
-        metadata: {
-          mode,
-          sanType,
-          projectedToBond: projectToBond,
-          projectedAmount: proj,
-          bondId: selectedBondId || null,
-          crossedBreakingPoint: crossesBP,
-          temporaryInsanity: sanLossToSan >= 5,
-        },
+        metadata: sanMetadata,
       });
 
       updateAgent(updated);

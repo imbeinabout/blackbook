@@ -4,6 +4,16 @@ import { AgentEvent } from "../models/events";
 
 const DEBUG_EVENTS = true;
 
+export interface SanEventMetadata {
+  actualSanLoss: number;
+  projectedLoss: number;
+  actualSan: number;
+  bondName?: string;
+  crossedBreakingPoint: boolean;
+  temporaryInsanity: boolean;
+  sanType: "helplessness" | "violence" | "unnatural";
+}
+
 export function createAgentEvent(
   event: Omit<
     AgentEvent,
@@ -28,7 +38,7 @@ export function addAgentEvent(
 
   if (DEBUG_EVENTS) {
     console.group(
-      `[EVENT] ${newEvent.category}:${newEvent.action}`
+      `[EVENT] ${agent.name} - ${newEvent.category}:${newEvent.action}`
     );
 
     console.log("Summary:", newEvent.summary);
@@ -54,4 +64,35 @@ export function updateEventDescription(
   if (!event) return;
 
   event.description = description;
+}
+
+export function buildSanEventSummary(
+  metadata: SanEventMetadata
+): string {
+  const parts: string[] = [];
+
+  parts.push(
+    `Lost ${metadata.actualSanLoss} SAN due to ${metadata.sanType}`
+  );
+
+  if (metadata.actualSan <= 0) {
+    parts.push("and became permanently insane");
+    return parts.join(", ");
+  }
+
+  if (metadata.projectedLoss > 0 && metadata.bondName) {
+    parts.push(
+      `projected ${metadata.projectedLoss} points to bond ${metadata.bondName}`
+    );
+  }
+
+  if (metadata.crossedBreakingPoint) {
+    parts.push("pushed through their Breaking Point");
+  }
+
+  if (metadata.temporaryInsanity) {
+    parts.push("became temporarily insane");
+  }
+
+  return parts.join(", ");
 }
