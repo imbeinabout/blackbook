@@ -305,7 +305,7 @@ const ModalsCard: React.FC<ModalsCardProps> = ({
                     <thead>
                       <tr>
                         <th>Skill</th>
-                        <th style={{ width: "110px" }}>+%</th>
+                        <th style={{ width: "180px" }}>+%</th>
                         <th style={{ width: "70px" }}>d4</th>
                       </tr>
                     </thead>
