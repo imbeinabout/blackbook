@@ -151,7 +151,15 @@ const MainPage: React.FC<MainPageProps> = ({
       try {
         const parsed = JSON.parse(text) as DeltaGreenAgent;
 
-        const { createAgent } = useAgentStore.getState();
+        const {
+          createAgent,
+          setActiveAgent,
+        } = useAgentStore.getState();
+
+        const newId = createAgent(parsed);
+        setActiveAgent(newId);
+
+        setToast("Agent imported successfully.");
       } catch (err) {
         console.error("Failed to import agent JSON", err);
         window.alert("Import failed: file is not a valid agent JSON.");
@@ -728,6 +736,14 @@ const MainPage: React.FC<MainPageProps> = ({
 
   return (
     <>
+      <input
+        type="file"
+        accept="application/json"
+        style={{ display: "none" }}
+        ref={fileInputRef}
+        onChange={handleImportFileInputChange}
+      />
+
       <MainPageLayout
         header={headerNode}
         sidebar={sidebarNode}
