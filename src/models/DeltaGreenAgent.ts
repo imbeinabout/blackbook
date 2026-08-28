@@ -4,6 +4,7 @@ import { AgentEvent } from "./events";
 
 // Core character interface
 export interface DeltaGreenAgent {
+  id: string;
   type: "agent";
   name: string;
   prototypeToken?: { name: string };

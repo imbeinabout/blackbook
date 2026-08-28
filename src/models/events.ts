@@ -1,5 +1,6 @@
 // src/models/events.ts
 export type EventCategory =
+    | "attribute"    
     | "skill"
     | "sanity"
     | "bond"
@@ -24,8 +25,6 @@ export interface AgentEvent {
 
   timestamp: string;
 
-  agentId: string;
-
   category: EventCategory;
   action: string;
   source: EventSource;
@@ -35,8 +34,8 @@ export interface AgentEvent {
 
   relatedEntity?: string;
 
-  before?: unknown;
-  after?: unknown;
+  before?: Record<string, unknown> | number | string;
+  after?: Record<string, unknown> | number | string;
 
   metadata?: Record<string, unknown>;
 }

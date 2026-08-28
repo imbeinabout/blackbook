@@ -2,6 +2,7 @@
 import React from "react";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../models/DeltaGreenAgent";
 import NumberSpinner from "../../components/ui/NumberSpinner";
+import { addAgentEvent } from "../../lib/eventLogger";
 
 export type TrackType = "HP" | "WP" | "SAN";
 type SanDamageType = "helplessness" | "violence" | "unnatural";
@@ -117,7 +118,7 @@ export default function StatusAdjustModal({
   const proj = track === "SAN" && mode === "damage" && projectToBond ? clamp(Number(projectAmt) || 0, 0, 4) : 0;
   const sanLossToSan = track === "SAN" && mode === "damage" ? Math.max(0, sanLossRaw - proj) : 0;
 
-  const previewNewSan =
+  const previewafter =
     track === "SAN" && san
       ? mode === "heal"
         ? clamp(san.value + validDelta, 0, san.max)
@@ -143,12 +144,12 @@ export default function StatusAdjustModal({
       : null;
 
   const crossesBP =
-    track === "SAN" && mode === "damage" && san && previewNewSan != null
-      ? previewNewSan < san.currentBreakingPoint
+    track === "SAN" && mode === "damage" && san && previewafter != null
+      ? previewafter < san.currentBreakingPoint
       : false;
 
   const hitsZeroSan =
-    track === "SAN" && mode === "damage" && previewNewSan != null ? previewNewSan === 0 : false;
+    track === "SAN" && mode === "damage" && previewafter != null ? previewafter === 0 : false;
 
   const tempInsanityWarn =
     track === "SAN" && mode === "damage" ? sanLossToSan >= 5 : false;
@@ -298,12 +299,32 @@ export default function StatusAdjustModal({
     const updated: DeltaGreenAgent = JSON.parse(JSON.stringify(agent));
 
     if (track === "HP" && updated.system.health) {
-      const current = updated.system.health.value;
+      const before = updated.system.health.value;
+
       updated.system.health.value = clamp(
-        mode === "damage" ? current - validDelta : current + validDelta,
+        mode === "damage"
+          ? before - validDelta
+          : before + validDelta,
         updated.system.health.min ?? 0,
         updated.system.health.max
       );
+
+      const after = updated.system.health.value;
+
+      addAgentEvent(updated, {
+        category: "attribute",
+        action: "hp-change",
+        source: "play",
+        summary: `${mode === "damage" ? "Lost" : "Recovered"} ${Math.abs(after - before)} HP`,
+        before,
+        after,
+        metadata: {
+          mode,
+          amount: validDelta,
+          delta: after - before,
+        },
+      });
+
       applyAutoStatusConditions(updated);
       updateAgent(updated);
       onClose();
@@ -311,12 +332,30 @@ export default function StatusAdjustModal({
     }
 
     if (track === "WP" && updated.system.wp) {
-      const current = updated.system.wp.value;
+      const before = updated.system.wp.value;
+
       updated.system.wp.value = clamp(
-        mode === "damage" ? current - validDelta : current + validDelta,
+        mode === "damage" ? before - validDelta : before + validDelta,
         updated.system.wp.min ?? 0,
         updated.system.wp.max
       );
+
+      const after = updated.system.wp.value;
+
+      addAgentEvent(updated, {
+        category: "attribute",
+        action: "wp-change",
+        source: "play",
+        summary: `${mode === "damage" ? "Lost" : "Recovered"} ${Math.abs(after - before)} WP`,
+        before,
+        after,
+        metadata: {
+          mode,
+          amount: validDelta,
+          delta: after - before,
+        },
+      });
+
       applyAutoStatusConditions(updated);
       updateAgent(updated);
       onClose();
@@ -324,11 +363,29 @@ export default function StatusAdjustModal({
     }
 
     if (track === "SAN" && updated.system.sanity) {
-      const currentSan = updated.system.sanity.value;
+      const before = updated.system.sanity.value;
       const maxSan = updated.system.sanity.max;
 
       if (mode === "heal") {
-        updated.system.sanity.value = clamp(currentSan + validDelta, 0, maxSan);
+        const after = clamp(before + validDelta, 0, maxSan);
+        updated.system.sanity.value = after;
+        addAgentEvent(updated, {
+          category: "sanity",
+          action: "san-change",
+          source: "play",
+          summary: `"Recovered" ${Math.abs(after - before)} SAN`,
+          before,
+          after,
+          metadata: {
+            mode,
+            sanType,
+            projectedToBond: projectToBond,
+            projectedAmount: proj,
+            bondId: selectedBondId || null,
+            crossedBreakingPoint: crossesBP,
+            temporaryInsanity: sanLossToSan >= 5,
+          },
+        });
         updateAgent(updated);
         onClose();
         return;
@@ -357,12 +414,12 @@ export default function StatusAdjustModal({
         });
       }
 
-      const newSan = clamp(currentSan - sanLossToSan, 0, maxSan);
-      updated.system.sanity.value = newSan;
+      const after = clamp(before - sanLossToSan, 0, maxSan);
+      updated.system.sanity.value = after;
 
-      if (newSan < updated.system.sanity.currentBreakingPoint) {
+      if (after < updated.system.sanity.currentBreakingPoint) {
         const pow = updated.system.statistics.pow.value ?? 0;
-        updated.system.sanity.currentBreakingPoint = Math.max(0, newSan - pow);
+        updated.system.sanity.currentBreakingPoint = Math.max(0, after - pow);
       }
 
       if (sanLossToSan >= 5) addCondition(updated, STATUS_IDS.tempInsanity);
@@ -379,6 +436,23 @@ export default function StatusAdjustModal({
 
         const nowComplete = ad.incident1 && ad.incident2 && ad.incident3;
 
+        addAgentEvent(updated, {
+          category: "sanity",
+          action: "san-change",
+          source: "play",
+          summary: `${mode === "damage" ? "Lost" : "Recovered"} ${Math.abs(after - before)} SAN`,
+          before,
+          after,
+          metadata: {
+            mode,
+            sanType,
+            projectedToBond: projectToBond,
+            projectedAmount: proj,
+            bondId: selectedBondId || null,
+            crossedBreakingPoint: crossesBP,
+            temporaryInsanity: sanLossToSan >= 5,
+          },
+        });
         updateAgent(updated);
 
         if (nowComplete && checkedIdx) {
@@ -391,6 +465,24 @@ export default function StatusAdjustModal({
         onClose();
         return;
       }
+
+      addAgentEvent(updated, {
+        category: "sanity",
+        action: "san-change",
+        source: "play",
+        summary: `${mode === "damage" ? "Lost" : "Recovered"} ${Math.abs(after - before)} SAN`,
+        before,
+        after,
+        metadata: {
+          mode,
+          sanType,
+          projectedToBond: projectToBond,
+          projectedAmount: proj,
+          bondId: selectedBondId || null,
+          crossedBreakingPoint: crossesBP,
+          temporaryInsanity: sanLossToSan >= 5,
+        },
+      });
 
       updateAgent(updated);
       onClose();

@@ -205,7 +205,7 @@ const MainPage: React.FC<MainPageProps> = ({
         .slice(0, 40); // keep it tidy
 
       link.href = url;
-      link.download = `dg-agent-${safeName || "agent"}-${activeAgentId}.json`;
+      link.download = `dg-agent-${safeName || "agent"}-${agent.id}.json`;
 
       document.body.appendChild(link);
       link.click();

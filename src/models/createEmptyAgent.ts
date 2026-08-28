@@ -9,6 +9,7 @@ import type {
   CreationMeta
 } from "./DeltaGreenAgent";
 import { buildBaseSkills } from "./baseSkills";
+import { nanoid } from "nanoid";
 
 function createStat(value: number): StatBlock {
   return {
@@ -102,6 +103,7 @@ export function createEmptyAgent(name = "New Agent"): DeltaGreenAgent {
   };
 
   return {
+    id: nanoid(),
     type: "agent",
     name,
     prototypeToken: { name },
