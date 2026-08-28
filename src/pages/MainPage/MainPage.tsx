@@ -24,6 +24,7 @@ import AddDisorderModal from "../../features/modals/AddDisorderModal";
 
 import { StatKey } from "../../models/characterCreationTypes";
 import { buildBaseSkills } from "../../models/baseSkills";
+import { ensureAgentDefaults } from "../../lib/agentMigration";
 
 type MainPageProps = {
   onCloseAgent: () => void;
@@ -149,7 +150,9 @@ const MainPage: React.FC<MainPageProps> = ({
       }
 
       try {
-        const parsed = JSON.parse(text) as DeltaGreenAgent;
+        const parsed = ensureAgentDefaults(
+          JSON.parse(text)
+         ) as DeltaGreenAgent;
 
         const {
           createAgent,

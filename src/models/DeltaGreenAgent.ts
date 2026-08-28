@@ -1,5 +1,6 @@
 // src/models/DeltaGreenAgent.ts
 import type { ActiveCondition } from "./conditions";
+import { AgentEvent } from "./events";
 
 // Core character interface
 export interface DeltaGreenAgent {
@@ -8,6 +9,7 @@ export interface DeltaGreenAgent {
   prototypeToken?: { name: string };
   items: DeltaGreenItem[];
   system: DeltaGreenSystem;
+  events: AgentEvent[];
 }
 
 // Items: weapons, gear, bonds, motivations, etc.

@@ -5,6 +5,7 @@ import { nanoid } from "nanoid";
 
 import type { DeltaGreenAgent } from "../models/DeltaGreenAgent";
 import { idbGetItem, idbSetItem, idbRemoveItem } from "./indexedDbStorage";
+import { ensureAgentDefaults } from "../lib/agentMigration";
 
 export type AgentId = string;
 
@@ -29,6 +30,17 @@ export interface AgentStoreState {
   reorderOpenAgentIds: (ids: AgentId[]) => void;
 }
 
+function migrateAgents(
+  agents: Record<AgentId, DeltaGreenAgent>
+): Record<AgentId, DeltaGreenAgent> {
+  return Object.fromEntries(
+    Object.entries(agents).map(([id, agent]) => [
+      id,
+      ensureAgentDefaults(agent),
+    ])
+  );
+}
+
 export const useAgentStore = create<AgentStoreState>()(
   persist(
     (set, get) => ({
@@ -41,7 +53,7 @@ export const useAgentStore = create<AgentStoreState>()(
         set((state) => ({
           agents: {
             ...state.agents,
-            [id]: agent,
+            [id]: ensureAgentDefaults(agent),
           },
           activeAgentId: id,
           openAgentIds: [...state.openAgentIds, id],
@@ -56,7 +68,7 @@ export const useAgentStore = create<AgentStoreState>()(
             ...state,
             agents: {
               ...state.agents,
-              [id]: agent,
+              [id]: ensureAgentDefaults(agent),
             },
           };
         });
@@ -139,6 +151,7 @@ export const useAgentStore = create<AgentStoreState>()(
       },
 
       loadAgents: (agents, activeId) => {
+        const migratedAgents = migrateAgents(agents);
         const ids = Object.keys(agents) as AgentId[];
         const safeActiveId =
           activeId && agents[activeId]
@@ -148,7 +161,7 @@ export const useAgentStore = create<AgentStoreState>()(
             : null;
 
         set({
-          agents,
+          agents: migratedAgents,
           activeAgentId: safeActiveId,
           openAgentIds: safeActiveId ? [safeActiveId] : [],
         });
@@ -184,6 +197,22 @@ export const useAgentStore = create<AgentStoreState>()(
         activeAgentId: state.activeAgentId,
         openAgentIds: state.openAgentIds,
       }),
+
+      merge: (persistedState, currentState) => {
+
+        const persisted =
+          persistedState as Partial<AgentStoreState>;
+
+        return {
+          ...currentState,
+
+          ...persisted,
+
+          agents: persisted.agents
+            ? migrateAgents(persisted.agents)
+            : {},
+        };
+      },
     }
   )
 );

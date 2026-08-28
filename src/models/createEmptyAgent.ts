@@ -107,5 +107,6 @@ export function createEmptyAgent(name = "New Agent"): DeltaGreenAgent {
     prototypeToken: { name },
     items: [],
     system,
+    events: [],
   };
 }

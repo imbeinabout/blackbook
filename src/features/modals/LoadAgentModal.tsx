@@ -2,6 +2,7 @@
 import React from "react";
 import { useAgentStore, AgentId } from "../../store/agentStore";
 import type { DeltaGreenAgent } from "../../models/DeltaGreenAgent";
+import { ensureAgentDefaults } from "../../lib/agentMigration";
 
 interface LoadAgentModalProps {
   isOpen: boolean;
@@ -80,7 +81,9 @@ const LoadAgentModal: React.FC<LoadAgentModalProps> = ({
       }
 
       try {
-        const parsed = JSON.parse(text) as DeltaGreenAgent;
+        const parsed = ensureAgentDefaults(
+          JSON.parse(text)
+        ) as DeltaGreenAgent;
 
         const { createAgent } = useAgentStore.getState();
         const newId = createAgent(parsed);
