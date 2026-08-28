@@ -11,6 +11,7 @@ export interface SanEventMetadata {
   bondName?: string;
   crossedBreakingPoint: boolean;
   temporaryInsanity: boolean;
+  adapted: boolean;
   sanType: "helplessness" | "violence" | "unnatural";
 }
 
@@ -92,6 +93,10 @@ export function buildSanEventSummary(
 
   if (metadata.temporaryInsanity) {
     parts.push("became temporarily insane");
+  }
+
+  if (metadata.adapted) {
+    parts.push(`became adapted to ${metadata.sanType}`);
   }
 
   return parts.join(", ");

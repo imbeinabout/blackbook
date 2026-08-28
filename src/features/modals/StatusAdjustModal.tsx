@@ -446,6 +446,7 @@ export default function StatusAdjustModal({
           bondName: selectedBond?.name,
           crossedBreakingPoint: crossesBP,
           temporaryInsanity: sanLossToSan >= 5,
+          adapted: nowComplete,
           sanType,
         };
         addAgentEvent(updated, {
@@ -480,6 +481,7 @@ export default function StatusAdjustModal({
         bondName: selectedBond?.name,
         crossedBreakingPoint: crossesBP,
         temporaryInsanity: sanLossToSan >= 5,
+        adapted: false,
         sanType,
       };
       addAgentEvent(updated, {
