@@ -7,18 +7,17 @@ import StartupPage from "../pages/StartupPage/StartupPage";
 import LoadAgentModal from "../features/modals/LoadAgentModal";
 import MainPage from "../pages/MainPage/MainPage";
 
-type Screen = "startup" | "main";
-
 const App: React.FC = () => {
-  const { createAgent, activeAgentId } = useAgentStore();
+  const { createAgent, activeAgentId, agents, } = useAgentStore();
 
-  const [screen, setScreen] = React.useState<Screen>("startup");
   const [isLoadModalOpen, setIsLoadModalOpen] = React.useState(false);
+
+  const hasAgents = Object.keys(agents).length > 0;
+  const canShowMainPage = hasAgents && activeAgentId && agents[activeAgentId];
 
   const handleNewAgent = () => {
     const newAgent = createEmptyAgent();
-    createAgent(newAgent); // store also sets activeAgentId
-    setScreen("main");
+    createAgent(newAgent);
   };
 
   const handleLoadAgentClick = () => {
@@ -32,7 +31,6 @@ const App: React.FC = () => {
 
   const handleAgentLoaded = () => {
     setIsLoadModalOpen(false);
-    setScreen("main");
   };
 
   const handleCloseModal = () => {
@@ -42,15 +40,11 @@ const App: React.FC = () => {
   const handleCloseAgent = () => {
     const { setActiveAgent } = useAgentStore.getState();
     setActiveAgent(null);
-    setScreen("startup");
   };
-
-  const showMain =
-    screen === "main" && activeAgentId !== null;
 
   return (
     <>
-      {screen === "startup" && (
+      {!hasAgents && (
         <StartupPage
           onNewAgent={handleNewAgent}
           onLoadAgent={handleLoadAgentClick}
@@ -58,7 +52,7 @@ const App: React.FC = () => {
         />
       )}
 
-      {showMain && (
+      {canShowMainPage && (
         <MainPage
           onCloseAgent={handleCloseAgent}
           onNewAgent={handleNewAgent}
