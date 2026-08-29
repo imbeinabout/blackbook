@@ -1,6 +1,8 @@
 // src/features/player-panel/cards/PlayerBondsCard.tsx
 import React from "react";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../../models/DeltaGreenAgent";
+import { addAgentEvent } from "../../../lib/eventLogger";
+import { nanoid } from "nanoid";
 
 interface PlayerBondsCardProps {
   agent: DeltaGreenAgent;
@@ -86,9 +88,7 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
 
     const newBond: DeltaGreenItem = {
       type: "bond",
-      _id:
-        (crypto as any).randomUUID?.() ??
-        Math.random().toString(36).slice(2),
+      _id: nanoid(),
       name,
       img: "systems/deltagreen/assets/icons/person-black-bg.svg",
       system: {

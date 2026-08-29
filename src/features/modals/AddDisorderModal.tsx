@@ -1,7 +1,8 @@
 // src/features/modals/AddDisorderModal.tsx
 import React from "react";
 import { createPortal } from "react-dom";
-import type { DeltaGreenAgent, DeltaGreenItem } from "../../models/DeltaGreenAgent"
+import type { DeltaGreenAgent, DeltaGreenItem } from "../../models/DeltaGreenAgent";
+import { nanoid } from "nanoid";
 
 export interface AddDisorderModalProps {
   isOpen: boolean;
@@ -76,9 +77,7 @@ const AddDisorderModal: React.FC<AddDisorderModalProps> = ({
 
     const disorderOnly: DeltaGreenItem = {
       type: "motivation",
-      _id:
-        (crypto as any).randomUUID?.() ??
-        Math.random().toString(36).slice(2),
+      _id: nanoid(),
       name: "",
       img: "systems/deltagreen/assets/icons/swap-bag-black-bg.svg",
       system: {

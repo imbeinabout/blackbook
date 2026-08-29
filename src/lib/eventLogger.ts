@@ -1,6 +1,7 @@
 // src/lib/eventLogger.ts
 import { DeltaGreenAgent } from "../models/DeltaGreenAgent";
 import { AgentEvent } from "../models/events";
+import { nanoid } from "nanoid";
 
 const DEBUG_EVENTS = true;
 
@@ -23,7 +24,7 @@ export function createAgentEvent(
 ): AgentEvent {
   return {
     ...event,
-    id: crypto.randomUUID(),
+    id: nanoid(),
     version: 1,
     timestamp: new Date().toISOString(),
   };

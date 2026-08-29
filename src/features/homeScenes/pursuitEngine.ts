@@ -1,6 +1,7 @@
 // src/features/homeScenes/pursuitEngine.ts
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../models/DeltaGreenAgent";
 import type { PersonalPursuit as ModelPersonalPursuit } from "../../models/personalPursuits";
+import { nanoid } from "nanoid";
 
 export type OutcomeKey = "critical_failure" | "failure" | "success" | "critical_success";
 
@@ -41,12 +42,6 @@ export type EffectMaps = {
 
 function clamp(n: number, min: number, max: number) {
   return Math.max(min, Math.min(max, n));
-}
-
-function uuid() {
-  return typeof crypto !== "undefined" && "randomUUID" in crypto
-    ? (crypto as any).randomUUID()
-    : `id_${Date.now()}_${Math.floor(Math.random() * 1e9)}`;
 }
 
 export function pursuitUsesOutcome(p: PursuitDef): boolean {
@@ -195,7 +190,7 @@ export function applyPursuitTotals(
     const name = (ctx.newBondName ?? "").trim() || "New Bond";
 
     const newBond: DeltaGreenItem = {
-      _id: uuid(),
+      _id: nanoid(),
       type: "bond",
       name,
       system: {
@@ -213,7 +208,7 @@ export function applyPursuitTotals(
     if (t && t.name.trim() && t.targetKey.trim()) {
       agent.system.specialTraining = agent.system.specialTraining ?? [];
       agent.system.specialTraining.push({
-        id: uuid(),
+        id: nanoid(),
         name: t.name.trim(),
         targetType: t.targetType,
         targetKey: t.targetKey.trim(),

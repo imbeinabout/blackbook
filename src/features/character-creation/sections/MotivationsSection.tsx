@@ -5,6 +5,7 @@ import type {
   DeltaGreenAgent,
   DeltaGreenItem,
 } from "../../../models/DeltaGreenAgent";
+import { nanoid } from "nanoid";
 
 type MotivationsSectionProps = {
   agent: DeltaGreenAgent;
@@ -74,9 +75,7 @@ const MotivationsSection: React.FC<MotivationsSectionProps> = ({
     const name = `Motivation ${n}`;
     const newMotivation: DeltaGreenItem = {
       type: "motivation",
-      _id:
-        (crypto as any).randomUUID?.() ??
-        Math.random().toString(36).slice(2),
+      _id: nanoid(),
       name,
       img: "systems/deltagreen/assets/icons/swap-bag-black-bg.svg",
       system: {
