@@ -66,9 +66,8 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
       }
       const after = checked;
 
-      const updated = JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
       const numIncidents = [adap.incident1, adap.incident2, adap.incident3].filter(Boolean).length;
-      addAgentEvent(updated, {
+      addAgentEvent(copy, {
         category: "sanity",
         action: `adaptation-incident`,
         source: "manual",
@@ -114,7 +113,7 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
 
         const numIncidents = [adap.incident1, adap.incident2, adap.incident3].filter(Boolean).length;
         
-        addAgentEvent(agent, {
+        addAgentEvent(copy, {
           category: "sanity",
           action: `adaptation-incident`,
           source: "manual",

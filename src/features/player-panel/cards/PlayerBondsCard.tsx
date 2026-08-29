@@ -20,113 +20,119 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
   const [newBondName, setNewBondName] = React.useState("");
   const [newBondDesc, setNewBondDesc] = React.useState("");
 
-  const updateItems = (newItems: DeltaGreenItem[]) => {
-    updateAgent({
-      ...agent,
-      items: newItems,
-    });
-  };
-
-  const updateBondById = (
+  const handleToggleDamaged = (
     id: string,
-    transform: (bond: DeltaGreenItem) => DeltaGreenItem
+    checked: boolean
   ) => {
-    const items = (agent.items as DeltaGreenItem[]).map((it) =>
-      it.type === "bond" && it._id === id ? transform(it) : it
-    );
-    updateItems(items);
-  };
+    const updated =
+      JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
 
-  const handleToggleDamaged = (id: string, checked: boolean) => {
-    const updated = JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
-    const bond = updated.items.find((it) => it.type === "bond" && it._id === id);
+    const bond = updated.items.find(
+      (it) => it.type === "bond" && it._id === id
+    );
+
+    if (!bond) return;
+
+    const before =
+      bond.system?.hasBeenDamagedSinceLastHomeScene ?? false;
+
+    bond.system = {
+      ...(bond.system ?? {}),
+      hasBeenDamagedSinceLastHomeScene: checked,
+    };
+
     addAgentEvent(updated, {
       category: "bond",
       action: "bond-damage-flag",
       source: "manual",
-      summary: 
-        checked
-          ? `Marked bond ${bond?.name} as damaged`
-          : `Cleared damaged status for bond ${bond?.name}`,
+      summary: checked
+        ? `Marked bond ${bond.name} as damaged`
+        : `Cleared damaged status for bond ${bond.name}`,
       relatedEntity: id,
-      before: 
-        bond?.system?.hasBeenDamagedSinceLastHomeScene
-          ? "damaged"
-          : "cleared",
-      after: 
-        checked
-          ? "damaged"
-          : "cleared",
+      before: before ? "damaged" : "cleared",
+      after: checked ? "damaged" : "cleared",
       metadata: {
-        id: id,
-        bondName: bond?.name,
-        score: bond?.system?.score,
+        id,
+        bondName: bond.name,
+        score: bond.system?.score,
         hasBeenDamagedSinceLastHomeScene: checked,
       },
     });
-    updateBondById(id, (bond) => ({
-      ...bond,
-      system: {
-        ...(bond.system ?? {}),
-        hasBeenDamagedSinceLastHomeScene: checked,
-      },
-    }));
+
+    updateAgent(updated);
   };
 
-  const handleAdjustScore = (id: string, delta: number) => {
-    updateBondById(id, (bond) => {
-      const current = bond.system?.score ?? 0;
-      const next = Math.max(0, current + delta);
+  const handleAdjustScore = (
+    id: string,
+    delta: number
+  ) => {
+    const updated =
+      JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
 
-      const updated = JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
-      addAgentEvent(updated, {
-        category: "bond",
-        action: "bond-change",
-        source: "manual",
-        summary: 
-          delta > 0
-            ? `Increased bond ${bond.name} score by 1`
-            : `Damaged bond ${bond.name} score by 1`,
-        relatedEntity: bond._id,
-        before: current,
-        after: next,
-        metadata: {
-          bondName: bond.name,
-          delta,
-        },
-      });
+    const bond = updated.items.find(
+      (it) => it.type === "bond" && it._id === id
+    );
 
-      return {
-        ...bond,
-        system: {
-          ...(bond.system ?? {}),
-          score: next,
-        },
-      };
+    if (!bond) return;
+
+    const current = bond.system?.score ?? 0;
+    const next = Math.max(0, current + delta);
+
+    bond.system = {
+      ...(bond.system ?? {}),
+      score: next,
+    };
+
+    addAgentEvent(updated, {
+      category: "bond",
+      action: "bond-change",
+      source: "manual",
+      summary:
+        delta > 0
+          ? `Increased bond ${bond.name} score by ${delta}`
+          : `Damaged bond ${bond.name} score by ${Math.abs(delta)}`,
+      relatedEntity: bond._id,
+      before: current,
+      after: next,
+      metadata: {
+        bondName: bond.name,
+        delta,
+      },
     });
+
+    updateAgent(updated);
   };
 
   const handleRemoveBond = (id: string) => {
-    const updated = JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
-    const bond = updated.items.find((it) => it.type === "bond" && it._id === id);
+    const updated =
+      JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
+
+    const bond = updated.items.find(
+      (it) => it.type === "bond" && it._id === id
+    );
+
+    if (!bond) return;
+
     addAgentEvent(updated, {
       category: "bond",
       action: "bond-removed",
       source: "manual",
-      summary: `Removed bond ${bond?.name}`,
+      summary: `Removed bond ${bond.name}`,
       relatedEntity: id,
       before: `Number of bonds: ${bonds.length}`,
       after: `Number of bonds: ${bonds.length - 1}`,
       metadata: {
-        id: id,
-        bondName: bond?.name,
-        score: bond?.system?.score,
+        id,
+        bondName: bond.name,
+        score: bond.system?.score,
       },
     });
-    const items = (agent.items as DeltaGreenItem[]).filter(
+
+    updated.items = updated.items.filter(
       (it) => it.type !== "bond" || it._id !== id
     );
-    updateItems(items);
+
+    updateAgent(updated);
   };
 
   const startAddBond = () => {
@@ -161,7 +167,11 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
       },
     };
 
-    const updated = JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
+    const updated =
+      JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
+
+    updated.items.push(newBond);
+
     addAgentEvent(updated, {
       category: "bond",
       action: "bond-created",
@@ -177,7 +187,7 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
       },
     });
 
-    updateItems([...(agent.items as DeltaGreenItem[]), newBond]);
+    updateAgent(updated);
     setIsAdding(false);
     setNewBondName("");
     setNewBondDesc("");

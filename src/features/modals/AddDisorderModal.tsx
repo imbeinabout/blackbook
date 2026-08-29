@@ -3,6 +3,7 @@ import React from "react";
 import { createPortal } from "react-dom";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../models/DeltaGreenAgent";
 import { nanoid } from "nanoid";
+import { addAgentEvent } from "../../lib/eventLogger";
 
 export interface AddDisorderModalProps {
   isOpen: boolean;
@@ -63,6 +64,22 @@ const AddDisorderModal: React.FC<AddDisorderModalProps> = ({
         };
       });
 
+      const numDisorders = items.filter((it) => it.type === "motivation" && (it.system?.disorder ?? "").trim().length > 0).length;
+      addAgentEvent(agent, {
+        category: "disorder",
+        action: "disorder-added",
+        source: "manual",
+        summary: `Added disorder "${text}" linked to motivation "${updatedItems.find((it) => it._id === selectedMotivationId)?.system?.name ?? ""}"`,
+        before: numDisorders,
+        after: numDisorders + 1,
+        relatedEntity: selectedMotivationId,
+        metadata: {
+          disorderName: text,
+          motivationId: selectedMotivationId,
+          motivationName: updatedItems.find((it) => it._id === selectedMotivationId)?.system?.name ?? "",
+        },
+      });
+
       onApply({ ...agent, items: updatedItems });
       onClose();
       return;
@@ -88,6 +105,21 @@ const AddDisorderModal: React.FC<AddDisorderModalProps> = ({
         crossedOut: false,
       },
     };
+
+    const numDisorders = items.filter((it) => it.type === "motivation" && (it.system?.disorder ?? "").trim().length > 0).length;
+    addAgentEvent(agent, {
+      category: "disorder",
+      action: "disorder-added",
+      source: "manual",
+      summary: `Added disorder "${text}"`,
+      before: numDisorders,
+      after: numDisorders + 1,
+      relatedEntity: disorderOnly._id,
+      metadata: {
+        disorderName: text,
+        id: disorderOnly._id,
+      },
+    });
 
     onApply({ ...agent, items: [...cleanedItems, disorderOnly] });
     onClose();

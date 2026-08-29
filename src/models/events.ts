@@ -4,6 +4,8 @@ export type EventCategory =
     | "skill"
     | "sanity"
     | "bond"
+    | "motivation"
+    | "disorder"
     | "condition"
     | "equipment"
     | "home-scene"

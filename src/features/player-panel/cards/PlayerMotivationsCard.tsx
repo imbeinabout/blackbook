@@ -5,6 +5,7 @@ import type {
   DeltaGreenItem,
 } from "../../../models/DeltaGreenAgent";
 import AddDisorderModal from "../../modals/AddDisorderModal";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 interface PlayerMotivationsCardProps {
   agent: DeltaGreenAgent;
@@ -56,23 +57,79 @@ const PlayerMotivationsCard: React.FC<PlayerMotivationsCardProps> = ({
   };
 
   const handleToggleCrossed = (id: string, checked: boolean) => {
-    updateMotivationById(id, (mot) => ({
-      ...mot,
-      system: {
-        ...(mot.system ?? {}),
+    const updated =
+      JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
+
+    const motivationItem = updated.items.find(
+      (it) => it._id === id
+    );
+
+    if (!motivationItem) return;
+
+    const motivationName =
+      motivationItem.system?.name ?? motivationItem.name;
+
+    motivationItem.system = {
+      ...(motivationItem.system ?? {}),
+      crossedOut: checked,
+    };
+
+    addAgentEvent(updated, {
+      category: "motivation",
+      action: "motivation-crossed",
+      source: "manual",
+      summary: checked
+        ? `Crossed out motivation "${motivationName}"`
+        : `Restored motivation "${motivationName}"`,
+      before: checked ? "unchecked" : "checked",
+      after: checked ? "checked" : "unchecked",
+      relatedEntity: id,
+      metadata: {
         crossedOut: checked,
+        motivationName,
+        motivationId: id,
       },
-    }));
+    });
+
+    updateAgent(updated);
   };
 
   const handleToggleCured = (id: string, checked: boolean) => {
-    updateMotivationById(id, (mot) => ({
-      ...mot,
-      system: {
-        ...(mot.system ?? {}),
+    const updated =
+      JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
+
+    const motivationItem = updated.items.find(
+      (it) => it._id === id
+    );
+
+    if (!motivationItem) return;
+
+    const disorder =
+      motivationItem.system?.disorder ?? "";
+
+    motivationItem.system = {
+      ...(motivationItem.system ?? {}),
+      disorderCured: checked,
+    };
+
+    addAgentEvent(updated, {
+      category: "disorder",
+      action: "disorder-cured",
+      source: "manual",
+      summary: checked
+        ? `Marked disorder "${disorder}" as cured`
+        : `Marked disorder "${disorder}" as active`,
+      before: checked ? "not cured" : "cured",
+      after: checked ? "cured" : "not cured",
+      relatedEntity: id,
+      metadata: {
         disorderCured: checked,
+        disorderName: disorder,
+        disorderId: id,
       },
-    }));
+    });
+
+    updateAgent(updated);
   };
 
   const openModal = React.useCallback(() => {
@@ -84,7 +141,34 @@ const PlayerMotivationsCard: React.FC<PlayerMotivationsCardProps> = ({
   };
 
   const handleResetDisorders = () => {
-    const items = (agent.items as DeltaGreenItem[]).reduce((acc, it) => {
+    const removedDisorders = (agent.items as DeltaGreenItem[])
+      .filter(
+        (it) =>
+          it.type === "motivation" &&
+          (it.system?.disorder ?? "").trim().length > 0
+      )
+      .map((it) => ({
+        disorder: it.system?.disorder,
+        motivation: it.system?.name ?? it.name,
+        id: it._id,
+      }));
+    const updated = JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
+    addAgentEvent(updated, {
+      category: "disorder",
+      action: "disorders-reset",
+      source: "manual",
+      summary: `Reset disorders: ${removedDisorders
+        .map((d) => d.disorder)
+        .join(", ")}`,
+      before: removedDisorders.length,
+      after: 0,
+      metadata: {
+        removedDisorders: removedDisorders,
+        removedCount: removedDisorders.length,
+        removedIds: removedDisorders.map((d) => d.id),
+      },
+    });
+    updated.items = (agent.items as DeltaGreenItem[]).reduce((acc, it) => {
       if (it.type !== "motivation") {
         acc.push(it);
         return acc;
@@ -105,7 +189,7 @@ const PlayerMotivationsCard: React.FC<PlayerMotivationsCardProps> = ({
       });
       return acc;
     }, [] as DeltaGreenItem[]);
-    updateItems(items);
+    updateAgent(updated);
   };
 
   return (
