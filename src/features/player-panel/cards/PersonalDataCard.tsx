@@ -304,7 +304,7 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
                             ? updated.system.health.value / oldMax
                             : 1;
 
-                        const newMax = updated.system.statistics.con.value;
+                        const newMax = Math.ceil((updated.system.statistics.con.value + updated.system.statistics.str.value) / 2);
 
                         addAgentEvent(updated, {
                           category: "attribute",
