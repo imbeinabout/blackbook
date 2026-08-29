@@ -5,6 +5,7 @@ import NumberSpinner from "../../../components/ui/NumberSpinner";
 import { renderStatButton } from "../playerPanel.helpers";
 import { getEffectiveStatChance } from "../conditionRolls";
 import { useAgentStore } from "../../../store/agentStore";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 type PersonalDataCardProps = {
     agent: DeltaGreenAgent;
@@ -275,6 +276,23 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
 
                       (["str", "con", "dex", "int", "pow", "cha"] as const).forEach((k) => {
                         const stat = updated.system.statistics[k];
+                        const before = stat.value;
+                        const after = draftStats[k];
+                        if (before !== after) {
+                          addAgentEvent(updated, {
+                            category: "attribute",
+                            action: "stat-change",
+                            source: "manual",
+                            summary: `Changed ${k.toUpperCase()} from ${before} to ${after}`,
+                            before,
+                            after,
+                            metadata: {
+                              stat: k,
+                              delta: after - before,
+                            },
+                          });
+                        }
+
                         stat.value = draftStats[k];
                         stat.x5 = draftStats[k] * 5;
                       });
@@ -287,6 +305,21 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
                             : 1;
 
                         const newMax = updated.system.statistics.con.value;
+
+                        addAgentEvent(updated, {
+                          category: "attribute",
+                          action: "hp-change",
+                          source: "manual",
+                          summary: `Health maximum recalculated from ${oldMax} to ${newMax}`,
+                          before: oldMax,
+                          after: newMax,
+                          metadata: {
+                            CON: updated.system.statistics.con.value,
+                            STR: updated.system.statistics.str.value,
+                            delta: newMax - oldMax,
+                          },
+                        });
+
                         updated.system.health.max = newMax;
                         updated.system.health.value = Math.max(
                           0,
@@ -302,6 +335,19 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
                             : 1;
 
                         const newMax = updated.system.statistics.pow.value;
+                        addAgentEvent(updated, {
+                          category: "attribute",
+                          action: "wp-change",
+                          source: "manual",
+                          summary: `Willpower maximum recalculated from ${oldMax} to ${newMax}`,
+                          before: oldMax,
+                          after: newMax,
+                          metadata: {
+                            POW: updated.system.statistics.pow.value,
+                            delta: newMax - oldMax,
+                          },
+                        });
+
                         updated.system.wp.max = newMax;
                         updated.system.wp.value = Math.max(
                           0,
