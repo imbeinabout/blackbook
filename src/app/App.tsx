@@ -13,7 +13,7 @@ const App: React.FC = () => {
   const [isLoadModalOpen, setIsLoadModalOpen] = React.useState(false);
 
   const hasAgents = Object.keys(agents).length > 0;
-  const canShowMainPage = hasAgents && activeAgentId && agents[activeAgentId];
+  const activeAgent = activeAgentId ? agents[activeAgentId] : null;
 
   const handleNewAgent = () => {
     const newAgent = createEmptyAgent();
@@ -44,7 +44,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {!hasAgents && (
+      {!activeAgent && (
         <StartupPage
           onNewAgent={handleNewAgent}
           onLoadAgent={handleLoadAgentClick}
@@ -52,7 +52,7 @@ const App: React.FC = () => {
         />
       )}
 
-      {canShowMainPage && (
+      {activeAgent && (
         <MainPage
           onCloseAgent={handleCloseAgent}
           onNewAgent={handleNewAgent}
