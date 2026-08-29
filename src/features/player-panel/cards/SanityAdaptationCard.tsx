@@ -2,6 +2,7 @@
 import React from "react";
 import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import NumberSpinner from "../../../components/ui/NumberSpinner";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 type AdaptationKind = "helplessness" | "violence";
 
@@ -46,11 +47,51 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
 
     onMutateAgent((copy) => {
       const adap = copy.system.sanity.adaptations[kind];
+      
       if (!adap) return;
 
-      if (idx === 1) adap.incident1 = checked;
-      if (idx === 2) adap.incident2 = checked;
-      if (idx === 3) adap.incident3 = checked;
+
+      let before = false;
+      if (idx === 1) {
+        before = adap.incident1;
+        adap.incident1 = checked;
+      }
+      if (idx === 2) {
+        before = adap.incident2;
+        adap.incident2 = checked;
+      }
+      if (idx === 3) {
+        before = adap.incident3;
+        adap.incident3 = checked;
+      }
+      const after = checked;
+
+      const updated = JSON.parse(JSON.stringify(agent)) as DeltaGreenAgent;
+      const numIncidents = [adap.incident1, adap.incident2, adap.incident3].filter(Boolean).length;
+      addAgentEvent(updated, {
+        category: "sanity",
+        action: `adaptation-incident`,
+        source: "manual",
+        summary: 
+          checked
+            ? `Marked ${kind} adaptation incident ${numIncidents} of 3`
+            : `Cleared ${kind} adaptation incident ${numIncidents + 1} of 3`,
+        before: 
+          before
+            ? "checked"
+            : "unchecked",
+        after:
+          after
+            ? "checked"
+            : "unchecked",
+        metadata: {
+          kind,
+          incident: idx,
+          checked,
+          numIncidents,
+        },
+
+      });
 
       if (adap.incident1 && adap.incident2 && adap.incident3 && !adap.isAdapted) {
         // All three incidents checked, not yet adapted -> prompt for adaptation.
@@ -66,9 +107,27 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
       onMutateAgent((copy) => {
         const adap = copy.system.sanity.adaptations[kind];
         if (!adap) return;
+        
         if (idx === 1) adap.incident1 = false;
         if (idx === 2) adap.incident2 = false;
         if (idx === 3) adap.incident3 = false;
+
+        const numIncidents = [adap.incident1, adap.incident2, adap.incident3].filter(Boolean).length;
+        
+        addAgentEvent(agent, {
+          category: "sanity",
+          action: `adaptation-incident`,
+          source: "manual",
+          summary: `Cleared ${kind} adaptation incident ${idx} of 3 due to canceling adaptation modal`,
+          before: "checked",
+          after: "unchecked",
+          metadata: {
+            kind,
+            incident: idx,
+            checked: false,
+            numIncidents,
+          },
+        });
       });
     }
 
@@ -95,23 +154,91 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
 
       if (pendingAdaptation === "helplessness") {
         // Helplessness: POW - 1D6. (WP is NOT adjusted.)
+        const oldPow = stats.pow.value;
         const newPow = clamp(stats.pow.value - loss, 0, 99);
         stats.pow.value = newPow;
         stats.pow.x5 = newPow * 5;
+
+        addAgentEvent(copy, {
+          category: "sanity",
+          action: "adaptation-applied",
+          source: "play",
+          summary: `Applied adaptation for Helplessness, lost ${loss} POW`,
+          before: 'Not adapted to Helplessness',
+          after: 'Adapted to Helplessness',
+          metadata: {
+            adaptation: "helplessness",
+            powLoss: loss,
+          },
+        });
+        addAgentEvent(copy, {
+          category: "attribute",
+          action: "stat-change",
+          source: "play",
+          summary: `POW changed from ${oldPow} to ${newPow} due to Helplessness adaptation`,
+          before: oldPow,
+          after: newPow,
+          metadata: {
+            stat: "POW",
+            delta: -loss,
+          },
+        });
 
         sanity.adaptations.helplessness.isAdapted = true;
         undoAdapt.helplessness = loss;
       } else if (pendingAdaptation === "violence") {
         // Violence: CHA - 1D6, all Bonds - same 1D6.
+        const oldCha = stats.cha.value;
         const newCha = clamp(stats.cha.value - loss, 0, 99);
         stats.cha.value = newCha;
         stats.cha.x5 = newCha * 5;
+
+        addAgentEvent(copy, {
+          category: "sanity",
+          action: "adaptation-applied",
+          source: "play",
+          summary: `Applied adaptation for Violence, lost ${loss} CHA and ${loss} from each Bond`,
+          before: 'Not adapted to Violence',
+          after: 'Adapted to Violence',
+          metadata: {
+            adaptation: "violence",
+            chaLoss: loss,
+            bondLoss: loss,
+          },
+        });
+        addAgentEvent(copy, {
+          category: "attribute",
+          action: "stat-change",
+          source: "play",
+          summary: `CHA changed from ${oldCha} to ${newCha} due to Violence adaptation`,
+          before: oldCha,
+          after: newCha,
+          metadata: {
+            stat: "CHA",
+            delta: -loss,
+          },
+        });
 
         copy.items = copy.items.map((it) => {
           if (it.type !== "bond") return it;
           const sys = it.system ?? {};
           const score = (sys.score as number) ?? 0;
           const newScore = clamp(score - loss, 0, 99);
+
+          addAgentEvent(copy, {
+            category: "bond",
+            action: "bond-change",
+            source: "play",
+            summary: `Bond "${it.name}" score damaged from ${score} to ${newScore} due to Violence adaptation`,
+            before: score,
+            after: newScore,
+            relatedEntity: it._id,
+            metadata: {
+              bondName: it.name,
+              delta: -loss,
+            },
+          });
+
           return {
             ...it,
             system: {
@@ -157,35 +284,103 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
       const ua: Record<AdaptationKind, number> = sysCopy.undoMeta.adaptations;
 
       if (pendingResetKind === "helplessness") {
-        if (storedLoss > 0) {
-          const newPow = clamp(stats.pow.value + storedLoss, 0, 99);
-          stats.pow.value = newPow;
-          stats.pow.x5 = newPow * 5;
-        }
+        const oldPow = stats.pow.value;
+        const newPow = clamp(stats.pow.value + storedLoss, 0, 99);
+        const delta = newPow - oldPow;
+        stats.pow.value = newPow;
+        stats.pow.x5 = newPow * 5;
+
         // Clear adaptation and last checkbox.
         sanity.adaptations.helplessness.isAdapted = false;
         sanity.adaptations.helplessness.incident3 = false;
         ua.helplessness = 0;
-      } else {
-        if (storedLoss > 0) {
-          const newCha = clamp(stats.cha.value + storedLoss, 0, 99);
-          stats.cha.value = newCha;
-          stats.cha.x5 = newCha * 5;
 
-          copy.items = copy.items.map((it) => {
-            if (it.type !== "bond") return it;
-            const sys = it.system ?? {};
-            const score = (sys.score as number) ?? 0;
-            const newScore = clamp(score + storedLoss, 0, 99);
-            return {
-              ...it,
-              system: {
-                ...sys,
-                score: newScore,
-              },
-            };
+        addAgentEvent(copy, {
+          category: "sanity",
+          action: "adaptation-applied",
+          source: "manual",
+          summary: `Reset adaptation for Helplessness, regained ${delta} to POW`,
+          before: 'Adapted to Helplessness',
+          after: 'Not adapted to Helplessness',
+          metadata: {
+            adaptation: "helplessness",
+            delta: delta,
+          },
+        });
+        addAgentEvent(copy, {
+          category: "attribute",
+          action: "stat-change",
+          source: "manual",
+          summary: `POW changed from ${oldPow} to ${newPow} due to reset Helplessness adaptation`,
+          before: oldPow,
+          after: newPow,
+          metadata: {
+            stat: "POW",
+            delta: delta,
+          },
+        });
+
+      } else {
+        const oldCha = stats.cha.value;
+        const newCha = clamp(stats.cha.value + storedLoss, 0, 99);
+        const delta = newCha - oldCha;
+        stats.cha.value = newCha;
+        stats.cha.x5 = newCha * 5;
+
+        addAgentEvent(copy, {
+          category: "sanity",
+          action: "adaptation-applied",
+          source: "play",
+          summary: `Applied adaptation for Violence, regained ${delta} CHA and ${delta} to each Bond`,
+          before: 'Adapted to Violence',
+          after: 'Not adapted to Violence',
+          metadata: {
+            adaptation: "violence",
+            delta: delta,
+          },
+        });
+        addAgentEvent(copy, {
+          category: "attribute",
+          action: "stat-change",
+          source: "play",
+          summary: `CHA changed from ${oldCha} to ${newCha} due to reset Violence adaptation`,
+          before: oldCha,
+          after: newCha,
+          metadata: {
+            stat: "CHA",
+            delta: delta,
+          },
+        });
+
+        copy.items = copy.items.map((it) => {
+          if (it.type !== "bond") return it;
+          const sys = it.system ?? {};
+          const score = (sys.score as number) ?? 0;
+          const newScore = clamp(score + storedLoss, 0, 99);
+
+          addAgentEvent(copy, {
+            category: "bond",
+            action: "bond-change",
+            source: "play",
+            summary: `Bond "${it.name}" score restored from ${score} to ${newScore} due to reset Violence adaptation`,
+            before: score,
+            after: newScore,
+            relatedEntity: it._id,
+            metadata: {
+              bondName: it.name,
+              delta: delta,
+            },
           });
-        }
+
+          return {
+            ...it,
+            system: {
+              ...sys,
+              score: newScore,
+            },
+          };
+        });
+        
         sanity.adaptations.violence.isAdapted = false;
         sanity.adaptations.violence.incident3 = false;
         ua.violence = 0;
