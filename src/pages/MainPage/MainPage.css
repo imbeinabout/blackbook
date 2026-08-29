@@ -2207,6 +2207,11 @@
   opacity: 0.5;
 }
 
+.bb-modal__dialog.bb-apply-adaptation-modal {
+  width: 420px;
+  max-width: 90vw;
+}
+
 .bb-apply-adaptation-modal .bb-modal__footer {
   display: flex;
   justify-content: center;
@@ -2857,6 +2862,19 @@
 
 .bb-card--special-training-wide {
   margin-top: 0.5rem;
+}
+
+.bb-modal__dialog.bb-manage-training-dialog {
+  width: 600px;
+  max-width: 90vw;
+}
+
+.bb-manage-training-dialog table {
+  width: 100%;
+}
+
+.bb-manage-training-dialog td {
+  overflow-wrap: anywhere;
 }
 
 /* FOOTER */
