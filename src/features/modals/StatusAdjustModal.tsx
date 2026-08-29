@@ -400,6 +400,40 @@ export default function StatusAdjustModal({
           );
         }
 
+        const selectedBond = updated.items.find(
+          (it) => it.type === "bond" && it._id === selectedBondId
+        );
+        addAgentEvent(updated, {
+          category: "bond",
+          action: "bond-change",
+          source: "play",
+          summary: `Damaged bond ${selectedBond?.name} by ${proj}`,
+          relatedEntity: selectedBondId,
+          before: selectedBond?.system?.score,
+          after: Math.max(0, (selectedBond?.system?.score ?? 0) - proj),
+          metadata: {
+            bondName: selectedBond?.name,
+            delta: -proj,
+          },
+        });
+        if (selectedBond?.system?.hasBeenDamagedSinceLastHomeScene !== true) {
+          addAgentEvent(updated, {
+            category: "bond",
+            action: "bond-damage-flag",
+            source: "play",
+            summary: `Marked bond ${selectedBond?.name} as damaged`,
+            relatedEntity: selectedBondId,
+            before: "cleared",
+            after: "damaged",
+            metadata: {
+              id: selectedBondId,
+              bondName: selectedBond?.name,
+              score: selectedBond?.system?.score,
+              hasBeenDamagedSinceLastHomeScene: true,
+            },
+          });
+        }
+
         updated.items = (updated.items as DeltaGreenItem[]).map((it) => {
           if (it.type !== "bond" || it._id !== selectedBondId) return it;
           const currentScore = it.system?.score ?? 0;
