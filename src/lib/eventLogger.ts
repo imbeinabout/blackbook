@@ -24,6 +24,7 @@ export function createAgentEvent(
 ): AgentEvent {
   return {
     ...event,
+    showInTimeline: event.showInTimeline ?? true,
     id: nanoid(),
     version: 1,
     timestamp: new Date().toISOString(),
@@ -36,7 +37,9 @@ export function addAgentEvent(
 ): AgentEvent {
   const newEvent = createAgentEvent(event);
 
-  agent.events.unshift(newEvent);
+  if(event.showInTimeline) {
+    agent.events.unshift(newEvent);
+  }
 
   if (DEBUG_EVENTS) {
     console.group(
