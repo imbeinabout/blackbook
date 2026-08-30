@@ -291,21 +291,65 @@ const ModalsCard: React.FC<ModalsCardProps> = ({
 
   const applyRecoverWP = () => {
     const amt = Math.max(1, Math.min(6, Number(wpRecover) || 1));
+
     updateAgentViaMutator((copy) => {
       const block = copy.system.wp;
       if (!block) return;
-      block.value = Math.min(block.max, Math.max(block.min ?? 0, block.value + amt));
+
+      const before = block.value;
+
+      block.value = Math.min(
+        block.max,
+        Math.max(block.min ?? 0, block.value + amt)
+      );
+
+      addAgentEvent(copy, {
+        category: "attribute",
+        action: "wp-change",
+        source: "play",
+        summary: `Recovered ${block.value - before} WP by resting`,
+        before,
+        after: block.value,
+        metadata: {
+          mode: 'rest',
+          delta: amt,
+          actualRecovery: block.value - before,
+        },
+      });
     });
+
     setWpApplied(true);
   };
 
   const applyRecoverHP = () => {
     const amt = Math.max(1, Math.min(4, Number(hpRecover) || 1));
+
     updateAgentViaMutator((copy) => {
       const block = copy.system.health;
       if (!block) return;
-      block.value = Math.min(block.max, Math.max(block.min ?? 0, block.value + amt));
+
+      const before = block.value;
+
+      block.value = Math.min(
+        block.max,
+        Math.max(block.min ?? 0, block.value + amt)
+      );
+
+      addAgentEvent(copy, {
+        category: "attribute",
+        action: "hp-change",
+        source: "play",
+        summary: `Recovered ${block.value - before} HP by resting`,
+        before,
+        after: block.value,
+        metadata: {
+          mode: 'rest',
+          delta: amt,
+          actualRecovery: block.value - before,
+        },
+      });
     });
+
     setHpApplied(true);
   };
 
