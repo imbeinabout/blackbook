@@ -194,8 +194,6 @@ export const useAgentStore = create<AgentStoreState>()(
 
       partialize: (state) => ({
         agents: state.agents,
-        activeAgentId: state.activeAgentId,
-        openAgentIds: state.openAgentIds,
       }),
 
       merge: (persistedState, currentState) => {
@@ -211,6 +209,9 @@ export const useAgentStore = create<AgentStoreState>()(
           agents: persisted.agents
             ? migrateAgents(persisted.agents)
             : {},
+          
+          activeAgentId: null,
+          openAgentIds: [],
         };
       },
     }
