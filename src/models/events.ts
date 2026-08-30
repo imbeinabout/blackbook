@@ -34,10 +34,10 @@ export interface AgentEvent {
   summary: string;
   description?: string;
 
-  relatedEntity?: string;
+  relatedEntity?: string | number;
 
-  before?: Record<string, unknown> | number | string | boolean;
-  after?: Record<string, unknown> | number | string | boolean;
+  before?: any;
+  after?: any;
 
   metadata?: Record<string, unknown>;
   storeEvent?: boolean;

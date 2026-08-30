@@ -2,6 +2,7 @@
 import React from "react";
 import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import { useLayoutMode } from "../../../hooks/useLayoutMode";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 type DetailsTabProps = {
   agent: DeltaGreenAgent;
@@ -31,8 +32,10 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
   const aliasListRef = React.useRef<HTMLDivElement | null>(null);
   const aliasModalBodyRef = React.useRef<HTMLDivElement | null>(null);
   const newAliasRowRef = React.useRef<HTMLTableRowElement | null>(null);
-  const [pendingScrollToNewAlias, setPendingScrollToNewAlias] = React.useState(false);
+  const aliasesBeforeEditRef = React.useRef<AgentAlias[]>([]);
 
+  const [pendingScrollToNewAlias, setPendingScrollToNewAlias] = React.useState(false);
+  
   const updateDetails = React.useCallback(
     (partial: Partial<typeof details>) => {
       updateAgent({
@@ -69,6 +72,13 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
     setPendingScrollToNewAlias(false);
   }, [pendingScrollToNewAlias, isAliasModalOpen, aliases.length]);
 
+  const openAliasModal = () => {
+    aliasesBeforeEditRef.current =
+      JSON.parse(JSON.stringify(aliases));
+
+    setIsAliasModalOpen(true);
+  };
+  
   const handleAliasChange = (
     index: number,
     field: keyof AgentAlias,
@@ -99,6 +109,38 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
   const handleRemoveAlias = (index: number) => {
     const updated = aliases.filter((_, i) => i !== index);
     updateDetails({ aliases: updated });
+  };
+
+  const handleAliasDone = () => {
+    const before = aliasesBeforeEditRef.current;
+    const after = aliases;
+
+    if (
+      JSON.stringify(before) !==
+      JSON.stringify(after)
+    ) {
+      const copy: DeltaGreenAgent =
+        JSON.parse(JSON.stringify(agent));
+
+      addAgentEvent(copy, {
+        category: "system",
+        action: "aliases-updated",
+        source: "manual",
+        summary: "Updated agent aliases",
+        relatedEntity: "aliases",
+        before,
+        after,
+        metadata: {
+          aliases: after,
+          addedCount: Math.max(0, after.length - before.length),
+          removedCount: Math.max(0, before.length - after.length),
+        },
+      });
+
+      updateAgent(copy);
+    }
+
+    setIsAliasModalOpen(false);
   };
 
   const activeAliases = aliases.filter(
@@ -234,7 +276,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
             <button
               type="button"
               className="bb-btn bb-btn--ghost bb-aliases__manage-btn"
-              onClick={() => setIsAliasModalOpen(true)}
+              onClick={openAliasModal}
             >
               Manage aliases
             </button>
@@ -438,7 +480,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               <button
                 type="button"
                 className="bb-btn bb-btn--ghost"
-                onClick={() => setIsAliasModalOpen(false)}
+                onClick={handleAliasDone}
               >
                 Done
               </button>
