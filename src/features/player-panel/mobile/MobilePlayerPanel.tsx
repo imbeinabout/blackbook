@@ -4,6 +4,7 @@ import "./MobilePlayerPanel.css"
 import { CardShell } from "../../../components/ui/CardShell";
 
 import type { PlayerPanelProps } from "../PlayerPanel";
+import { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import { MOBILE_SECTIONS, MobileSection } from "./mobileSections";
 import { MobileSectionNav } from "./MobileSectionNav";
 
@@ -106,11 +107,11 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
     }
   }
 
-  function TerminalOverlay({ onClose }: { onClose: () => void }) {
+  function TerminalOverlay({ onClose, agent }: { onClose: () => void; agent: DeltaGreenAgent }) {
   return (
       <div className="bb-mobile-overlay">
         <button onClick={onClose}>Close</button>
-        <TerminalTab />
+        <TerminalTab agent={agent} />
       </div>
     );
   }
@@ -247,7 +248,7 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
       </div>
 
       {isTerminalOpen && (
-        <TerminalOverlay onClose={() => setIsTerminalOpen(false)} />
+        <TerminalOverlay onClose={() => setIsTerminalOpen(false)} agent={agent} />
       )}
         <button
           className="bb-dice-button bb-only-mobile"

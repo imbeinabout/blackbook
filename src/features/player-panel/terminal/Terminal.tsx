@@ -1,5 +1,6 @@
 // src/features/player-panel/terminal/Terminal.tsx
 import React, { useState, useEffect, useRef } from "react";
+import { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 
 // ------------------------
 // Command Types
@@ -9,6 +10,8 @@ export interface TerminalContext {
   listVisible: () => string;
   setStateFlag: (flag: string, value: boolean) => void;
   getStateFlag: (flag: string) => boolean;
+
+  agent?: DeltaGreenAgent;
 }
 
 export interface Command {
@@ -74,6 +77,44 @@ const COMMANDS: Command[] = [
     execute: (ctx) => {
       ctx.setStateFlag("contactUsed", true);
       return "Attempting secure transmission...\nResponse: NO HANDLER FOUND.";
+    },
+  },
+  {
+    name: "events",
+    aliases: ["ev"],
+    hidden: false,
+    execute: (ctx, raw) => {
+      if (!ctx.agent) {
+        return "NO AGENT LOADED.";
+      }
+
+      const parts = raw.split(/\s+/);
+      const count = Math.max(
+        1,
+        Number(parts[1] ?? 10)
+      );
+
+      const events =
+        ctx.agent.events?.slice(0, count) ?? [];
+
+      if (events.length === 0) {
+        return "NO EVENTS RECORDED.";
+      }
+
+      return events
+        .map(
+          (e, i) =>
+            `${i + 1}. [${e.category}] ${e.action}\n   ${e.summary}`
+        )
+        .join("\n");
+    },
+  },
+  {
+    name: "eventcount",
+    aliases: ["ec"],
+    hidden: false,
+    execute: (ctx) => {
+      return `Events: ${ctx.agent?.events?.length ?? 0}`;
     },
   },
 
@@ -159,7 +200,12 @@ const parser = createParser(COMMANDS);
 // ------------------------
 // Component
 // ------------------------
-export default function DeltaGreenTerminalAdvanced() {
+
+type TerminalProps = {
+  agent: DeltaGreenAgent;
+};
+
+export default function DeltaGreenTerminalAdvanced({ agent }: TerminalProps) {
   const [lines, setLines] = useState<string[]>([]);
   const [input, setInput] = useState("");
   const [stateFlags, setStateFlags] = useState<Record<string, boolean>>({});
@@ -174,6 +220,8 @@ export default function DeltaGreenTerminalAdvanced() {
     setStateFlag: (flag, value) =>
       setStateFlags((f) => ({ ...f, [flag]: value })),
     getStateFlag: (flag) => !!stateFlags[flag],
+
+    agent,
   };
 
   

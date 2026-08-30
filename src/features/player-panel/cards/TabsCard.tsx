@@ -68,7 +68,7 @@ const TabsCard: React.FC<TabsCardProps> = ({
           {activeBottomTab === "wounds" && <WoundsTab agent={agent} />}
           {activeBottomTab === "details" && <DetailsTab agent={agent} updateAgent={updateAgent} />}
           {activeBottomTab === "notes" && <NotesTab agent={agent} updateAgent={updateAgent} />}
-          {activeBottomTab === "shell" && <TerminalTab />}
+          {activeBottomTab === "shell" && <TerminalTab agent={agent} />}
         </div>
       </div>
     </>

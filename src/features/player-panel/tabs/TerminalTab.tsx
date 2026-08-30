@@ -1,6 +1,7 @@
 // src/features/player-panel/tabs/TerminalTab.tsx
 import React from "react";
 import DeltaGreenTerminalAdvanced from "../terminal/Terminal";
+import { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 
 /**
  * TerminalTab
@@ -9,7 +10,7 @@ import DeltaGreenTerminalAdvanced from "../terminal/Terminal";
  * It is intentionally isolated from agent state for now,
  * but will later be wired to agent data, dice rolls, or logs.
  */
-export const TerminalTab: React.FC = () => {
+export const TerminalTab: React.FC<{ agent: DeltaGreenAgent }> = ({ agent }) => {
   return (
     <div className="bb-terminal-tab">
       <div className="bb-terminal-tab__header">
@@ -17,7 +18,7 @@ export const TerminalTab: React.FC = () => {
       </div>
 
       <div className="bb-terminal-tab__body">
-        <DeltaGreenTerminalAdvanced />
+        <DeltaGreenTerminalAdvanced agent={agent} />
       </div>
     </div>
   );
