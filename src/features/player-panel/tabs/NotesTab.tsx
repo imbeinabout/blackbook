@@ -1,6 +1,7 @@
 // src/features/player-panel/tabs/NotesTab.tsx
 import React from "react";
 import { nanoid } from "nanoid";
+import { addAgentEvent } from "../../../lib/eventLogger";
 import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 
 type NotesTabProps = {
@@ -38,6 +39,7 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
   const editorRef = React.useRef<HTMLDivElement | null>(null);
   const isProgrammaticEditRef = React.useRef(false);
   const shouldScrollToHitRef = React.useRef(false);
+  const noteEventTimeout = React.useRef<number | null>(null);
 
   React.useEffect(() => {
     if (editorRef.current) {
@@ -62,25 +64,101 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
       content: "",
       updatedAt: Date.now(),
     };
-    updateNotes([note, ...notes]);
+
+    const copy: DeltaGreenAgent =
+      JSON.parse(JSON.stringify(agent));
+
+    copy.system.notes = [note, ...notes];
+
+    addAgentEvent(copy, {
+      category: "system",
+      action: "note-created",
+      source: "manual",
+      summary: `Created note: ${note.id}`,
+      relatedEntity: "notes",
+      storeEvent: false,
+      metadata: {
+        note,
+      },
+    });
+
+    updateAgent(copy);
     setActiveId(note.id);
   };
 
   const removeNote = (id: string) => {
-    const next = notes.filter(n => n.id !== id);
-    updateNotes(next);
-    if (activeId === id) {
-      setActiveId(next[0]?.id ?? null);
-    }
+    const note = notes.find(n => n.id === id);
+    if (!note) return;
+
+    const copy: DeltaGreenAgent = JSON.parse(JSON.stringify(agent));
+    copy.system.notes = notes.filter(n => n.id !== id);
+
+    addAgentEvent(copy, {
+      category: "system",
+      action: "note-deleted",
+      source: "manual",
+      summary: `Deleted note: "${note.title}"`,
+      relatedEntity: "notes",
+      storeEvent: false,
+      metadata: {
+        noteId: id,
+      },
+    });
+
+    updateAgent(copy);
   };
 
-  const updateActiveNote = (partial: Partial<AgentNote>) => {
+  const queueNoteUpdatedEvent = (
+    updatedNote: AgentNote
+  ) => {
+    if (noteEventTimeout.current) {
+      window.clearTimeout(
+        noteEventTimeout.current
+      );
+    }
+
+    noteEventTimeout.current =
+      window.setTimeout(() => {
+        const copy: DeltaGreenAgent =
+          JSON.parse(JSON.stringify(agent));
+
+        addAgentEvent(copy, {
+          category: "system",
+          action: "note-updated",
+          source: "manual",
+          summary: `Updated note: ${updatedNote.title}`,
+          relatedEntity: "notes",
+          storeEvent: false,
+          metadata: {
+            note: updatedNote,
+          },
+        });
+
+        updateAgent(copy);
+      }, 3000);
+  };
+
+  const updateActiveNote = (
+    partial: Partial<AgentNote>
+  ) => {
     if (!activeNote) return;
-    updateNotes(
-      notes.map(n =>
-        n.id === activeNote.id ? { ...n, ...partial, updatedAt: Date.now() } : n
-      )
+
+    const updatedNote: AgentNote = {
+      ...activeNote,
+      ...partial,
+      updatedAt: Date.now(),
+    };
+
+    const copy: DeltaGreenAgent = JSON.parse(JSON.stringify(agent));
+
+    copy.system.notes = notes.map(n =>
+      n.id === activeNote.id
+        ? updatedNote
+        : n
     );
+
+    updateAgent(copy);
+    queueNoteUpdatedEvent(updatedNote);
   };
 
   const saveTimeout = React.useRef<number | null>(null);
@@ -201,7 +279,7 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
 
     setHitIndex(-1);
   }, [query, notes]);
-
+  
   const clearExistingHighlight = React.useCallback(() => {
     const el = editorRef.current;
     if (!el) return;
@@ -407,7 +485,9 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
                   "bb-notes-list__item" +
                   (note.id === activeId ? " bb-notes-list__item--active" : "")
                 }
-                onClick={() => setActiveId(note.id)}
+                onClick={() => {
+                  setActiveId(note.id);
+                }}
                 title={note.title}
               >
                 <span className="bb-notes-list__title">{note.title || "Untitled"}</span>
