@@ -4,6 +4,7 @@ import { nanoid } from "nanoid";
 import { useAgentStore } from "../../../store/agentStore";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../../models/DeltaGreenAgent";
 import NumberSpinner from "../../../components/ui/NumberSpinner";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 type GearSystem = {
   quantity: number;
@@ -79,6 +80,18 @@ export const GearTab: React.FC<GearTabProps> = ({ agent }) => {
         } as GearSystem,
       };
       copy.items.push(newGear);
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: "gear-added",
+        source: "manual",
+        summary: `Added ${qty}x ${name} to gear`,
+        relatedEntity: newGear._id,
+        before: 'null',
+        after: name,
+        metadata: {
+          gear: {...newGear},
+        },
+      });
     });
 
     setIsModalOpen(false);
@@ -87,6 +100,19 @@ export const GearTab: React.FC<GearTabProps> = ({ agent }) => {
 
   const handleDeleteGear = (itemId: string) => {
     updateActiveAgent((copy) => {
+      const removed = copy.items.find((it) => (it.type === "gear" && it._id === itemId)) as DeltaGreenItem;
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: "gear-removed",
+        source: "manual",
+        summary: `Removed ${removed.name} from gear`,
+        relatedEntity: removed._id,
+        before: removed.name,
+        after: 'null',
+        metadata: {
+          gear: {...removed},
+        },
+      });
       copy.items = copy.items.filter(
         (it) => !(it.type === "gear" && it._id === itemId)
       );
@@ -106,6 +132,27 @@ export const GearTab: React.FC<GearTabProps> = ({ agent }) => {
       const next = Math.max(0, (sys.quantity ?? 0) + delta);
       sys.quantity = next;
       item.system = sys as any;
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: "gear-quantity-adjusted",
+        source: "manual",
+        summary: 
+          delta > 0 ?
+            `Added 1 ${item.name} to gear`
+          :
+            `Removed 1 ${item.name} to gear`,
+        relatedEntity: item._id,
+        before: 
+          delta > 0 ?
+            item.system.quantity - 1
+          :
+            item.system.quantity + 1,
+        after: item.system.quantity,
+        metadata: {
+          gear: {...item},
+          delta,
+        },
+      });
     });
   };
 
