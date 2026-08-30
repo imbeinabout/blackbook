@@ -2,6 +2,7 @@
 import React from "react";
 import { nanoid } from "nanoid";
 import { useAgentStore } from "../../../store/agentStore";
+import { addAgentEvent } from "../../../lib/eventLogger";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../../models/DeltaGreenAgent";
 import armorDataJson from "../../../data/armor.json";
 import NumberSpinner from "../../../components/ui/NumberSpinner";
@@ -136,15 +137,44 @@ export const ArmorTab: React.FC<ArmorTabProps> = ({ agent }) => {
       const item = copy.items.find((it) => it._id === itemId);
       if (!item) return;
       const sys = item.system as ArmorSystem;
+      const before = !!sys.equipped;
       sys.equipped = !sys.equipped;
+
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: sys.equipped
+          ? "armor-equipped"
+          : "armor-unequipped",
+        source: "manual",
+        summary: `${sys.equipped ? "Equipped" : "Unequipped"} ${item.name}`,
+        relatedEntity: item._id,
+        before,
+        after: sys.equipped,
+        metadata: {
+          armor: {...sys}
+        },
+      });
     });
   };
 
   const handleDeleteArmor = (itemId: string) => {
     updateActiveAgent((copy) => {
+      const removed = copy.items.find((it) => (it.type === "armor" && it._id === itemId)) as DeltaGreenItem;
       copy.items = copy.items.filter(
         (it) => !(it.type === "armor" && it._id === itemId)
       );
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: "armor-removed",
+        source: "manual",
+        summary: `Removed ${removed.name} armor`,
+        relatedEntity: removed._id,
+        before: removed.name,
+        after: 'null',
+        metadata: {
+          armor: {...removed}
+        },
+      });
     });
   };
 
@@ -162,6 +192,18 @@ export const ArmorTab: React.FC<ArmorTabProps> = ({ agent }) => {
         } as ArmorSystem,
       };
       copy.items.push(newArmor);
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: "armor-added",
+        source: "manual",
+        summary: `Added ${newArmor.name} armor`,
+        relatedEntity: newArmor._id,
+        before: 'null',
+        after: newArmor.name,
+        metadata: {
+          armor: {...newArmor}
+        },
+      });
     });
     setIsModalOpen(false);
   };

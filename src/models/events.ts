@@ -36,8 +36,8 @@ export interface AgentEvent {
 
   relatedEntity?: string;
 
-  before?: Record<string, unknown> | number | string;
-  after?: Record<string, unknown> | number | string;
+  before?: Record<string, unknown> | number | string | boolean;
+  after?: Record<string, unknown> | number | string | boolean;
 
   metadata?: Record<string, unknown>;
 }
