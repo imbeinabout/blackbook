@@ -133,8 +133,6 @@ export const NotesTab: React.FC<NotesTabProps> = ({ agent, updateAgent }) => {
             note: updatedNote,
           },
         });
-
-        updateAgent(copy);
       }, 3000);
   };
 
