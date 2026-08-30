@@ -2,6 +2,7 @@
 import React from "react";
 import { nanoid } from "nanoid";
 import { useAgentStore } from "../../../store/agentStore";
+import { addAgentEvent } from "../../../lib/eventLogger";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../../models/DeltaGreenAgent";
 import weaponsDataJson from "../../../data/weapons.json";
 import NumberSpinner from "../../../components/ui/NumberSpinner";
@@ -179,7 +180,23 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
       const item = copy.items.find((it) => it._id === itemId);
       if (!item) return;
       const sys = item.system as WeaponSystem;
+      const before = !!sys.equipped;
       sys.equipped = !sys.equipped;
+
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: sys.equipped
+          ? "weapon-equipped"
+          : "weapon-unequipped",
+        source: "manual",
+        summary: `${sys.equipped ? "Equipped" : "Unequipped"} ${item.name}`,
+        relatedEntity: item._id,
+        before,
+        after: sys.equipped,
+        metadata: {
+          weapon: {...sys}
+        },
+      });
     });
   };
 
@@ -188,10 +205,24 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
       const item = copy.items.find((it) => it._id === itemId);
       if (!item) return;
       const sys = item.system as WeaponSystem;
+      const before = sys.currentAmmo;
       const maxAmmo = parseInt(sys.ammo || "0", 10);
       if (!Number.isNaN(maxAmmo) && maxAmmo > 0) {
         sys.currentAmmo = maxAmmo;
       }
+
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: "weapon-reloaded",
+        source: "manual",
+        summary: `Reloaded ${item.name}`,
+        relatedEntity: item._id,
+        before,
+        after: sys.currentAmmo,
+        metadata: {
+          weapon: {...sys}
+        },
+      });
     });
   };
 
@@ -209,6 +240,19 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
         typeof sys.currentAmmo === "number"
           ? sys.currentAmmo
           : maxAmmo;
+      
+      addAgentEvent(copy, {
+        category: "equipment",
+        action: "weapon-ammo-spent",
+        source: "manual",
+        summary: `Expended 1 round of ${item.name} ammo`,
+        relatedEntity: item._id,
+        before: current,
+        after: current - 1,
+        metadata: {
+          weapon: {...sys}
+        },
+      });
 
       sys.currentAmmo = Math.max(0, current - 1);
     });
@@ -216,9 +260,23 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
 
   const handleDeleteWeapon = (itemId: string) => {
     updateActiveAgent((copy) => {
+        const removed = copy.items.find((it) => (it.type === "weapon" && it._id === itemId)) as DeltaGreenItem;
         copy.items = copy.items.filter(
         (it) => !(it.type === "weapon" && it._id === itemId)
         );
+
+        addAgentEvent(copy, {
+          category: "equipment",
+          action: "weapon-removed",
+          source: "manual",
+          summary: `Removed ${removed.name} weapon`,
+          relatedEntity: removed._id,
+          before: removed.name,
+          after: "null",
+          metadata: {
+            weapon: {...removed}
+          },
+        });
     });
   };
 
@@ -239,8 +297,20 @@ export const WeaponsTab: React.FC<WeaponsTabProps> = ({
             : undefined,
         } as WeaponSystem,
       };
-
       copy.items.push(newWeapon);
+
+      addAgentEvent(copy, {
+          category: "equipment",
+          action: "weapon-added",
+          source: "manual",
+          summary: `Added ${newWeapon.name} weapon`,
+          relatedEntity: newWeapon._id,
+          before: "null",
+          after: newWeapon.name,
+          metadata: {
+            weapon: {...newWeapon}
+          },
+        });
     });
 
     setIsModalOpen(false);
