@@ -83,8 +83,8 @@ const SkillsCard: React.FC<SkillsCardProps> = ({
                               source: "manual",
                               summary: `${checked ? "Marked" : "Cleared"} ${skill.label} as a failure skill`,
                               relatedEntity: key,
-                              before: checked ? 'not failed' : 'failed',
-                              after: checked ? 'failed' : 'not failed',
+                              before: checked ? false : true,
+                              after: checked ? true : false,
                               metadata: {
                                 skillKey: key,
                                 skillLabel: skill.label,
@@ -173,8 +173,8 @@ const SkillsCard: React.FC<SkillsCardProps> = ({
                               source: "manual",
                               summary: `${checked ? "Marked" : "Cleared"} ${skill.label} as a failure skill`,
                               relatedEntity: key,
-                              before: checked ? 'not failed' : 'failed',
-                              after: checked ? 'failed' : 'not failed',
+                              before: checked ? false : true,
+                              after: checked ? true : false,
                               metadata: {
                                 skillKey: key,
                                 skillLabel: skill.label,

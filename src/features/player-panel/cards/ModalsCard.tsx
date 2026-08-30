@@ -137,8 +137,8 @@ const ModalsCard: React.FC<ModalsCardProps> = ({
             source: "manual",
             summary: `"Cleared" ${copy.system.skills[skillKey].label} as a failure skill`,
             relatedEntity: skillKey,
-            before: 'failed',
-            after: 'not failed',
+            before: true,
+            after: false,
             metadata: {
               skillKey,
               skillLabel: copy.system.skills[skillKey].label,
@@ -172,8 +172,8 @@ const ModalsCard: React.FC<ModalsCardProps> = ({
             source: "manual",
             summary: `"Cleared" ${copy.system.typedSkills[skillKey].label} as a failure skill`,
             relatedEntity: skillKey,
-            before: 'failed',
-            after: 'not failed',
+            before: true,
+            after: false,
             metadata: {
               skillKey,
               skillLabel: copy.system.typedSkills[skillKey].label,

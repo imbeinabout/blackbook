@@ -81,8 +81,8 @@ const PlayerMotivationsCard: React.FC<PlayerMotivationsCardProps> = ({
       summary: checked
         ? `Crossed out motivation "${motivationName}"`
         : `Restored motivation "${motivationName}"`,
-      before: checked ? "unchecked" : "checked",
-      after: checked ? "checked" : "unchecked",
+      before: checked ? false : true,
+      after: checked ? true : false,
       relatedEntity: id,
       metadata: {
         crossedOut: checked,
@@ -119,8 +119,8 @@ const PlayerMotivationsCard: React.FC<PlayerMotivationsCardProps> = ({
       summary: checked
         ? `Marked disorder "${disorder}" as cured`
         : `Marked disorder "${disorder}" as active`,
-      before: checked ? "not cured" : "cured",
-      after: checked ? "cured" : "not cured",
+      before: checked ? false : true,
+      after: checked ? true : false,
       relatedEntity: id,
       metadata: {
         disorderCured: checked,

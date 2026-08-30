@@ -75,14 +75,8 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
           checked
             ? `Marked ${kind} adaptation incident ${numIncidents} of 3`
             : `Cleared ${kind} adaptation incident ${numIncidents + 1} of 3`,
-        before: 
-          before
-            ? "checked"
-            : "unchecked",
-        after:
-          after
-            ? "checked"
-            : "unchecked",
+        before,
+        after,
         metadata: {
           kind,
           incident: idx,
@@ -118,8 +112,8 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
           action: `adaptation-incident`,
           source: "manual",
           summary: `Cleared ${kind} adaptation incident ${idx} of 3 due to canceling adaptation modal`,
-          before: "checked",
-          after: "unchecked",
+          before: true,
+          after: false,
           metadata: {
             kind,
             incident: idx,
@@ -163,8 +157,8 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
           action: "adaptation-applied",
           source: "play",
           summary: `Applied adaptation for Helplessness, lost ${loss} POW`,
-          before: 'Not adapted to Helplessness',
-          after: 'Adapted to Helplessness',
+          before: false,
+          after: true,
           metadata: {
             adaptation: "helplessness",
             powLoss: loss,
@@ -197,8 +191,8 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
           action: "adaptation-applied",
           source: "play",
           summary: `Applied adaptation for Violence, lost ${loss} CHA and ${loss} from each Bond`,
-          before: 'Not adapted to Violence',
-          after: 'Adapted to Violence',
+          before: false,
+          after: true,
           metadata: {
             adaptation: "violence",
             chaLoss: loss,
@@ -299,8 +293,8 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
           action: "adaptation-applied",
           source: "manual",
           summary: `Reset adaptation for Helplessness, regained ${delta} to POW`,
-          before: 'Adapted to Helplessness',
-          after: 'Not adapted to Helplessness',
+          before: true,
+          after: false,
           metadata: {
             adaptation: "helplessness",
             delta: delta,
@@ -331,8 +325,8 @@ const SanityAdaptationCard: React.FC<SanityAdaptationCardProps> = ({
           action: "adaptation-applied",
           source: "play",
           summary: `Applied adaptation for Violence, regained ${delta} CHA and ${delta} to each Bond`,
-          before: 'Adapted to Violence',
-          after: 'Not adapted to Violence',
+          before: true,
+          after: false,
           metadata: {
             adaptation: "violence",
             delta: delta,

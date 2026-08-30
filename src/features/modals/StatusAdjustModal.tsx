@@ -423,8 +423,8 @@ export default function StatusAdjustModal({
             source: "play",
             summary: `Marked bond ${selectedBond?.name} as damaged`,
             relatedEntity: selectedBondId,
-            before: "cleared",
-            after: "damaged",
+            before: false,
+            after: true,
             metadata: {
               id: selectedBondId,
               bondName: selectedBond?.name,

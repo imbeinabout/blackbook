@@ -49,8 +49,8 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
         ? `Marked bond ${bond.name} as damaged`
         : `Cleared damaged status for bond ${bond.name}`,
       relatedEntity: id,
-      before: before ? "damaged" : "cleared",
-      after: checked ? "damaged" : "cleared",
+      before: before,
+      after: checked,
       metadata: {
         id,
         bondName: bond.name,
