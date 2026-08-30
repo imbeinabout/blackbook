@@ -6,6 +6,7 @@ import type { ConditionTemplate, ConditionCategory } from "../../models/conditio
 import conditionsDataJson from "../../data/conditions.json";
 import NumberSpinner from "../../components/ui/NumberSpinner";
 import { addCondition } from "../player-panel/conditions.logic";
+import { addAgentEvent } from "../../lib/eventLogger";
 
 const builtInTemplates = conditionsDataJson as ConditionTemplate[];
 
@@ -112,6 +113,21 @@ const AddConditionModal: React.FC<AddConditionModalProps> = ({
         id: selected.id,
         label: selected.label,
         category: selected.category,
+      });
+
+      addAgentEvent(copy, {
+        category: "condition",
+        action: "condition-added",
+        source: "manual",
+        summary: `Added condition "${selected.label}"`,
+        relatedEntity: selected.id,
+        before: (copy.system.conditions?.length ?? 1) - 1,
+        after: copy.system.conditions?.length ?? 1,
+        metadata: {
+          conditionId: selected.id,
+          conditionLabel: selected.label,
+          conditionCategory: selected.category,
+        },
       });
     });
     onClose();

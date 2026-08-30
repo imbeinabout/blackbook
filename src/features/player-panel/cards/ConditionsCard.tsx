@@ -5,6 +5,7 @@ import type { ConditionTemplate } from "../../../models/conditions";
 import { removeCondition } from "../conditions.logic";
 import conditionsDataJson from "../../../data/conditions.json";
 import { useLayoutMode } from "../../../hooks/useLayoutMode";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 type ConditionsCardProps = {
   agent: DeltaGreenAgent;
@@ -101,7 +102,43 @@ export const ConditionsCard: React.FC<ConditionsCardProps> = ({
                     title="Remove condition"
                     onClick={() =>
                       updateAgentViaMutator((copy) => {
+                        const before = copy.system.conditions?.length ?? 0;
+                        const hadStimulated = copy.system.conditions?.some(
+                          (cond) => cond.id === "stimulated"
+                        ) ?? false;
+
                         removeCondition(copy, c.id);
+
+                        addAgentEvent(copy, {
+                          category: "condition",
+                          action: "condition-removed",
+                          source: "manual",
+                          summary: `Removed condition "${c.label}"`,
+                          relatedEntity: c.id,
+                          before,
+                          after: before - 1,
+                          metadata: {
+                            conditionId: c.id,
+                            conditionLabel: c.label,
+                            conditionCategory: c.category,
+                          },
+                        });
+                        if (c.id === "exhausted" && hadStimulated) {
+                          addAgentEvent(copy, {
+                            category: "condition",
+                            action: "condition-removed",
+                            source: "manual",
+                            summary: `Removed condition "Stimulated"`,
+                            relatedEntity: c.id,
+                            before: before - 1,
+                            after: before - 2,
+                            metadata: {
+                              conditionId: c.id,
+                              conditionLabel: c.label,
+                              conditionCategory: c.category,
+                            },
+                          });
+                        }
                       })
                     }
                   >
