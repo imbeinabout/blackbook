@@ -124,9 +124,7 @@ const AddConditionModal: React.FC<AddConditionModalProps> = ({
         before: (copy.system.conditions?.length ?? 1) - 1,
         after: copy.system.conditions?.length ?? 1,
         metadata: {
-          conditionId: selected.id,
-          conditionLabel: selected.label,
-          conditionCategory: selected.category,
+          condition: {...selected}
         },
       });
     });

@@ -106,6 +106,7 @@ export const ConditionsCard: React.FC<ConditionsCardProps> = ({
                         const hadStimulated = copy.system.conditions?.some(
                           (cond) => cond.id === "stimulated"
                         ) ?? false;
+                        const removed = copy.system.conditions?.find((it) => it.id === c.id);
 
                         removeCondition(copy, c.id);
 
@@ -118,9 +119,7 @@ export const ConditionsCard: React.FC<ConditionsCardProps> = ({
                           before,
                           after: before - 1,
                           metadata: {
-                            conditionId: c.id,
-                            conditionLabel: c.label,
-                            conditionCategory: c.category,
+                            condition: {...removed},
                           },
                         });
                         if (c.id === "exhausted" && hadStimulated) {
@@ -133,9 +132,7 @@ export const ConditionsCard: React.FC<ConditionsCardProps> = ({
                             before: before - 1,
                             after: before - 2,
                             metadata: {
-                              conditionId: c.id,
-                              conditionLabel: c.label,
-                              conditionCategory: c.category,
+                              condition: {...removed},
                             },
                           });
                         }
