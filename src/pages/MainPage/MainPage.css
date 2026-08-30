@@ -4129,6 +4129,11 @@ input[type="number"] {
   line-height: 1.35;
 }
 
+.bb-modal__dialog.bb-rest-modal__dialog {
+  width: 600px;
+  max-width: 90vw;
+}
+
 .bb-upgrade-modal__dialog {
   width: 96%;
   max-width: 720px;
