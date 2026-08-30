@@ -2822,6 +2822,38 @@
   gap: 0.5rem;
 }
 
+.bb-details-tab__photo-title {
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+}
+
+.bb-details-tab__alias-viewer {
+  max-height: 10rem;
+  overflow-y: auto;
+  border: 1px solid var(--bb-border-soft);
+  background: #020403;
+  padding: 0.5rem;
+}
+
+.bb-alias-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bb-alias-list__item {
+  padding: 0.25rem 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.bb-alias-list__item + .bb-alias-list__item {
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
 /* Photo block */
 .bb-photo-dropzone {
   border: 1px dashed var(--bb-border-soft);

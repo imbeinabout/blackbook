@@ -200,7 +200,18 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
       <div className="bb-details-tab__grid">
         {/* PHOTO */}
         <section className="bb-details-tab__photo">
-          <h3 className="bb-section-title">Agent Photo</h3>
+            {activeAliases.length !== 0 ? (
+                <h3 className="bb-section-title bb-details-tab__photo-title">
+                  {activeAliases.length > 0
+                    ? activeAliases[0].name
+                    : "AGENT PHOTO"
+                  }
+                </h3>
+              ) : (
+                <h3 className="bb-section-title">
+                  AGENT PHOTO
+                </h3>
+              )}
           <div
             className={
               "bb-photo-dropzone" +
@@ -242,45 +253,13 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
             </button>
           )}
 
-          {/* ALIASES UNDER PHOTO */}
-          <section className="bb-details-tab__aliases">
-            <h3 className="bb-section-title">Aliases</h3>
-            {activeAliases.length === 0 ? (
-              <p className="bb-text-muted">No active aliases.</p>
-            ) : (
-              <ul className="bb-alias-list">
-                {activeAliases.map((alias, index) => {
-                  const tooltipParts = [];
-                  if (alias.description?.trim()) {
-                    tooltipParts.push(alias.description.trim());
-                  }
-                  if (alias.credentials?.trim()) {
-                    tooltipParts.push(`Credentials: ${alias.credentials.trim()}`);
-                  }
-                  const title =
-                    tooltipParts.length > 0 ? tooltipParts.join("\n\n") : "";
-
-                  return (
-                    <li
-                      key={index}
-                      className="bb-alias-list__item"
-                      title={title}
-                    >
-                      {alias.name}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-
-            <button
-              type="button"
-              className="bb-btn bb-btn--ghost bb-aliases__manage-btn"
-              onClick={openAliasModal}
-            >
-              Manage aliases
-            </button>
-          </section>
+          <button
+            type="button"
+            className="bb-btn bb-btn--ghost bb-aliases__manage-btn"
+            onClick={openAliasModal}
+          >
+            Manage aliases
+          </button>
         </section>
 
         {/* TEXT FIELDS */}
@@ -336,6 +315,47 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               }
             />
           </div>
+
+          <div className="bb-field-group">
+            <label className="bb-field-label">
+              Active Aliases
+            </label>
+
+            <div className="bb-details-tab__alias-viewer">
+              {activeAliases.length === 0 ? (
+                <p className="bb-text-muted">
+                  No active aliases.
+                </p>
+              ) : (
+                <ul className="bb-alias-list">
+                  {activeAliases.map((alias, index) => {
+                    const tooltipParts = [];
+
+                    if (alias.description?.trim()) {
+                      tooltipParts.push(alias.description.trim());
+                    }
+
+                    if (alias.credentials?.trim()) {
+                      tooltipParts.push(
+                        `Credentials: ${alias.credentials.trim()}`
+                      );
+                    }
+
+                    return (
+                      <li
+                        key={index}
+                        className="bb-alias-list__item"
+                        title={tooltipParts.join("\n\n")}
+                      >
+                        {alias.name}
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          </div>
+
         </section>
 
       {/* ALIAS MODAL */}
@@ -454,7 +474,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                           <td className="bb-aliases-table__actions-cell" data-label="Actions">
                             <button
                               type="button"
-                              className="bb-btn bb-btn--ghost bb-btn--small"
+                              className="bb-btn bb-btn--ghost bb-btn--small bb-button--danger"
                               onClick={() => handleRemoveAlias(index)}
                             >
                               Remove
