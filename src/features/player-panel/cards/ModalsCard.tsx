@@ -8,6 +8,7 @@ import { addCondition } from "../conditions.logic";
 import AddConditionModal from "../../modals/AddConditionModal";
 import HomeScenesModal from "../../modals/HomeScenesModal";
 import { nanoid } from "nanoid";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 type ConditionTemplate = Omit<ActiveCondition, "source">;
 
@@ -110,13 +111,75 @@ const ModalsCard: React.FC<ModalsCardProps> = ({
 
       for (const [skillKey, amt] of Object.entries(deltas)) {
         if (copy.system.skills[skillKey]) {
+          const before = copy.system.skills[skillKey].proficiency ?? 0;
           copy.system.skills[skillKey].proficiency =
             (copy.system.skills[skillKey].proficiency ?? 0) + amt;
           copy.system.skills[skillKey].failure = false;
+          addAgentEvent(copy, {
+            category: "skill",
+            action: "skill-upgraded",
+            source: "advancement",
+            summary: `Upgraded ${copy.system.skills[skillKey].label} by +${amt}%`,
+            relatedEntity: skillKey,
+            before: before,
+            after: before + amt,
+            metadata: {
+              skillKey,
+              skillLabel: copy.system.skills[skillKey].label,
+              delta: amt,
+              previousAdvancement: advMap[skillKey] ?? 0,
+              newAdvancement: (advMap[skillKey] ?? 0) + amt,
+            },
+          });
+          addAgentEvent(copy, {
+            category: "skill",
+            action: "skill-failure-cleared",
+            source: "manual",
+            summary: `"Cleared" ${copy.system.skills[skillKey].label} as a failure skill`,
+            relatedEntity: skillKey,
+            before: 'failed',
+            after: 'not failed',
+            metadata: {
+              skillKey,
+              skillLabel: copy.system.skills[skillKey].label,
+              failure: false,
+            }
+          });
         } else if (copy.system.typedSkills[skillKey]) {
+          const before = copy.system.typedSkills[skillKey].proficiency ?? 0;
           copy.system.typedSkills[skillKey].proficiency =
             (copy.system.typedSkills[skillKey].proficiency ?? 0) + amt;
           copy.system.typedSkills[skillKey].failure = false;
+          addAgentEvent(copy, {
+            category: "skill",
+            action: "skill-upgraded",
+            source: "advancement",
+            summary: `Upgraded ${copy.system.typedSkills[skillKey].label} by +${amt}%`,
+            relatedEntity: skillKey,
+            before: before,
+            after: before + amt,
+            metadata: {
+              skillKey,
+              skillLabel: copy.system.typedSkills[skillKey].label,
+              delta: amt,
+              previousAdvancement: advMap[skillKey] ?? 0,
+              newAdvancement: (advMap[skillKey] ?? 0) + amt,
+            },
+          });
+          addAgentEvent(copy, {
+            category: "skill",
+            action: "skill-failure-cleared",
+            source: "manual",
+            summary: `"Cleared" ${copy.system.typedSkills[skillKey].label} as a failure skill`,
+            relatedEntity: skillKey,
+            before: 'failed',
+            after: 'not failed',
+            metadata: {
+              skillKey,
+              skillLabel: copy.system.typedSkills[skillKey].label,
+              failure: false,
+            }
+          });
         }
 
         advMap[skillKey] = (advMap[skillKey] ?? 0) + amt;
@@ -143,11 +206,45 @@ const ModalsCard: React.FC<ModalsCardProps> = ({
 
       for (const [skillKey, amt] of Object.entries(last.deltas)) {
         if (copy.system.skills[skillKey]) {
+          const before = copy.system.skills[skillKey].proficiency ?? 0;
           copy.system.skills[skillKey].proficiency =
             (copy.system.skills[skillKey].proficiency ?? 0) - amt;
+          addAgentEvent(copy, {
+            category: "skill",
+            action: "skill-upgrade-undone",
+            source: "manual",
+            summary: `Undid upgrade of ${copy.system.skills[skillKey].label} by -${amt}%`,
+            relatedEntity: skillKey,
+            before: before,
+            after: before - amt,
+            metadata: {
+              skillKey,
+              skillLabel: copy.system.skills[skillKey].label,
+              delta: -amt,
+              previousAdvancement: advMap[skillKey] ?? 0,
+              newAdvancement: (advMap[skillKey] ?? 0) - amt,
+            },
+          });
         } else if (copy.system.typedSkills[skillKey]) {
+          const before = copy.system.typedSkills[skillKey].proficiency ?? 0;
           copy.system.typedSkills[skillKey].proficiency =
             (copy.system.typedSkills[skillKey].proficiency ?? 0) - amt;
+          addAgentEvent(copy, {
+            category: "skill",
+            action: "skill-upgrade-undone",
+            source: "manual",
+            summary: `Undid upgrade of ${copy.system.typedSkills[skillKey].label} by -${amt}%`,
+            relatedEntity: skillKey,
+            before: before,
+            after: before - amt,
+            metadata: {
+              skillKey,
+              skillLabel: copy.system.typedSkills[skillKey].label,
+              delta: -amt,
+              previousAdvancement: advMap[skillKey] ?? 0,
+              newAdvancement: (advMap[skillKey] ?? 0) - amt,
+            },
+          });
         }
 
         advMap[skillKey] = (advMap[skillKey] ?? 0) - amt;

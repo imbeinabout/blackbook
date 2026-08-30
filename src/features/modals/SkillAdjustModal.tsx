@@ -3,6 +3,7 @@
 import React from "react";
 import type { DeltaGreenAgent } from "../../models/DeltaGreenAgent";
 import NumberSpinner from "../../components/ui/NumberSpinner";
+import { addAgentEvent } from "../../lib/eventLogger";
 
 type SkillAdjustModalProps = {
   open: boolean;
@@ -120,21 +121,22 @@ const SkillAdjustModal: React.FC<SkillAdjustModalProps> = ({
             );
     }
 
-    // Future-proof history storage
-    const anyAgent = updated as any;
-
-    if (!anyAgent.system.skillHistory) {
-      anyAgent.system.skillHistory = [];
-    }
-
-    anyAgent.system.skillHistory.push({
-      timestamp: new Date().toISOString(),
-      skillKey: selectedSkillKey,
-      skillLabel: selectedSkill?.label ?? selectedSkillKey,
-      oldManualAdjustment: manualAdjustment,
-      adjustment,
-      newManualAdjustment: projectedAdjustment,
-      reason: reason.trim(),
+    addAgentEvent(updated, {
+      category: "skill",
+      action: "skill-adjusted",
+      source: "manual",
+      summary: `Manually adjusted ${selectedSkill?.label ?? selectedSkillKey} by ${adjustment > 0 ? "+" : ""}${adjustment}`,
+      relatedEntity: selectedSkillKey,
+      before: selectedSkill?.proficiency ?? 0,
+      after: (selectedSkill?.proficiency ?? 0) + adjustment,
+      metadata: {
+        skillKey: selectedSkillKey,
+        skillLabel: selectedSkill?.label ?? selectedSkillKey,
+        delta: adjustment,
+        existingManual,
+        projectedAdjustment,
+        reason: reason.trim() || undefined,
+      },
     });
 
     updateAgent(updated);

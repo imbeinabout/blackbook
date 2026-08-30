@@ -5,6 +5,7 @@ import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import { StatKey } from "../../../models/characterCreationTypes";
 import { buildBaseSkills } from "../../../models/baseSkills";
 import { getSkillBreakdown } from "../../../lib/skillApplication";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 type BaseSkills = ReturnType<typeof buildBaseSkills>;
 
@@ -150,7 +151,24 @@ const SpecialTrainingCard: React.FC<SpecialTrainingCardProps> = ({
     withUpdatedAgent((copy) => {
       const existing = (copy.system.specialTraining ??
         []) as SpecialTrainingEntry[];
+      const before = existing.length;
       copy.system.specialTraining = [...existing, newEntry];
+
+      addAgentEvent(copy, {
+        category: "skill",
+        action: "special-training-added",
+        source: "manual",
+        summary: `Added special training: ${trimmedName} using ${targetType === "stat" ? targetKey.toUpperCase() : targetKey}`,
+        relatedEntity: newEntry.id,
+        before: before,
+        after: before + 1,
+        metadata: {
+          trainingName: trimmedName,
+          targetType,
+          targetKey,
+          targetLabel: getTargetDisplay(newEntry),
+        },
+      });
     });
 
     setNewName("");
@@ -161,7 +179,26 @@ const SpecialTrainingCard: React.FC<SpecialTrainingCardProps> = ({
     withUpdatedAgent((copy) => {
       const existing = (copy.system.specialTraining ??
         []) as SpecialTrainingEntry[];
+      const before = existing.length;
+      const removed = existing.find((t) => t.id === id);
       copy.system.specialTraining = existing.filter((t) => t.id !== id);
+      addAgentEvent(copy, {
+        category: "skill",
+        action: "special-training-removed",
+        source: "manual",
+        summary: `Removed special training: ${removed?.name}`,
+        relatedEntity: id,
+        before,
+        after: before - 1,
+        metadata: {
+          trainingName: removed?.name,
+          targetType: removed?.targetType,
+          targetKey: removed?.targetKey,
+          targetLabel: removed
+            ? getTargetDisplay(removed)
+            : undefined,
+        },
+      });
     });
   };
 

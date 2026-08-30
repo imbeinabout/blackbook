@@ -4,6 +4,7 @@ import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import { getSkillBreakdown } from "../../../lib/skillApplication";
 import { formatTypedSkillLabel } from "../playerPanel.helpers";
 import { getEffectiveSkillChance } from "../conditionRolls";
+import { addAgentEvent } from "../../../lib/eventLogger";
 
 type SkillsCardProps = {
   agent: DeltaGreenAgent;
@@ -76,6 +77,20 @@ const SkillsCard: React.FC<SkillsCardProps> = ({
                         const checked = e.target.checked;
                         updateAgentViaMutator((copy) => {
                           if (copy.system.skills[key]) {
+                            addAgentEvent(copy, {
+                              category: "skill",
+                              action: checked ? "skill-failure-marked" : "skill-failure-cleared",
+                              source: "manual",
+                              summary: `${checked ? "Marked" : "Cleared"} ${skill.label} as a failure skill`,
+                              relatedEntity: key,
+                              before: checked ? 'not failed' : 'failed',
+                              after: checked ? 'failed' : 'not failed',
+                              metadata: {
+                                skillKey: key,
+                                skillLabel: skill.label,
+                                failure: checked,
+                              }
+                            });
                             copy.system.skills[key].failure = checked;
                           }
                         });
@@ -152,6 +167,20 @@ const SkillsCard: React.FC<SkillsCardProps> = ({
                         const checked = e.target.checked;
                         updateAgentViaMutator((copy) => {
                           if (copy.system.typedSkills[key]) {
+                            addAgentEvent(copy, {
+                              category: "skill",
+                              action: checked ? "skill-failure-marked" : "skill-failure-cleared",
+                              source: "manual",
+                              summary: `${checked ? "Marked" : "Cleared"} ${skill.label} as a failure skill`,
+                              relatedEntity: key,
+                              before: checked ? 'not failed' : 'failed',
+                              after: checked ? 'failed' : 'not failed',
+                              metadata: {
+                                skillKey: key,
+                                skillLabel: skill.label,
+                                failure: checked,
+                              }
+                            });
                             copy.system.typedSkills[key].failure = checked;
                           }
                         });
