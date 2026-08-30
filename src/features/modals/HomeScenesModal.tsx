@@ -13,7 +13,7 @@ import {
   type OutcomeKey,
   type PursuitContext,
   type PursuitDef,
-} from "../homeScenes/pursuitEngine";
+} from "../../lib/pursuitEngine";
 
 const PERSONAL_PURSUITS = personalPursuitsData as PursuitDef[];
 
