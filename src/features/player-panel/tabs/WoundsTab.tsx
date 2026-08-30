@@ -2,6 +2,7 @@
 import React from "react";
 import { nanoid } from "nanoid";
 import { useAgentStore } from "../../../store/agentStore";
+import { addAgentEvent } from "../../../lib/eventLogger";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../../models/DeltaGreenAgent";
 
 type WoundSystem = {
@@ -77,6 +78,20 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
         } as WoundSystem,
       };
       copy.items.push(newWound);
+      addAgentEvent(copy, {
+        category: "wound",
+        action: "wound-added",
+        source: "manual",
+        summary: `Added wound/ailment "${name}"`,
+        relatedEntity: newWound._id,
+        before: "null",
+        after: name,
+        metadata: {
+          wound: {
+            ...newWound,
+          },
+        },
+      });
     });
 
     setIsModalOpen(false);
@@ -85,9 +100,26 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
 
   const handleDeleteWound = (itemId: string) => {
     updateActiveAgent((copy) => {
+      const wound = copy.items.find(
+        (it) => it.type === "wound" && it._id === itemId
+      ) as DeltaGreenItem;
+      if (!wound) return;
       copy.items = copy.items.filter(
         (it) => !(it.type === "wound" && it._id === itemId)
       );
+
+      addAgentEvent(copy, {
+        category: "wound",
+        action: "wound-removed",
+        source: "manual",
+        summary: `Removed wound/ailment "${wound.name}"`,
+        relatedEntity: wound._id,
+        before: wound.name,
+        after: "null",
+        metadata: {
+          wound: {...wound},
+        },
+      });
     });
   };
 
@@ -101,8 +133,25 @@ export const WoundsTab: React.FC<WoundsTabProps> = ({ agent }) => {
         firstAidApplied: false,
         description: "",
       };
+      const before = !!sys.firstAidApplied;
       sys.firstAidApplied = !sys.firstAidApplied;
       item.system = sys as any;
+      addAgentEvent(copy, {
+        category: "wound",
+        action: sys.firstAidApplied
+          ? "first-aid-applied"
+          : "first-aid-cleared",
+        source: "manual",
+        summary: sys.firstAidApplied
+          ? `Applied first aid to "${item.name}"`
+          : `Marked first aid as not applied for "${item.name}"`,
+        relatedEntity: item._id,
+        before,
+        after: sys.firstAidApplied,
+        metadata: {
+          wound: {...item},
+        },
+      });
     });
   };
 

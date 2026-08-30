@@ -24,7 +24,7 @@ export function createAgentEvent(
 ): AgentEvent {
   return {
     ...event,
-    showInTimeline: event.showInTimeline ?? true,
+    storeEvent: event.storeEvent ?? true,
     id: nanoid(),
     version: 1,
     timestamp: new Date().toISOString(),
@@ -37,7 +37,7 @@ export function addAgentEvent(
 ): AgentEvent {
   const newEvent = createAgentEvent(event);
 
-  if(event.showInTimeline) {
+  if(newEvent.storeEvent) {
     agent.events.unshift(newEvent);
   }
 
@@ -50,6 +50,7 @@ export function addAgentEvent(
     console.log("Before:", newEvent.before);
     console.log("After:", newEvent.after);
     console.log("Metadata:", newEvent.metadata);
+    console.log("Store Event:", newEvent.storeEvent)
 
     console.groupEnd();
   }

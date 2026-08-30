@@ -9,7 +9,7 @@ export type EventCategory =
     | "condition"
     | "equipment"
     | "home-scene"
-    | "personal-pursuit"
+    | "wound"
     | "note"
     | "system";
 
@@ -40,5 +40,5 @@ export interface AgentEvent {
   after?: Record<string, unknown> | number | string | boolean;
 
   metadata?: Record<string, unknown>;
-  showInTimeline?: boolean;
+  storeEvent?: boolean;
 }
