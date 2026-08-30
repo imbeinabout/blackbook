@@ -33,6 +33,11 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
   const aliasModalBodyRef = React.useRef<HTMLDivElement | null>(null);
   const newAliasRowRef = React.useRef<HTMLTableRowElement | null>(null);
   const aliasesBeforeEditRef = React.useRef<AgentAlias[]>([]);
+  const detailsBeforeEditRef = React.useRef({
+    physicalDescription: "",
+    personalDetails: "",
+    homeFamilyDevelopments: "",
+  });
 
   const [pendingScrollToNewAlias, setPendingScrollToNewAlias] = React.useState(false);
   
@@ -72,6 +77,47 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
     setPendingScrollToNewAlias(false);
   }, [pendingScrollToNewAlias, isAliasModalOpen, aliases.length]);
 
+  const captureDetailsSnapshot = () => {
+    detailsBeforeEditRef.current = {
+      physicalDescription: details.physicalDescription,
+      personalDetails: details.personalDetails,
+      homeFamilyDevelopments: details.homeFamilyDevelopments,
+    };
+  };
+
+  const commitDetailsChanges = () => {
+    const before = detailsBeforeEditRef.current;
+
+    const after = {
+      physicalDescription: details.physicalDescription,
+      personalDetails: details.personalDetails,
+      homeFamilyDevelopments: details.homeFamilyDevelopments,
+    };
+
+    if (
+      JSON.stringify(before) ===
+      JSON.stringify(after)
+    ) {
+      return;
+    }
+
+    const copy: DeltaGreenAgent =
+      JSON.parse(JSON.stringify(agent));
+
+    addAgentEvent(copy, {
+      category: "system",
+      action: "details-updated",
+      source: "manual",
+      summary: "Updated agent details",
+      relatedEntity: "details",
+      before,
+      after,
+      storeEvent: false,
+    });
+
+    updateAgent(copy);
+  };
+  
   const openAliasModal = () => {
     aliasesBeforeEditRef.current =
       JSON.parse(JSON.stringify(aliases));
@@ -152,15 +198,42 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
       if (!file.type.startsWith("image/")) return;
 
       const reader = new FileReader();
+
       reader.onload = () => {
         const result = reader.result;
-        if (typeof result === "string") {
-          updateDetails({ photoDataUrl: result });
+
+        if (typeof result !== "string") return;
+
+        if (details.photoDataUrl === result) {
+          return;
         }
+
+        const copy: DeltaGreenAgent =
+          JSON.parse(JSON.stringify(agent));
+
+        copy.system.details = {
+          ...details,
+          photoDataUrl: result,
+        };
+
+        addAgentEvent(copy, {
+          category: "system",
+          action: "photo-updated",
+          source: "manual",
+          summary: "Updated agent photo",
+          relatedEntity: "details",
+          storeEvent: false,
+          metadata: {
+            photoDataUrl: result,
+          },
+        });
+
+        updateAgent(copy);
       };
+
       reader.readAsDataURL(file);
     },
-    [updateDetails]
+    [agent, details.photoDataUrl, updateAgent]
   );
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -168,6 +241,32 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
     setIsDragOver(false);
     const file = e.dataTransfer.files?.[0];
     if (file) handleFile(file);
+  };
+
+  const handleRemovePhoto = () => {
+    if (!details.photoDataUrl) return;
+
+    const copy: DeltaGreenAgent =
+      JSON.parse(JSON.stringify(agent));
+
+    copy.system.details = {
+      ...details,
+      photoDataUrl: "",
+    };
+
+    addAgentEvent(copy, {
+      category: "system",
+      action: "photo-updated",
+      source: "manual",
+      summary: "Removed agent photo",
+      relatedEntity: "details",
+      storeEvent: false,
+      metadata: {
+        photoDataUrl: "",
+      },
+    });
+
+    updateAgent(copy);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -247,7 +346,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
             <button
               type="button"
               className="bb-btn bb-btn--ghost bb-details-tab__clear-photo"
-              onClick={() => updateDetails({ photoDataUrl: "" })}
+              onClick={handleRemovePhoto}
             >
               Remove photo
             </button>
@@ -274,6 +373,8 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               className="bb-textarea"
               rows={3}
               value={details.physicalDescription}
+              onFocus={captureDetailsSnapshot}
+              onBlur={commitDetailsChanges}
               onChange={(e) =>
                 updateDetails({ physicalDescription: e.target.value })
               }
@@ -291,6 +392,8 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               rows={7}
               placeholder={placeholderPersonal}
               value={details.personalDetails}
+              onFocus={captureDetailsSnapshot}
+              onBlur={commitDetailsChanges}
               onChange={(e) =>
                 updateDetails({ personalDetails: e.target.value })
               }
@@ -310,6 +413,8 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               className="bb-textarea"
               rows={4}
               value={details.homeFamilyDevelopments}
+              onFocus={captureDetailsSnapshot}
+              onBlur={commitDetailsChanges}
               onChange={(e) =>
                 updateDetails({ homeFamilyDevelopments: e.target.value })
               }
