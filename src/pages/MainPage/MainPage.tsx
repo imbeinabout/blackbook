@@ -305,6 +305,20 @@ const MainPage: React.FC<MainPageProps> = ({
     // Snapshot current agent as baseline
     const baselineJson = JSON.stringify(agent);
 
+    updateActiveAgentViaMutator((copy) => {
+      addAgentEvent(copy, {
+        category: "character",
+        action: "play-mode-entered",
+        source: "manual",
+        storeEvent: false,
+        summary: "Entered PLAY mode",
+        relatedEntity: "play-mode",
+        metadata: {
+          agent: JSON.parse(JSON.stringify(copy)),
+        },
+      });
+    });
+
     updateCreationMeta(activeAgentId, (prev) => ({
       ...prev,
       playMode: {
@@ -354,6 +368,21 @@ const MainPage: React.FC<MainPageProps> = ({
       setToast("PLAY mode disabled (no baseline snapshot was available).");
       return;
     }
+
+    updateActiveAgentViaMutator((copy) => {
+      addAgentEvent(copy, {
+        category: "character",
+        action: "play-mode-exited",
+        source: "manual",
+        storeEvent: false,
+        summary: "Exited PLAY mode",
+        relatedEntity: "play-mode",
+        metadata: {
+          resetToBaseline: true,
+          baselineAgent: JSON.parse(baselineJson),
+        },
+      });
+    });
 
     // Restore the snapshot
     const baselineAgent: DeltaGreenAgent = JSON.parse(baselineJson);
