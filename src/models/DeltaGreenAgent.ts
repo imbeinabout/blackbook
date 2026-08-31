@@ -147,6 +147,7 @@ export interface CreationMeta {
 
   advancementPointsByKey?: Record<string, number>;
   manualSkillAdjustments?: Record<string, number>;
+  pursuitPointsByKey?: Record<string, number>;
 
 }
 

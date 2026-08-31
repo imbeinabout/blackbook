@@ -12,6 +12,7 @@ export type SkillBreakdown = {
   bonus: number;
   veteran: number;
   advancement: number;
+  pursuit: number;
   manual: number;
   total: number;
   breakdownText: string; 
@@ -31,6 +32,7 @@ export function getSkillBreakdown(
   const bonus = bonusSkillPoints[key] ?? 0;
   const veteran = veteranSkillPoints[key] ?? 0;
   const advancement = agent.system.creation?.advancementPointsByKey?.[key] ?? 0;
+  const pursuit = agent.system.creation?.pursuitPointsByKey?.[key] ?? 0;
   const manual = agent.system.creation?.manualSkillAdjustments?.[key] ?? 0;
 
   if (!isTyped) {
@@ -40,7 +42,7 @@ export function getSkillBreakdown(
     const totalFromAgent =
       agent.system.skills[key]?.proficiency ?? (base0 + bonus + veteran + advancement + manual);
 
-    const baselineSaved = Math.max(totalFromAgent - bonus - veteran - advancement - manual, 0);
+    const baselineSaved = Math.max(totalFromAgent - bonus - veteran - advancement - pursuit - manual, 0);
 
     let base = 0;
     let profession = 0;
@@ -63,11 +65,12 @@ export function getSkillBreakdown(
     if (bonus > 0) parts.push(`${bonus} Bonus`);
     if (veteran > 0) parts.push(`${veteran} Veteran`);
     if (advancement > 0) parts.push(`${advancement} Advancement`);
+    if (pursuit > 0) parts.push(`${pursuit} Pursuit`);
     if (manual > 0) parts.push(`${manual} Manual`);
 
     const breakdownText = parts.length ? ` (${parts.join(" + ")})` : "";
 
-    return { base, profession, bonus, veteran, advancement, manual, total, breakdownText };
+    return { base, profession, bonus, veteran, advancement, pursuit, manual, total, breakdownText };
   } else {
     // ----- Typed skills -----
     const totalFromAgent =
@@ -88,7 +91,7 @@ export function getSkillBreakdown(
 
     const breakdownText = parts.length ? ` (${parts.join(" + ")})` : "";
 
-    return { base, profession, bonus, veteran, advancement, manual, total, breakdownText };
+    return { base, profession, bonus, veteran, advancement, pursuit, manual, total, breakdownText };
   }
 }
 

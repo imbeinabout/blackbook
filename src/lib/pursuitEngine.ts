@@ -166,6 +166,18 @@ export function applyPursuitTotals(
       if (k && agent.system.skills?.[k]) {
         const cur = Number(agent.system.skills[k].proficiency ?? 0) || 0;
         agent.system.skills[k].proficiency = clamp(cur + delta, 0, 99);
+        const creation =
+          agent.system.creation ??
+            ({
+              bonusSkillPointsByKey: {},
+              veteranSkillPointsByKey: {},
+              playMode: { isPlaying: false },
+              advancementPointsByKey: {},
+              pursuitPointsByKey: {},
+            } as any);
+        creation.pursuitPointsByKey = creation.pursuitPointsByKey ?? {};
+        creation.pursuitPointsByKey[k] = (creation.pursuitPointsByKey[k] ?? 0) + delta;
+        agent.system.creation = creation;
       }
       continue;
     }
