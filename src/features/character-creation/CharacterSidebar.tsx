@@ -111,6 +111,8 @@ export type CharacterSidebarProps = {
     applyDamagedVeteranTemplate: () => void;
     resetDamagedVeteranTemplate: () => void;
 
+    onPersonalDataChanged?: (field: string, before: string, after: string) => void;
+
     enterPlayMode: () => void;
     exitPlayMode: () => void;
 
@@ -171,6 +173,7 @@ const {
     selectDamagedVeteranTemplate,
     applyDamagedVeteranTemplate,
     resetDamagedVeteranTemplate,
+    onPersonalDataChanged,
     enterPlayMode,
     exitPlayMode,
     requestAddDisorder,
@@ -213,7 +216,11 @@ const {
               <p className="bb-sidebar-locked-msg">{lock.reason}</p>
             ) : sectionKey === "IDENTITY" ? (
               agent ? (
-                <PersonalDataSection agent={agent} updateField={updateActiveAgentField} />
+                <PersonalDataSection 
+                  agent={agent} 
+                  updateField={updateActiveAgentField} 
+                  onPersonalDataChanged={onPersonalDataChanged}
+                />
               ) : (
                 <p>Load or create an agent to edit personal data.</p>
               )

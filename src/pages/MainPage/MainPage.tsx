@@ -25,6 +25,7 @@ import AddDisorderModal from "../../features/modals/AddDisorderModal";
 import { StatKey } from "../../models/characterCreationTypes";
 import { buildBaseSkills } from "../../models/baseSkills";
 import { ensureAgentDefaults } from "../../lib/agentMigration";
+import { addAgentEvent } from "../../lib/eventLogger";
 
 type MainPageProps = {
   onCloseAgent: () => void;
@@ -401,6 +402,33 @@ const MainPage: React.FC<MainPageProps> = ({
     [activeAgentId]
   );
 
+  const handlePersonalDataChanged = React.useCallback(
+  (
+    field: string,
+    before: string,
+    after: string
+  ) => {
+    if (!inPlay || !activeAgentId) return;
+
+    updateActiveAgentViaMutator((copy) => {
+      addAgentEvent(copy, {
+        category: "character",
+        action: "personal-data-changed",
+        source: "manual",
+        storeEvent: false,
+        summary: `${field} changed "${before}" → "${after}"`,
+        relatedEntity: field,
+        metadata: {
+          field,
+          before,
+          after,
+        },
+      });
+    });
+  },
+  [inPlay, activeAgentId, updateActiveAgentViaMutator]
+);
+
   function updateCreationMeta(
     agentId: string,
     updater: (prev: CreationMeta) => CreationMeta
@@ -654,6 +682,8 @@ const MainPage: React.FC<MainPageProps> = ({
             ...prev,
             damagedVeteranTemplateApplied: false,
           })),
+        
+        onPersonalDataChanged: handlePersonalDataChanged,
 
         enterPlayMode,
         exitPlayMode,

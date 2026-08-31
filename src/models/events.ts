@@ -11,6 +11,7 @@ export type EventCategory =
     | "home-scene"
     | "wound"
     | "note"
+    | "character"
     | "system";
 
 export type EventSource =
