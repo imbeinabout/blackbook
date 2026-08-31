@@ -373,7 +373,7 @@ export default function HomeScenesModal({
 
   const allowDiceRollButtons = React.useMemo(() => {
     if (!selectedPursuit) return true;
-    if (selectedPursuit.id === "stay_on_case") return false;
+    //if (selectedPursuit.id === "stay_on_case") return false;
     return true;
   }, [selectedPursuit]);
 
