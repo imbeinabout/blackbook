@@ -14,6 +14,8 @@ import {
   type PursuitContext,
   type PursuitDef,
 } from "../../lib/pursuitEngine";
+import { addAgentEvent, buildPursuitEventSummary } from "../../lib/eventLogger";
+import { nanoid } from "nanoid";
 
 const PERSONAL_PURSUITS = personalPursuitsData as PursuitDef[];
 
@@ -126,6 +128,7 @@ export default function HomeScenesModal({
   const [selectedStatKey, setSelectedStatKey] = React.useState<string>("");
 
   const [newBondName, setNewBondName] = React.useState<string>("");
+  const [newBondId, setNewBondId] = React.useState<string>("");
 
   const [trainingName, setTrainingName] = React.useState<string>("");
   const [trainingTargetType, setTrainingTargetType] = React.useState<"stat" | "skill" | "typedSkill">("skill");
@@ -171,6 +174,7 @@ export default function HomeScenesModal({
       selectedSkillKey,
       selectedStatKey,
       newBondName,
+      newBondId,
       training: {
         name: trainingName,
         targetType: trainingTargetType,
@@ -184,6 +188,7 @@ export default function HomeScenesModal({
     selectedSkillKey,
     selectedStatKey,
     newBondName,
+    newBondId,
     trainingName,
     trainingTargetType,
     trainingTargetKey,
@@ -310,8 +315,55 @@ export default function HomeScenesModal({
     if (diceLinesMissing) return;
     if (needsBond && !selectedBondId) return;
     if (specialMissing) return;
+    ctx.newBondId =
+      selectedPursuit.id === "establish_new_bond" &&
+      (selectedOutcome === "success" ||
+      selectedOutcome === "critical_success")
+        ? nanoid()
+        : undefined;
 
     updateAgentViaMutator((copy) => {
+      const selectedBond = bonds.find(b => b._id === selectedBondId);
+      const summaryItems = Object.entries(summaryTotals).map(
+        ([key, value]) => {
+          let res = key;
+          if (key === "selected_bond" && selectedBond) {
+            res = getBondName(selectedBond);
+          }
+          if (key.length <= 3) {
+            res = key.toUpperCase();
+          }
+          if (key === "skill" && ctx.selectedSkillKey) {
+            res = ctx.selectedSkillKey;
+          }
+          if (key === "stat" && ctx.selectedStatKey) {
+            res = ctx.selectedStatKey.toUpperCase();
+          }
+
+          return {
+            key,
+            label: res,
+            value,
+          };
+        }
+      );
+      const pursuitMetadata = {
+        pursuitId: selectedPursuit.id,
+        pursuitName: selectedPursuit.name,
+        outcome: selectedOutcome,
+        summaryExtras,
+        summaryTotals,
+        summaryItems,
+        ctx: {...ctx},
+      }
+      addAgentEvent(copy, {
+        category: "home-scene",
+        action: "personal-pursuit-applied",
+        source: "manual",
+        summary: buildPursuitEventSummary(pursuitMetadata),
+        relatedEntity: selectedPursuit.id,
+        metadata: pursuitMetadata,
+      });
       applyPursuitTotals(copy, selectedPursuit, selectedOutcome, ctx, summaryTotals);
       copy.system.sanity.value = clamp(copy.system.sanity.value, 0, copy.system.sanity.max ?? 99);
     });
@@ -460,7 +512,7 @@ export default function HomeScenesModal({
                     </div>
                     <input
                       value={newBondName}
-                      onChange={(e) => setNewBondName(e.target.value)}
+                      onChange={(e) => (setNewBondName(e.target.value))}
                       placeholder="e.g. Partner, Kid, Best Friend…"
                     />
                   </div>

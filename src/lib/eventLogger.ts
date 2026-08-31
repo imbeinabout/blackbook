@@ -16,6 +16,16 @@ export interface SanEventMetadata {
   sanType: "helplessness" | "violence" | "unnatural";
 }
 
+export interface PursuitEventMetadata {
+  pursuitId: string;
+  pursuitName: string;
+  outcome: string;
+  summaryExtras: any;
+  summaryTotals: any;
+  summaryItems: any;
+  ctx: any;
+}
+
 export function createAgentEvent(
   event: Omit<
     AgentEvent,
@@ -105,4 +115,20 @@ export function buildSanEventSummary(
   }
 
   return parts.join(", ");
+}
+
+export function buildPursuitEventSummary(
+  metadata: PursuitEventMetadata
+): string {
+  const res = [`${metadata.pursuitName} (${metadata.outcome}): `]
+  const parts: string[] = [];
+
+  for (const item of metadata.summaryItems) {
+    parts.push(`${item.label} ${item.value >= 0 ? "+" : ""}${item.value}`);
+  }
+  parts.push(...metadata.summaryExtras);
+
+  res.push(parts.join(", "));
+
+  return res.join("")
 }
