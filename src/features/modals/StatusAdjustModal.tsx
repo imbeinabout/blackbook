@@ -284,7 +284,26 @@ export default function StatusAdjustModal({
     const sanVal = updated.system.sanity.value ?? 0;
     const powVal = updated.system.statistics.pow.value ?? 0;
 
+    const before = updated.system.sanity.currentBreakingPoint;
+    const after = Math.max(0, sanVal - powVal);
+
     updated.system.sanity.currentBreakingPoint = Math.max(0, sanVal - powVal);
+
+    if(before !== after) {
+      addAgentEvent(updated, {
+        category: "sanity",
+        action: "breaking-point-reset",
+        source: "play",
+        summary: `Reset BP from ${before} to ${after}`,
+        before,
+        after,
+        metadata: {
+          sanVal,
+          powVal,
+          delta: after - before,
+        },
+      });
+    }
 
     updateAgent(updated);
     onClose();
