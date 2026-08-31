@@ -299,12 +299,33 @@ export default function HomeScenesModal({
 
   const completeHomeScene = () => {
     updateAgentViaMutator((copy) => {
+      const damagedBonds = copy.items.filter(
+        it =>
+          it.type === "bond" &&
+          it.system?.hasBeenDamagedSinceLastHomeScene
+      );
       copy.items = copy.items.map((it: DeltaGreenItem) => {
         if (it.type !== "bond") return it;
         return {
           ...it,
           system: { ...(it.system ?? {}), hasBeenDamagedSinceLastHomeScene: false },
         };
+      });
+      addAgentEvent(copy, {
+        category: "home-scene",
+        action: "home-scene-completed",
+        source: "manual",
+        summary: `Completed Home Scene - Resolved Bonds: ${damagedBonds.map(
+            b => b.system?.name ?? b.name
+          ).join(", ")}`,
+        relatedEntity: "home-scenes",
+        metadata: {
+          damagedBondCount: damagedBonds.length,
+          damagedBondIds: damagedBonds.map(b => b._id),
+          damagedBondNames: damagedBonds.map(
+            b => b.system?.name ?? b.name
+          ),
+        },
       });
     });
     onClose();
