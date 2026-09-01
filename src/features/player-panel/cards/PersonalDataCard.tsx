@@ -306,19 +306,21 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
 
                         const newMax = Math.ceil((updated.system.statistics.con.value + updated.system.statistics.str.value) / 2);
 
-                        addAgentEvent(updated, {
-                          category: "attribute",
-                          action: "hp-change",
-                          source: "manual",
-                          summary: `Health maximum recalculated from ${oldMax} to ${newMax}`,
-                          before: oldMax,
-                          after: newMax,
-                          metadata: {
-                            CON: updated.system.statistics.con.value,
-                            STR: updated.system.statistics.str.value,
-                            delta: newMax - oldMax,
-                          },
-                        });
+                        if(newMax !== oldMax) {
+                          addAgentEvent(updated, {
+                            category: "attribute",
+                            action: "hp-change",
+                            source: "manual",
+                            summary: `Health maximum recalculated from ${oldMax} to ${newMax}`,
+                            before: oldMax,
+                            after: newMax,
+                            metadata: {
+                              CON: updated.system.statistics.con.value,
+                              STR: updated.system.statistics.str.value,
+                              delta: newMax - oldMax,
+                            },
+                          });
+                        }
 
                         updated.system.health.max = newMax;
                         updated.system.health.value = Math.max(
@@ -335,18 +337,20 @@ const PersonalDataCard: React.FC<PersonalDataCardProps> = ({
                             : 1;
 
                         const newMax = updated.system.statistics.pow.value;
-                        addAgentEvent(updated, {
-                          category: "attribute",
-                          action: "wp-change",
-                          source: "manual",
-                          summary: `Willpower maximum recalculated from ${oldMax} to ${newMax}`,
-                          before: oldMax,
-                          after: newMax,
-                          metadata: {
-                            POW: updated.system.statistics.pow.value,
-                            delta: newMax - oldMax,
-                          },
-                        });
+                        if(newMax !== oldMax) {
+                          addAgentEvent(updated, {
+                            category: "attribute",
+                            action: "wp-change",
+                            source: "manual",
+                            summary: `Willpower maximum recalculated from ${oldMax} to ${newMax}`,
+                            before: oldMax,
+                            after: newMax,
+                            metadata: {
+                              POW: updated.system.statistics.pow.value,
+                              delta: newMax - oldMax,
+                            },
+                          });
+                        }
 
                         updated.system.wp.max = newMax;
                         updated.system.wp.value = Math.max(
