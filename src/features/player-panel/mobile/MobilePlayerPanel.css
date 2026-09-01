@@ -2075,7 +2075,13 @@
     line-height: 1.45;
     border-radius: 6px;
   }
-}
+
+/* ---------------------------------
+  TIMELINE MODAL
+---------------------------------- */
+  .bb-timeline-change-grid {
+    grid-template-columns: 1fr;
+  }
 
 /* ---------------------------------
   PERSONAL STATS EDIT MODAL
@@ -2145,7 +2151,7 @@
     font-size: 1rem;
     font-weight: 500;
   }
-
+}
 
 
 @keyframes bb-alias-sheet-in {

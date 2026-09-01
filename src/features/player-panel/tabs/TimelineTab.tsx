@@ -2,6 +2,7 @@
 import React from "react";
 import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import type { AgentEvent } from "../../../models/events" 
+import { updateEventDescription } from "../../../lib/eventLogger";
 
 type TimelineTabProps = {
   agent: DeltaGreenAgent;
@@ -12,6 +13,11 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
   const [search, setSearch] = React.useState("");
   const [categoryFilter, setCategoryFilter] = React.useState("all");
   const [selectedEvent, setSelectedEvent] = React.useState<AgentEvent | null>(null);
+  const [eventNote, setEventNote] = React.useState("");
+  
+  React.useEffect(() => {
+    setEventNote(selectedEvent?.description ?? "");
+  }, [selectedEvent]);
 
   const categoryCounts = React.useMemo(() => {
     const counts: Record<string, number> = {};
@@ -59,6 +65,29 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
 
         return ["all", ...Array.from(values).sort()];
     }, [agent.events]);
+
+    const handleCloseModal = () => {
+        if (!selectedEvent) return;
+        if (
+            eventNote === (selectedEvent.description ?? "")
+        ) {
+            setSelectedEvent(null);
+            return;
+        }
+
+        const copy: DeltaGreenAgent =
+            JSON.parse(JSON.stringify(agent));
+
+        updateEventDescription(
+            copy,
+            selectedEvent.id,
+            eventNote
+        );
+
+        updateAgent(copy);
+
+        setSelectedEvent(null);
+    };
 
   return(
     <div className="bb-details-tab">
@@ -117,9 +146,7 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
             </td>
 
             <td>
-                {event.description
-                ? "📝"
-                : "—"}
+                {event.description?.trim() || "—"}
             </td>
             <td>
                 <button
@@ -142,6 +169,125 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
         )}
         </tbody>
     </table>
+    {selectedEvent && (
+        <div className="bb-modal">
+            <div className="bb-modal__dialog bb-timeline-modal">
+            <div className="bb-modal__header">
+                <h3 className="bb-modal__title">
+                Event Details
+                </h3>
+            </div>
+
+            <div className="bb-modal__body">
+                <div className="bb-timeline-event-header">
+                    <h2 className="bb-timeline-event-title">
+                        {selectedEvent.summary}
+                    </h2>
+
+                    <div className="bb-timeline-event-subtitle">
+                        {formatCategory(selectedEvent.category)}
+                        {" • "}
+                        {selectedEvent.source}
+                        {" • "}
+                        {new Date(selectedEvent.timestamp).toLocaleString()}
+                    </div>
+                </div>
+
+                <section className="bb-timeline-modal-section">
+                    <h3>Notes</h3>
+
+                    <textarea
+                        className="bb-textarea"
+                        rows={5}
+                        value={eventNote}
+                        onChange={(e) => setEventNote(e.target.value)}
+                        placeholder="Add context or campaign notes..."
+                    />
+                </section>
+
+                {(
+                    selectedEvent.before !== undefined ||
+                    selectedEvent.after !== undefined
+                ) && (
+                <section className="bb-timeline-modal-section">
+                    <h3>Change</h3>
+
+                    <div className="bb-timeline-change-grid">
+
+                        <div>
+                            <strong>Before</strong>
+                            <pre>
+                                {JSON.stringify(
+                                    selectedEvent.before,
+                                    null,
+                                    2
+                                )}
+                            </pre>
+                        </div>
+
+                        <div>
+                            <strong>After</strong>
+                            <pre>
+                                {JSON.stringify(
+                                    selectedEvent.after,
+                                    null,
+                                    2
+                                )}
+                            </pre>
+                        </div>
+
+                    </div>
+                </section>
+                )}
+
+                <details className="bb-timeline-details">
+                    <summary>Technical Details</summary>
+
+                    <div className="bb-timeline-details-content">
+
+                    <div className="bb-timeline-kv">
+                        <span>Action</span>
+                        <span>{selectedEvent.action}</span>
+                    </div>
+
+                    {selectedEvent.relatedEntity && (
+                        <div className="bb-timeline-kv">
+                            <span>Entity</span>
+                            <span>
+                                {String(selectedEvent.relatedEntity)}
+                            </span>
+                        </div>
+                    )}
+
+                    {selectedEvent.metadata && (
+                        <>
+                            <h4>Metadata</h4>
+
+                            <pre className="bb-timeline-json">
+                                {JSON.stringify(
+                                    selectedEvent.metadata,
+                                    null,
+                                    2
+                                )}
+                            </pre>
+                        </>
+                    )}
+                    </div>
+                </details>
+            </div>
+
+            <div className="bb-modal__footer">
+                <button
+                type="button"
+                className="bb-btn"
+                onClick={handleCloseModal}
+                >
+                Close
+                </button>
+            </div>
+            </div>
+        </div>
+        )}
 
     </div>
   );

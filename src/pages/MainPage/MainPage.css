@@ -4104,6 +4104,74 @@ input[type="number"] {
   min-width: 0;
 }
 
+.bb-timeline-summary,
+.bb-timeline-note {
+  white-space: normal !important;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+
+.bb-timeline-summary {
+  min-width: 45%;
+}
+
+.bb-timeline-note {
+  min-width: 30%;
+}
+
+.bb-timeline-modal {
+  width: min(1000px, 95vw);
+  max-width: 1000px;
+}
+
+.bb-timeline-event-title {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.bb-timeline-event-subtitle {
+  margin-top: 0.5rem;
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+.bb-timeline-notes textarea {
+  min-height: 150px;
+}
+
+.bb-timeline-change-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.bb-timeline-change-panel {
+  border: 1px solid var(--bb-border-color);
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+
+.bb-timeline-kv {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 1rem;
+  padding: 0.35rem 0;
+}
+
+.bb-timeline-kv span:first-child {
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.bb-timeline-json {
+  max-height: 250px;
+  overflow: auto;
+  padding: 0.75rem;
+  border-radius: 4px;
+  background: rgba(0,0,0,0.2);
+}
+
 /* --- Player panel locked until PLAY MODE --- */
 .bb-player-panel-shell {
   position: relative;
