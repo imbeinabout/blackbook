@@ -13,6 +13,17 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
   const [categoryFilter, setCategoryFilter] = React.useState("all");
   const [selectedEvent, setSelectedEvent] = React.useState<AgentEvent | null>(null);
 
+  const categoryCounts = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+
+    for (const event of agent.events) {
+        counts[event.category] =
+        (counts[event.category] ?? 0) + 1;
+    }
+
+    return counts;
+  }, [agent.events]);
+  
   const filteredEvents = React.useMemo(() => {
     return [...agent.events]
         .filter((event) => {
@@ -52,29 +63,28 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
   return(
     <div className="bb-details-tab">
 
-    <div className="bb-timeline-controls">
+    <div className="bb-timeline-toolbar">
+        <select
+        className="bb-select bb-timeline-toolbar__filter"
+        value={categoryFilter}
+        onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+        {categories.map(category => (
+            <option key={category} value={category}>
+                {category === "all"
+                    ? `All Events (${agent.events.length})`
+                    : `${formatCategory(category)} (${categoryCounts[category] ?? 0})`}
+            </option>
+        ))}
+        </select>
+        
         <input
         type="text"
-        className="bb-input"
+        className="bb-input bb-timeline-toolbar__search"
         placeholder="Search timeline..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         />
-
-        <select
-        className="bb-select"
-        value={categoryFilter}
-        onChange={(e) => setCategoryFilter(e.target.value)}
-        >
-            <option value="all">
-                All ({agent.events.length})
-            </option>
-        {categories.map(category => (
-            <option key={category} value={category}>
-            {category}
-            </option>
-        ))}
-        </select>
     </div>
 
     <table className="bb-weapons-table">
@@ -93,14 +103,13 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
             <tr
             key={event.id}
             onClick={() => setSelectedEvent(event)}
-            style={{ cursor: "pointer" }}
             >
             <td>
                 {new Date(event.timestamp).toLocaleString()}
             </td>
 
             <td>
-                {event.category}
+                {formatCategory(event.category)}
             </td>
 
             <td>
@@ -138,3 +147,16 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
   );
 
 };
+
+function formatCategory(category: string): string {
+  if (category === "all") return "All Events";
+
+  return category
+    .split("-")
+    .map(
+      word =>
+        word.charAt(0).toUpperCase() +
+        word.slice(1)
+    )
+    .join(" ");
+}
