@@ -28,6 +28,7 @@ import { WoundsTab } from "../tabs/WoundsTab";
 import { DetailsTab } from "../tabs/DetailsTab";
 import { NotesTab } from "../tabs/NotesTab";
 import { TerminalTab } from "../tabs/TerminalTab";
+import { TimelineTab } from "../tabs/TimelineTab";
 
 const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
   const {
@@ -241,6 +242,9 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
             />
             <CardShell>
               <NotesTab agent={agent} updateAgent={updateAgent} />
+            </CardShell>
+            <CardShell>
+              <TimelineTab agent={agent} updateAgent={updateAgent} />
             </CardShell>
           </>
         )}

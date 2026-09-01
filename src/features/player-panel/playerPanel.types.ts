@@ -6,6 +6,7 @@ export type BottomTabKey =
   | "wounds"
   | "details"
   | "notes"
+  | "timeline"
   | "shell";
 
 export type BottomTab = { key: BottomTabKey; label: string }

@@ -8,6 +8,7 @@ import { useLayoutMode } from "../../hooks/useLayoutMode";
 
 import { useAgentStore } from "../../store/agentStore";
 import type { CreationMeta, DeltaGreenAgent } from "../../models/DeltaGreenAgent";
+import type { BottomTabKey } from "../../features/player-panel/playerPanel.types"
 
 import Header from "../../components/layout/Header";
 import CharacterSidebar from "../../features/character-creation";
@@ -33,15 +34,6 @@ type MainPageProps = {
   onLoadAgent: () => void;
 };
 
-type BottomTabKey =
-  | "weapons"
-  | "armor"
-  | "gear"
-  | "wounds"
-  | "details"
-  | "notes"
-  | "shell";
-
 type SectionLock = {
   locked: boolean;
   reason?: string;
@@ -54,6 +46,7 @@ const bottomTabs: { key: BottomTabKey; label: string }[] = [
   { key: "wounds", label: "WOUNDS/AILMENTS" },
   { key: "details", label: "DETAILS" },
   { key: "notes", label: "NOTES" },
+  { key: "timeline", label: "TIMELINE"},
   { key: "shell", label: "SHELL" },
 ];
 

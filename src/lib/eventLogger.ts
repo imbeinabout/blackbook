@@ -3,7 +3,7 @@ import { DeltaGreenAgent } from "../models/DeltaGreenAgent";
 import { AgentEvent } from "../models/events";
 import { nanoid } from "nanoid";
 
-const DEBUG_EVENTS = true;
+const DEBUG_EVENTS = false;
 
 export interface SanEventMetadata {
   actualSanLoss: number;

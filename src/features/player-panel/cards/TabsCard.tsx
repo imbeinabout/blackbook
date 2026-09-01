@@ -10,6 +10,7 @@ import { WoundsTab } from "../tabs/WoundsTab";
 import { DetailsTab } from "../tabs/DetailsTab";
 import { NotesTab } from "../tabs/NotesTab";
 import { TerminalTab } from "../tabs/TerminalTab";
+import { TimelineTab } from "../tabs/TimelineTab";
 
 type TabsCardProps = {
   agent: DeltaGreenAgent;
@@ -68,6 +69,7 @@ const TabsCard: React.FC<TabsCardProps> = ({
           {activeBottomTab === "wounds" && <WoundsTab agent={agent} />}
           {activeBottomTab === "details" && <DetailsTab agent={agent} updateAgent={updateAgent} />}
           {activeBottomTab === "notes" && <NotesTab agent={agent} updateAgent={updateAgent} />}
+          {activeBottomTab === "timeline" && <TimelineTab agent={agent} updateAgent={updateAgent} />}
           {activeBottomTab === "shell" && <TerminalTab agent={agent} />}
         </div>
       </div>
