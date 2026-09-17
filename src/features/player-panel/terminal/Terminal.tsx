@@ -130,6 +130,48 @@ const COMMANDS: Command[] = [
   },
 
   {
+    name: "santa",
+    aliases: ["hohoho"],
+    hidden: true,
+    execute: () =>
+      `         .-""-.
+ /,..___\\
+() {_____}
+  (/-@-@-\\\)
+  {\`-=^=-\'\}
+  {  \`-\'  \}
+   {     \}
+    \`---'`,
+  },
+
+  {
+    name: "bunny",
+    aliases: ["easter"],
+    hidden: true,
+    execute: () =>
+      `            O O
+           dO Ob
+          dOO OOO
+         dOOO OOOb
+        dOOOO OOOOb
+        OOOOO OOOOO
+        OOOOO OOOOO
+        OOOOO OOOOO
+        YOOOO OOOOO
+         YOOO OOOP
+    oOOOOOOOOOOOOb
+  oOOOOOOOOOOOOOOOb
+ oOOOb dOOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOO
+OOOOOOOOOOOOOOOOOOP
+OOOOOOOOOOOOOOOOOP
+ YOOOOOOOOOOOOOOP
+   YOOOOOOOOOOOP
+  %%%%%%%%%%%%%%
+ %%%%%%OOOjgsOOO`,
+  },
+
+  {
     name: "majestic",
     aliases: ["mj12"],
     hidden: true,
