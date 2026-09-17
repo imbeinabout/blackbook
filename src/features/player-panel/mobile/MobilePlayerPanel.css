@@ -548,6 +548,56 @@
     justify-content: center;
   }
 
+  .bb-agent-statistics-modal {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 100%;
+
+    height: 90dvh;
+
+    border-radius: 16px 16px 0 0;
+
+    box-shadow: 0 -12px 32px rgba(0,0,0,0.6);
+
+    padding-bottom: env(safe-area-inset-bottom);
+
+    animation: bb-alias-sheet-in 220ms ease-out;
+  }
+
+  .bb-agent-statistics-modal__body {
+    flex: 1 1 auto;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 0.75rem;
+
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bb-agent-statistics-modal .bb-modal__footer {
+    position: sticky;
+    bottom: 0;
+
+    display: flex;
+
+    gap: 0.5rem;
+
+    padding: 0.75rem;
+
+    background: var(--bb-bg);
+
+    border-top: 1px solid var(--bb-border-soft);
+  }
+
+  .bb-agent-statistics-modal .bb-modal__footer .bb-button {
+    flex: 1;
+    min-height: 44px;
+  }
+
   /* Alias modal becomes a bottom sheet */
   .bb-aliases-modal__dialog {
     width: 100%;

@@ -492,7 +492,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               </h3>
             </div>
 
-            <div className="bb-modal__body">
+            <div className="bb-modal__body bb-agent-statistics-modal__body">
 
               <h3>Career</h3>
 

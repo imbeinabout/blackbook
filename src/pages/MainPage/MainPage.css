@@ -2833,6 +2833,8 @@
 .bb-agent-statistics-modal {
   width: 400px;
   max-width: 90vw;
+  display: flex;
+  flex-direction: column;
 }
 
 .bb-details-tab__alias-viewer {
