@@ -43,3 +43,28 @@ export interface AgentEvent {
   metadata?: Record<string, unknown>;
   storeEvent?: boolean;
 }
+
+export interface AgentStatistics {
+  totalEvents: number;
+
+  firstEventDate?: string;
+  lastEventDate?: string;
+
+  categoryCounts: Record<string, number>;
+  mostActiveCategory?: string;
+
+  skillChanges: number;
+  attributeChanges: number;
+
+  sanityEvents: number;
+  totalSanLost: number;
+
+  bondChanges: number;
+
+  conditionsAdded: number;
+  conditionsRemoved: number;
+
+  disordersAdded: number;
+
+  homeScenes: number;
+}
