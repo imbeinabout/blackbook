@@ -3,6 +3,7 @@ import React from "react";
 import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import type { AgentEvent } from "../../../models/events" 
 import { addAgentEvent, deleteAgentEvent, updateEventDescription } from "../../../lib/eventLogger";
+import { ConfirmDialog } from "../../../components/common/ConfirmDialog";
 
 type TimelineTabProps = {
   agent: DeltaGreenAgent;
@@ -14,6 +15,7 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
   const [categoryFilter, setCategoryFilter] = React.useState("all");
   const [selectedEvent, setSelectedEvent] = React.useState<AgentEvent | null>(null);
   const [eventNote, setEventNote] = React.useState("");
+  const [showDeleteConfirm, setShowDeleteConfirm] = React.useState(false);
   const [isMarkerDialogOpen, setIsMarkerDialogOpen] = React.useState(false);
   const [markerType, setMarkerType] = React.useState<
     "session" | "operation" | "campaign"
@@ -418,10 +420,36 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
             </div>
 
             <div className="bb-modal__footer">
+                {selectedEvent.category === "marker" && (
+                    <>
+                    <button
+                        type="button"
+                        className="bb-button bb-button--danger"
+                        onClick={() => setShowDeleteConfirm(true)}
+                    >
+                        Delete Marker
+                    </button>
+                    <ConfirmDialog
+                        isOpen={showDeleteConfirm}
+                        title="Delete Marker"
+                        message={<p>Are you sure you want to delete this marker?</p>}
+                        confirmLabel="Delete Marker"
+                        danger
+                        onCancel={() => setShowDeleteConfirm(false)}
+                        onConfirm={ () => {
+                            const copy: DeltaGreenAgent = JSON.parse(JSON.stringify(agent));
+                            deleteAgentEvent(copy, selectedEvent.id);
+                            updateAgent(copy);
+                            setShowDeleteConfirm(false);
+                            setSelectedEvent(null);
+                        }}
+                    />
+                    </>
+                )}
                 <button
-                type="button"
-                className="bb-btn"
-                onClick={handleCloseModal}
+                    type="button"
+                    className="bb-btn"
+                    onClick={handleCloseModal}
                 >
                 Close
                 </button>
