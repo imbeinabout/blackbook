@@ -1,6 +1,7 @@
 // src/features/player-panel/terminal/Terminal.tsx
 import React, { useState, useEffect, useRef } from "react";
 import { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
+import { calculateAgentStatistics } from "../../../lib/agentHistory";
 
 // ------------------------
 // Command Types
@@ -117,6 +118,118 @@ const COMMANDS: Command[] = [
       return `Events: ${ctx.agent?.events?.length ?? 0}`;
     },
   },
+  {
+    name: "stats",
+    aliases: ["st"],
+    hidden: false,
+    execute: (ctx, raw) => {
+      if (!ctx.agent) {
+        return "NO AGENT LOADED.";
+      }
+
+      const stats = calculateAgentStatistics(ctx.agent);
+
+      const subcommand =
+        raw.split(/\s+/)[1]?.toLowerCase() ?? "all";
+
+      const recordStats = (): string =>
+        [
+          "=== AGENT RECORD ===",
+          `Events Recorded: ${stats.totalEvents}`,
+          `First Event: ${stats.firstEventDate ?? "N/A"}`,
+          `Latest Event: ${stats.lastEventDate ?? "N/A"}`,
+          `Career Length: ${stats.activeDays ?? 0} days`,
+        ].join("\n");
+
+      const developmentStats = (): string =>
+        [
+          "=== DEVELOPMENT ===",
+          `Skill Changes: ${stats.skillChanges}`,
+          `Attribute Changes: ${stats.attributeChanges}`,
+        ].join("\n");
+
+      const mentalStats = (): string =>
+        [
+          "=== MENTAL HEALTH ===",
+          `SAN Events: ${stats.sanityEvents}`,
+          `Total SAN Lost: ${stats.totalSanLost}`,
+        ].join("\n");
+
+      const relationshipStats = (): string =>
+        [
+          "=== RELATIONSHIPS ===",
+          `Bond Changes: ${stats.bondChanges}`,
+          `Home Scenes: ${stats.homeScenes}`,
+        ].join("\n");
+
+      const conditionStats = (): string =>
+        [
+          "=== CONDITIONS ===",
+          `Conditions Added: ${stats.conditionsAdded}`,
+          `Conditions Removed: ${stats.conditionsRemoved}`,
+          `Disorders Developed: ${stats.disordersAdded}`,
+        ].join("\n");
+
+      const activityStats = (): string =>
+        [
+          "=== ACTIVITY ===",
+          `Most Active Category: ${
+            stats.mostActiveCategory?.category ??
+            stats.mostActiveCategory ??
+            "N/A"
+          }`,
+        ].join("\n");
+
+      switch (subcommand) {
+        case "all":
+          return [
+            recordStats(),
+            "",
+            developmentStats(),
+            "",
+            mentalStats(),
+            "",
+            relationshipStats(),
+            "",
+            conditionStats(),
+            "",
+            activityStats(),
+          ].join("\n");
+
+        case "record":
+          return recordStats();
+
+        case "development":
+          return developmentStats();
+
+        case "mental":
+          return mentalStats();
+
+        case "relationships":
+          return relationshipStats();
+
+        case "conditions":
+          return conditionStats();
+
+        case "activity":
+          return activityStats();
+
+        default:
+          return [
+            `UNKNOWN STATISTICS CATEGORY: ${subcommand}`,
+            "",
+            "Available categories:",
+            "all",
+            "record",
+            "development",
+            "mental",
+            "relationships",
+            "conditions",
+            "activity",
+          ].join("\n");
+      }
+    },
+  },
 
   // ------------------------
   // Hidden Easter Eggs
@@ -137,10 +250,10 @@ const COMMANDS: Command[] = [
       `         .-""-.
  /,..___\\
 () {_____}
-  (/-@-@-\\\)
-  {\`-=^=-\'\}
-  {  \`-\'  \}
-   {     \}
+  (/-@-@-\\)
+  {\`-=^=-'}
+  {  \`-'  }
+   {     }
     \`---'`,
   },
 
