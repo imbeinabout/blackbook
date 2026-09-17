@@ -1,26 +1,27 @@
 // src/models/events.ts
 export type EventCategory =
-    | "attribute"    
-    | "skill"
-    | "sanity"
-    | "bond"
-    | "motivation"
-    | "disorder"
+    | "attribute"
+    | "bond" 
+    | "character"   
     | "condition"
+    | "disorder"
     | "equipment"
     | "home-scene"
-    | "wound"
+    | "marker"
+    | "motivation"
     | "note"
-    | "character"
-    | "system";
+    | "sanity"
+    | "skill"
+    | "system"
+    | "wound";
 
 export type EventSource =
-    | "creation"
-    | "play"
     | "advancement"
-    | "manual"
+    | "creation"
     | "import"
-    | "migration";
+    | "manual"
+    | "migration"
+    | "play";
 
 export interface AgentEvent {
   id: string;

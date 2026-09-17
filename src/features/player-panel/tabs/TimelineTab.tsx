@@ -2,7 +2,7 @@
 import React from "react";
 import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import type { AgentEvent } from "../../../models/events" 
-import { updateEventDescription } from "../../../lib/eventLogger";
+import { addAgentEvent, deleteAgentEvent, updateEventDescription } from "../../../lib/eventLogger";
 
 type TimelineTabProps = {
   agent: DeltaGreenAgent;
@@ -14,7 +14,12 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
   const [categoryFilter, setCategoryFilter] = React.useState("all");
   const [selectedEvent, setSelectedEvent] = React.useState<AgentEvent | null>(null);
   const [eventNote, setEventNote] = React.useState("");
-  
+  const [isMarkerDialogOpen, setIsMarkerDialogOpen] = React.useState(false);
+  const [markerType, setMarkerType] = React.useState<
+    "session" | "operation" | "campaign"
+    >("session");
+  const [markerName, setMarkerName] = React.useState("");
+    
   React.useEffect(() => {
     setEventNote(selectedEvent?.description ?? "");
   }, [selectedEvent]);
@@ -85,8 +90,49 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
         );
 
         updateAgent(copy);
+        setEventNote("");
 
         setSelectedEvent(null);
+    };
+
+    const handleCloseMarkerDialog = () => {
+        setIsMarkerDialogOpen(false);
+        setMarkerName("");
+        setMarkerType("session");
+        setEventNote("");
+    }
+
+    const handleCreateMarker = () => {
+        const name = markerName.trim();
+
+        if (!name) {
+            return;
+        }
+
+        const copy: DeltaGreenAgent =
+            JSON.parse(JSON.stringify(agent));
+
+        addAgentEvent(copy, {
+            category: "marker",
+            action: markerType,
+            source: "manual",
+
+            summary:
+            `=== ${markerType.toUpperCase()}: ${name} ===`,
+            description: eventNote.trim() || undefined,
+
+            metadata: {
+                markerType,
+                markerName: name,
+            },
+        });
+
+        updateAgent(copy);
+
+        setMarkerName("");
+        setMarkerType("session");
+        setEventNote("");
+        setIsMarkerDialogOpen(false);
     };
 
   return(
@@ -108,12 +154,20 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
         </select>
         
         <input
-        type="text"
-        className="bb-input bb-timeline-toolbar__search"
-        placeholder="Search timeline..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
+            type="text"
+            className="bb-input bb-timeline-toolbar__search"
+            placeholder="Search timeline..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
         />
+
+        <button
+            type="button"
+            className="bb-button bb-button--small bb-button--ghost bb-timeline-toolbar__add"
+            onClick={() => setIsMarkerDialogOpen(true)}
+        >
+            +
+        </button>
     </div>
 
     <table className="bb-weapons-table">
@@ -132,7 +186,11 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
             <tr
             key={event.id}
             onClick={() => setSelectedEvent(event)}
-            className="bb-timeline-row"
+            className={
+                event.category === "marker"
+                    ? "bb-timeline-row bb-timeline-row--marker"
+                    : "bb-timeline-row"
+            }
             >
             <td>
                 {new Date(event.timestamp).toLocaleString()}
@@ -170,6 +228,88 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
         )}
         </tbody>
     </table>
+    {isMarkerDialogOpen && (
+        <div className="bb-modal">
+          <div className="bb-modal__dialog bb-timeline-modal">
+            <div className="bb-modal__header">
+                <h3 className="bb-modal__title">
+                Add Marker
+                </h3>
+            </div>
+            <div className="bb-modal__body">
+                <div className="bb-form-group">
+                    <label>Marker Type</label>
+
+                    <select
+                    className="bb-select"
+                    value={markerType}
+                    onChange={(e) =>
+                        setMarkerType(
+                        e.target.value as
+                            | "session"
+                            | "operation"
+                            | "campaign"
+                        )
+                    }
+                    >
+                    <option value="session">Session</option>
+                    <option value="operation">Operation</option>
+                    <option value="campaign">Campaign</option>
+                    </select>
+                </div>
+
+                <div className="bb-form-group">
+                    <label>Name</label>
+
+                    <input
+                    className="bb-input"
+                    type="text"
+                    value={markerName}
+                    onChange={(e) =>
+                        setMarkerName(e.target.value)
+                    }
+                    placeholder={
+                        markerType === "session"
+                        ? "12"
+                        : markerType === "operation"
+                        ? "NIGHT FLOORS"
+                        : "Impossible Landscapes"
+                    }
+                    />
+                </div>
+
+                <div className="bb-form-group">
+                    <label>Notes</label>
+                    <textarea
+                        className="bb-textarea"
+                        rows={5}
+                        value={eventNote}
+                        onChange={(e) => setEventNote(e.target.value)}
+                        placeholder="Add context or campaign notes..."
+                    />
+                </div>
+            </div>
+            <div className="bb-modal__footer">
+                <button
+                    type="button"
+                    className="bb-btn bb-btn--secondary"
+                    onClick={handleCloseMarkerDialog}
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    className="bb-btn"
+                    onClick={handleCreateMarker}
+                    disabled={!markerName.trim()}
+                >
+                    Create Marker
+                </button>
+            </div>
+          </div>
+        </div>
+    )}
     {selectedEvent && (
         <div className="bb-modal">
             <div className="bb-modal__dialog bb-timeline-modal">

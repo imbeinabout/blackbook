@@ -4140,6 +4140,11 @@ input[type="number"] {
   cursor: pointer;
 }
 
+.bb-timeline-row--marker td {
+  font-weight: 600;
+  color: var(--bb-accent);
+}
+
 .bb-timeline-summary,
 .bb-timeline-note {
   white-space: normal !important;
