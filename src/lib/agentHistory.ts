@@ -11,6 +11,7 @@ export function calculateAgentStatistics(
 
     firstEventDate: undefined,
     lastEventDate: undefined,
+    activeDays: undefined,
 
     categoryCounts: {},
     mostActiveCategory: undefined,

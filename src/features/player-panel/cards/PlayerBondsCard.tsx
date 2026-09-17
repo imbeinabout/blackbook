@@ -3,6 +3,7 @@ import React from "react";
 import type { DeltaGreenAgent, DeltaGreenItem } from "../../../models/DeltaGreenAgent";
 import { addAgentEvent } from "../../../lib/eventLogger";
 import { nanoid } from "nanoid";
+import NumberSpinner from "../../../components/ui/NumberSpinner";
 
 interface PlayerBondsCardProps {
   agent: DeltaGreenAgent;
@@ -237,6 +238,7 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
                         className="bb-button bb-button--small"
                         style = {{ marginRight: "0.25rem" }}
                         onClick={() => handleAdjustScore(bond._id, -1)}
+                        disabled={(bond.system?.score ?? 0) <= 0}
                       >
                         -
                       </button>
@@ -248,6 +250,7 @@ const PlayerBondsCard: React.FC<PlayerBondsCardProps> = ({
                         className="bb-button bb-button--small"
                         style = {{ marginLeft: "0.25rem" }}
                         onClick={() => handleAdjustScore(bond._id, +1)}
+                        disabled={(bond.system?.score ?? 0) >= agent.system.statistics.cha.value}
                       >
                         +
                       </button>
