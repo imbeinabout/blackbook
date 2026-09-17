@@ -3,6 +3,7 @@ import React from "react";
 import { useAgentStore, AgentId } from "../../store/agentStore";
 import type { DeltaGreenAgent } from "../../models/DeltaGreenAgent";
 import { ensureAgentDefaults } from "../../lib/agentMigration";
+import { ConfirmDialog } from "../../components/common/ConfirmDialog";
 
 interface LoadAgentModalProps {
   isOpen: boolean;
@@ -253,35 +254,16 @@ const LoadAgentModal: React.FC<LoadAgentModalProps> = ({
       </div>
 
       {/* Small confirm modal for delete */}
-      {showDeleteConfirm && (
-        <div className="bb-modal bb-modal--confirm">
-          <div className="bb-modal__dialog bb-modal__dialog--small">
-            <h4 className="bb-modal__title">Delete Agent?</h4>
-            <div className="bb-modal__body">
-              <p>
-                This will permanently delete the selected agent dossier from
-                this device. This action cannot be undone.
-              </p>
-            </div>
-            <div className="bb-modal__footer">
-              <button
-                type="button"
-                className="bb-button bb-button--small"
-                onClick={handleCancelDelete}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="bb-button bb-button--small bb-button--danger"
-                onClick={handleConfirmDelete}
-              >
-                Yes, Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Agent?"
+        message={<p>This will permanently delete the selected agent dossier from this device. This action cannot be undone.</p>}
+        confirmLabel="Yes, Delete"
+        cancelLabel="Cancel"
+        danger
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+      />
     </>
   );
 };

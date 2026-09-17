@@ -14,6 +14,7 @@ import Header from "../../components/layout/Header";
 import CharacterSidebar from "../../features/character-creation";
 import PlayerPanel from "../../features/player-panel";
 import Footer from "../../components/layout/Footer"
+import { ConfirmDialog } from "../../components/common/ConfirmDialog";
 
 import { getCreationMeta, getSectionLock } from "../../features/character-creation/creation.logic";
 
@@ -213,6 +214,7 @@ const MainPage: React.FC<MainPageProps> = ({
   };
 
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
+  const [showExitPlayConfirm, setShowExitPlayConfirm] = React.useState(false);
   const [openCreationSection, setOpenCreationSection] = React.useState<CreationSectionKey>("IDENTITY");
   const [activeBottomTab, setActiveBottomTab] = React.useState<BottomTabKey>("weapons");
   const [statMode, setStatMode] = React.useState<"Assigned" | "Rolled">("Assigned");
@@ -334,22 +336,16 @@ const MainPage: React.FC<MainPageProps> = ({
     }
   };
 
-  const exitPlayMode = () => {
+  const requestExitPlayMode = () => {
+    setShowExitPlayConfirm(true);
+  };
+
+  const confirmExitPlayMode = () => {
     if (!activeAgentId || !agent) return;
     document.body.classList.remove("bb-play-mode");
 
     const creation = getCreationMeta(agent);
     if (!creation.playMode?.isPlaying) return;
-
-    const confirmed = window.confirm(
-      [
-        "Exit PLAY mode and reset this Agent to their pre-play baseline?",
-        "",
-        "This will reset advances, conditions, bond scores, and other changes made during play.",
-      ].join("\n")
-    );
-
-    if (!confirmed) return;
 
     const baselineJson = creation.playMode.baselineAgentJson;
     if (!baselineJson) {
@@ -389,6 +385,7 @@ const MainPage: React.FC<MainPageProps> = ({
     }));
 
     setToast("PLAY mode disabled. Agent reset to baseline.");
+    setShowExitPlayConfirm(false);
   };
 
   const updateActiveAgentField = React.useCallback(
@@ -708,7 +705,7 @@ const MainPage: React.FC<MainPageProps> = ({
         onPersonalDataChanged: handlePersonalDataChanged,
 
         enterPlayMode,
-        exitPlayMode,
+        exitPlayMode: requestExitPlayMode,
 
         requestAddDisorder: openAddDisorderModal,
         
@@ -849,6 +846,28 @@ const MainPage: React.FC<MainPageProps> = ({
           }}
         />
       )}
+
+      <ConfirmDialog
+        isOpen={showExitPlayConfirm}
+        title="Exit PLAY Mode?"
+        message={
+          <>
+            <p>
+              Exit PLAY mode and reset this Agent to their pre-play baseline?
+            </p>
+
+            <p>
+              This will reset advances, conditions, bond scores,
+              and other changes made during play.
+            </p>
+          </>
+        }
+        confirmLabel="Exit Play Mode"
+        cancelLabel="Cancel"
+        danger
+        onCancel={() => setShowExitPlayConfirm(false)}
+        onConfirm={confirmExitPlayMode}
+      />
 
       {toast && (
         <div className="bb-toast">
