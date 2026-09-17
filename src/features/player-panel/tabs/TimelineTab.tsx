@@ -132,6 +132,7 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
             <tr
             key={event.id}
             onClick={() => setSelectedEvent(event)}
+            className="bb-timeline-row"
             >
             <td>
                 {new Date(event.timestamp).toLocaleString()}

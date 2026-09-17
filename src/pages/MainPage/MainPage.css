@@ -4104,6 +4104,15 @@ input[type="number"] {
   min-width: 0;
 }
 
+.bb-timeline-row {
+  transition: background-color 0.15s ease;
+}
+
+.bb-timeline-row:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+}
+
 .bb-timeline-summary,
 .bb-timeline-note {
   white-space: normal !important;
