@@ -49,9 +49,13 @@ export interface AgentStatistics {
 
   firstEventDate?: string;
   lastEventDate?: string;
+  activeDays?: number;
 
   categoryCounts: Record<string, number>;
-  mostActiveCategory?: string;
+  mostActiveCategory?: {
+    category: string;
+    count: number;
+  };
 
   skillChanges: number;
   attributeChanges: number;

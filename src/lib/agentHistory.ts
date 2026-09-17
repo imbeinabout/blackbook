@@ -1,3 +1,4 @@
+// src/lib/agentHistory.ts
 import { DeltaGreenAgent } from "../models/DeltaGreenAgent";
 import { AgentStatistics } from "../models/events";
 
@@ -39,6 +40,10 @@ export function calculateAgentStatistics(
 
     stats.firstEventDate = sorted[0].timestamp;
     stats.lastEventDate = sorted[sorted.length - 1].timestamp;
+    stats.activeDays =
+      (new Date(stats.lastEventDate).getTime() -
+        new Date(stats.firstEventDate).getTime()) /
+      (1000 * 60 * 60 * 24);
   }
 
   for (const event of agent.events) {
@@ -47,8 +52,9 @@ export function calculateAgentStatistics(
     if (event.category === "attribute") stats.attributeChanges++;
     if (event.category === "sanity") {
       stats.sanityEvents++;
-      if (event.metadata?.actualSanLoss) {
-        stats.totalSanLost += event.metadata.actualSanLoss as number; //TODO: Update SAN events to always have actualSanLoss in metadata
+      const sanLoss = event.metadata?.actualSanLoss;
+      if (typeof sanLoss === "number") {
+        stats.totalSanLost += sanLoss;
       }
     }
     if (event.category === "bond") stats.bondChanges++;
@@ -60,7 +66,13 @@ export function calculateAgentStatistics(
     if (event.category === "home-scene") stats.homeScenes++;
   }
 
-  stats.mostActiveCategory = Object.entries(stats.categoryCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+  const mostActive = Object.entries(stats.categoryCounts).sort((a, b) => b[1] - a[1])[0];
+  if (mostActive) {
+    stats.mostActiveCategory = {
+      category: mostActive[0],
+      count: mostActive[1],
+    };
+  }
 
   return stats;
 }

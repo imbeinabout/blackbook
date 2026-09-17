@@ -3,6 +3,7 @@ import React from "react";
 import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import { useLayoutMode } from "../../../hooks/useLayoutMode";
 import { addAgentEvent } from "../../../lib/eventLogger";
+import { calculateAgentStatistics } from "../../../lib/agentHistory";
 
 type DetailsTabProps = {
   agent: DeltaGreenAgent;
@@ -57,6 +58,8 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
     },
     [agent, details, updateAgent]
   );
+
+  const statistics = React.useMemo(() => calculateAgentStatistics(agent), [agent]);
 
   const isMobile = useLayoutMode() === "mobile";
 
@@ -482,7 +485,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
       {/* STATISTICS MODAL */}
       {isStatisticsOpen && (
         <div className="bb-modal">
-          <div className="bb-modal__dialog">
+          <div className="bb-modal__dialog bb-agent-statistics-modal">
             <div className="bb-modal__header">
               <h3 className="bb-modal__title">
                 Agent Statistics
@@ -490,9 +493,113 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
             </div>
 
             <div className="bb-modal__body">
-              Statistics coming in v0.3.1
-            </div>
 
+              <h3>Career</h3>
+
+              <div className="bb-timeline-kv">
+                <span>Total Events</span>
+                <span>{statistics.totalEvents}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>First Event</span>
+                <span>
+                  {statistics.firstEventDate
+                    ? new Date(statistics.firstEventDate).toLocaleDateString()
+                    : "—"}
+                </span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Latest Event</span>
+                <span>
+                  {statistics.lastEventDate
+                    ? new Date(statistics.lastEventDate).toLocaleDateString()
+                    : "—"}
+                </span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Career Length</span>
+                <span>
+                  {statistics.activeDays !== undefined
+                    ? statistics.activeDays.toFixed(1)
+                    : "—"} days
+                </span>
+              </div>
+
+              <h3>Development</h3>
+
+              <div className="bb-timeline-kv">
+                <span>Skill Changes</span>
+                <span>{statistics.skillChanges}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Attribute Changes</span>
+                <span>{statistics.attributeChanges}</span>
+              </div>
+
+              <h3>Mental Health</h3>
+
+              <div className="bb-timeline-kv">
+                <span>SAN Events</span>
+                <span>{statistics.sanityEvents}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Total SAN Lost</span>
+                <span>{statistics.totalSanLost}</span>
+              </div>
+
+              <h3>Relationships</h3>
+
+              <div className="bb-timeline-kv">
+                <span>Bond Changes</span>
+                <span>{statistics.bondChanges}</span>
+              </div>
+
+              <h3>Conditions</h3>
+
+              <div className="bb-timeline-kv">
+                <span>Conditions Added</span>
+                <span>{statistics.conditionsAdded}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Conditions Removed</span>
+                <span>{statistics.conditionsRemoved}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Disorders Developed</span>
+                <span>{statistics.disordersAdded}</span>
+              </div>
+
+              <h3>Personal Life</h3>
+
+              <div className="bb-timeline-kv">
+                <span>Home Scenes</span>
+                <span>{statistics.homeScenes}</span>
+              </div>
+
+              {statistics.mostActiveCategory && (
+                <>
+                  <h3>Activity</h3>
+
+                  <div className="bb-timeline-kv">
+                    <span>Most Active Category</span>
+                    <span>
+                      {statistics.mostActiveCategory.category}
+                      {" ("}
+                      {statistics.mostActiveCategory.count}
+                      {")"}
+                    </span>
+                  </div>
+                </>
+              )}
+
+            </div>
             <div className="bb-modal__footer">
               <button
                 type="button"

@@ -2830,6 +2830,11 @@
   max-width: 100%;
 }
 
+.bb-agent-statistics-modal {
+  width: 400px;
+  max-width: 90vw;
+}
+
 .bb-details-tab__alias-viewer {
   max-height: 10rem;
   overflow-y: auto;
