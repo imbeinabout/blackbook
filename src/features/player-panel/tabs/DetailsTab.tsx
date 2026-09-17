@@ -27,6 +27,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
 
   const [isDragOver, setIsDragOver] = React.useState(false);
   const [isAliasModalOpen, setIsAliasModalOpen] = React.useState(false);
+  const [isStatisticsOpen, setIsStatisticsOpen] = React.useState(false);
 
   const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const aliasListRef = React.useRef<HTMLDivElement | null>(null);
@@ -361,10 +362,18 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
 
           <button
             type="button"
+            className="bb-btn"
+            onClick={() => setIsStatisticsOpen(true)}
+          >
+            Agent Statistics
+          </button>
+
+          <button
+            type="button"
             className="bb-btn bb-btn--ghost bb-aliases__manage-btn"
             onClick={openAliasModal}
           >
-            Manage aliases
+            Manage Aliases
           </button>
         </section>
 
@@ -469,6 +478,33 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
           </div>
 
         </section>
+      
+      {/* STATISTICS MODAL */}
+      {isStatisticsOpen && (
+        <div className="bb-modal">
+          <div className="bb-modal__dialog">
+            <div className="bb-modal__header">
+              <h3 className="bb-modal__title">
+                Agent Statistics
+              </h3>
+            </div>
+
+            <div className="bb-modal__body">
+              Statistics coming in v0.3.1
+            </div>
+
+            <div className="bb-modal__footer">
+              <button
+                type="button"
+                className="bb-btn"
+                onClick={() => setIsStatisticsOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ALIAS MODAL */}
       {isAliasModalOpen && (
