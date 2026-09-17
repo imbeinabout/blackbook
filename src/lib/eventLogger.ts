@@ -68,6 +68,15 @@ export function addAgentEvent(
   return newEvent;
 }
 
+export function deleteAgentEvent(
+  agent: DeltaGreenAgent,
+  eventId: string
+) {
+  agent.events = agent.events.filter(
+    e => e.id !== eventId
+  );
+}
+
 export function updateEventDescription(
   agent: DeltaGreenAgent,
   eventId: string,
