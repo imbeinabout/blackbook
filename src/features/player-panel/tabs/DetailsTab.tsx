@@ -299,18 +299,18 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
       <div className="bb-details-tab__grid">
         {/* PHOTO */}
         <section className="bb-details-tab__photo">
-            {activeAliases.length !== 0 ? (
-                <h3 className="bb-section-title bb-details-tab__photo-title">
-                  {activeAliases.length > 0
-                    ? activeAliases[0].name
-                    : "AGENT PHOTO"
-                  }
-                </h3>
-              ) : (
-                <h3 className="bb-section-title">
-                  AGENT PHOTO
-                </h3>
-              )}
+          {activeAliases.length !== 0 ? (
+              <h3 className="bb-section-title bb-details-tab__photo-title">
+                {activeAliases.length > 0
+                  ? activeAliases[0].name
+                  : "AGENT PHOTO"
+                }
+              </h3>
+            ) : (
+              <h3 className="bb-section-title">
+                AGENT PHOTO
+              </h3>
+          )}
           <div
             className={
               "bb-photo-dropzone" +
@@ -322,11 +322,27 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
             onDrop={handleDrop}
           >
             {details.photoDataUrl ? (
-              <img
-                src={details.photoDataUrl}
-                alt={`${agent.name} portrait`}
-                className="bb-photo-dropzone__image"
-              />
+              <>
+                {
+                  <img
+                    src={details.photoDataUrl}
+                    alt={`${agent.name} portrait`}
+                    className="bb-photo-dropzone__image"
+                  />
+                }
+
+                <button
+                  type="button"
+                  className="bb-photo-dropzone__remove bb-button bb-button--danger bb-button--small"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRemovePhoto();
+                  }}
+                  title="Remove photo"
+                >
+                  ✕
+                </button>
+              </>
             ) : (
               <div className="bb-photo-dropzone__placeholder">
                 <p className="bb-photo-dropzone__hint">
@@ -342,15 +358,6 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
             style={{ display: "none" }}
             onChange={handleFileChange}
           />
-          {details.photoDataUrl && (
-            <button
-              type="button"
-              className="bb-btn bb-btn--ghost bb-details-tab__clear-photo"
-              onClick={handleRemovePhoto}
-            >
-              Remove photo
-            </button>
-          )}
 
           <button
             type="button"
