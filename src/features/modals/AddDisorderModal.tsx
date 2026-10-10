@@ -65,18 +65,33 @@ const AddDisorderModal: React.FC<AddDisorderModalProps> = ({
       });
 
       const numDisorders = items.filter((it) => it.type === "motivation" && (it.system?.disorder ?? "").trim().length > 0).length;
+      const motivationName = updatedItems.find((it) => it._id === selectedMotivationId)?.system?.name ?? "";
       addAgentEvent(agent, {
         category: "disorder",
         action: "disorder-added",
         source: "manual",
-        summary: `Added disorder "${text}" linked to motivation "${updatedItems.find((it) => it._id === selectedMotivationId)?.system?.name ?? ""}"`,
+        summary: `Added disorder "${text}" linked to motivation "${motivationName}"`,
         before: numDisorders,
         after: numDisorders + 1,
         relatedEntity: selectedMotivationId,
         metadata: {
           disorderName: text,
           motivationId: selectedMotivationId,
-          motivationName: updatedItems.find((it) => it._id === selectedMotivationId)?.system?.name ?? "",
+          motivationName: motivationName,
+        },
+      });
+      addAgentEvent(agent, {
+        category: "motivation",
+        action: "motivation-crossed",
+        source: "manual",
+        summary: `Crossed out motivation "${motivationName}"`,
+        before: false,
+        after: true,
+        relatedEntity: selectedMotivationId,
+        metadata: {
+          crossedOut: true,
+          motivationName: motivationName,
+          motivationId: selectedMotivationId,
         },
       });
 

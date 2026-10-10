@@ -144,22 +144,22 @@ const COMMANDS: Command[] = [
       const developmentStats = (): string =>
         [
           "=== DEVELOPMENT ===",
-          `Skill Changes: ${stats.skillChanges}`,
-          `Attribute Changes: ${stats.attributeChanges}`,
+          `Skill Changes: ${stats.skillValueChanges}`,
+          `Attribute Changes: ${stats.statValueChanges}`,
         ].join("\n");
 
       const mentalStats = (): string =>
         [
           "=== MENTAL HEALTH ===",
-          `SAN Events: ${stats.sanityEvents}`,
+          `SAN Events: ${stats.sanityLossEvents}`,
           `Total SAN Lost: ${stats.totalSanLost}`,
         ].join("\n");
 
       const relationshipStats = (): string =>
         [
           "=== RELATIONSHIPS ===",
-          `Bond Changes: ${stats.bondChanges}`,
-          `Home Scenes: ${stats.homeScenes}`,
+          `Bond Changes: ${stats.bondScoreChanges}`,
+          `Home Scenes: ${stats.homeScenesCompleted}`,
         ].join("\n");
 
       const conditionStats = (): string =>

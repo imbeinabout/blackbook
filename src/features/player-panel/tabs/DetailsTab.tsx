@@ -532,19 +532,19 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
 
               <div className="bb-timeline-kv">
                 <span>Skill Changes</span>
-                <span>{statistics.skillChanges}</span>
+                <span>{statistics.skillValueChanges}</span>
               </div>
 
               <div className="bb-timeline-kv">
                 <span>Attribute Changes</span>
-                <span>{statistics.attributeChanges}</span>
+                <span>{statistics.statValueChanges}</span>
               </div>
 
               <h3>Mental Health</h3>
 
               <div className="bb-timeline-kv">
                 <span>SAN Events</span>
-                <span>{statistics.sanityEvents}</span>
+                <span>{statistics.sanityLossEvents}</span>
               </div>
 
               <div className="bb-timeline-kv">
@@ -556,7 +556,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
 
               <div className="bb-timeline-kv">
                 <span>Bond Changes</span>
-                <span>{statistics.bondChanges}</span>
+                <span>{statistics.bondScoreChanges}</span>
               </div>
 
               <h3>Conditions</h3>
@@ -580,7 +580,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
 
               <div className="bb-timeline-kv">
                 <span>Home Scenes</span>
-                <span>{statistics.homeScenes}</span>
+                <span>{statistics.homeScenesCompleted}</span>
               </div>
 
               {statistics.mostActiveCategory && (

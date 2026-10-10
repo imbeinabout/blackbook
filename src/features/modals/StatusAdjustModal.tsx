@@ -396,6 +396,7 @@ export default function StatusAdjustModal({
           before,
           after,
           metadata: {
+            actualSanLoss: before - after,
             mode,
             sanType,
             projectedToBond: projectToBond,

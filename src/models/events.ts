@@ -46,10 +46,11 @@ export interface AgentEvent {
 }
 
 export interface AgentStatistics {
+  // Timeline
   totalEvents: number;
-
   firstEventDate?: string;
   lastEventDate?: string;
+  activitySpanDays?: number;
   activeDays?: number;
 
   categoryCounts: Record<string, number>;
@@ -58,18 +59,75 @@ export interface AgentStatistics {
     count: number;
   };
 
-  skillChanges: number;
-  attributeChanges: number;
+  // Operational History
+  campaigns: number;
+  operations: number;
+  sessions: number;
+  latestCampaign?: string;
+  latestOperation?: string;
+  latestSession?: string;
 
-  sanityEvents: number;
+  // Sanity
+  sanityLossEvents: number;
   totalSanLost: number;
+  totalSanRecovered: number;
+  netSanChange: number;
+  breakingPointsCrossed: number;
+  temporaryInsanityEpisodes: number;
+  adaptedtoViolence: boolean;
+  adaptedtoHelplessness: boolean;
+  sanLostByType: {
+    helplessness: number;
+    violence: number;
+    unnatural: number;
+  }
 
-  bondChanges: number;
+  // Physical History
+  hpDamageTaken: number;
+  hpRecovered: number;
+  woundsAdded: number;
+  woundsRemoved: number;
+  firstAidApplications: number;
 
+  // Willpower History
+  wpDamageTaken: number;
+  wpRecovered: number;
+
+  // Bonds
+  bondsCreated: number;
+  bondsRemoved: number;
+  bondScoreChanges: number;
+  bondDamagedEvents: number;
+  totalBondDamage: number;
+  totalBondRecovery: number;
+  projectionEvents: number;
+
+  // Psycological Consequences
+  disordersAdded: number;
+  disordersCured: number;
+  motivationsCrossedOut: number;
+  motivationsRestored: number;
+
+  // Development
+  statValueChanges: number;
+  skillValueChanges: number;
+  skillUpgradeEvents: number;
+  totalSkillPointsGained: number;
+  totalSkillPointsReversed: number;
+  specialTrainingAdded: number;
+  specialTrainingRemoved: number;
+  mostImprovedSkill?: {
+    key: string;
+    label: string;
+    netChange: number;
+  }
+
+  // Conditions
   conditionsAdded: number;
   conditionsRemoved: number;
 
-  disordersAdded: number;
-
-  homeScenes: number;
+  // Downtime
+  homeScenesCompleted: number;
+  personalPursuits: number;
+  bondsResolvedInHomeScenes: number;
 }
