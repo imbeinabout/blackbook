@@ -4,6 +4,7 @@ import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import type { AgentEvent } from "../../../models/events" 
 import { addAgentEvent, deleteAgentEvent, updateEventDescription } from "../../../lib/eventLogger";
 import { ConfirmDialog } from "../../../components/common/ConfirmDialog";
+import { useLayoutMode } from "../../../hooks/useLayoutMode";
 
 type TimelineTabProps = {
   agent: DeltaGreenAgent;
@@ -11,6 +12,7 @@ type TimelineTabProps = {
 };
 
 export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) => {
+  const isMobile = useLayoutMode() === "mobile";
   const [search, setSearch] = React.useState("");
   const [categoryFilter, setCategoryFilter] = React.useState("all");
   const [selectedEvent, setSelectedEvent] = React.useState<AgentEvent | null>(null);
@@ -168,11 +170,11 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
             className="bb-button bb-button--small bb-button--ghost bb-timeline-toolbar__add"
             onClick={() => setIsMarkerDialogOpen(true)}
         >
-            +
+            {isMobile ? "Add Marker" : "+"}
         </button>
     </div>
 
-    <table className="bb-weapons-table">
+    <table className="bb-weapons-table bb-timeline-table">
         <thead>
         <tr>
             <th>Date/Time</th>
@@ -194,19 +196,19 @@ export const TimelineTab: React.FC<TimelineTabProps> = ({ agent, updateAgent }) 
                     : "bb-timeline-row"
             }
             >
-            <td>
+            <td data-label="Date">
                 {new Date(event.timestamp).toLocaleString()}
             </td>
 
-            <td>
+            <td data-label="Category">
                 {formatCategory(event.category)}
             </td>
 
-            <td>
+            <td data-label="Summary">
                 {event.summary}
             </td>
 
-            <td>
+            <td data-label="Note">
                 {event.description?.trim() || "—"}
             </td>
             <td>
