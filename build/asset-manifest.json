@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.35ba5b46.css",
-    "main.js": "/static/js/main.c3cab453.js",
+    "main.js": "/static/js/main.79ff92f6.js",
     "static/media/helmet-nobg.png": "/static/media/helmet-nobg.64ebdc80419227238b6c.png",
     "static/media/blackbook-logo.png": "/static/media/blackbook-logo.d9a295bc8ed11a33b894.png",
     "static/media/vest-nobg.png": "/static/media/vest-nobg.67427d8ff2624dfab49a.png",
     "index.html": "/index.html",
     "main.35ba5b46.css.map": "/static/css/main.35ba5b46.css.map",
-    "main.c3cab453.js.map": "/static/js/main.c3cab453.js.map"
+    "main.79ff92f6.js.map": "/static/js/main.79ff92f6.js.map"
   },
   "entrypoints": [
     "static/css/main.35ba5b46.css",
-    "static/js/main.c3cab453.js"
+    "static/js/main.79ff92f6.js"
   ]
 }

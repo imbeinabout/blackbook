@@ -1,8 +1,6 @@
 # Blackbook
 ![Blackbook Logo](src/assets/blackbook-logo.png)
 
-**Current Version:** v0.3.0
-
 > **Project Status**  
 > Blackbook is a hobby project built and maintained in spare time. While development is ongoing, features, priorities, and pace may change without notice. There are no promised timelines or guarantees.
 
@@ -18,6 +16,8 @@ All data lives in your browser. No accounts. No backend.
 The latest deployed version is available via **GitHub Pages**:
 
  **https://blackbook-rpg.app/**
+
+**Current Version:** v0.3.1
 
 ## Screenshots
 
