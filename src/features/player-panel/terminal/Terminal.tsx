@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import { calculateAgentStatistics } from "../../../lib/agentHistory";
+import { calculateAgentMilestones } from "../../../lib/agentMilestones";
 
 // ------------------------
 // Command Types
@@ -116,6 +117,30 @@ const COMMANDS: Command[] = [
     hidden: false,
     execute: (ctx) => {
       return `Events: ${ctx.agent?.events?.length ?? 0}`;
+    },
+  },
+  {
+    name: "milestones",
+    aliases: ["ms"],
+    hidden: false,
+    execute: (ctx) => {
+      if (!ctx.agent) {
+        return "NO AGENT LOADED.";
+      }
+
+      const milestones = calculateAgentMilestones(ctx.agent, calculateAgentStatistics(ctx.agent));
+      
+      const summaryMilestones = (): string =>
+      [
+        "=== MILESTONES ===",
+        ...milestones.map((m) => {
+          const status = m.achieved ? "ACHIEVED" : "IN PROGRESS";
+          return `${m.title.padEnd(24, ".")} ${status} (${m.progress}/${m.target})${m.skill ? ` [${m.skill.toUpperCase()}]` : ""}`;
+        }),
+      ]
+      .join("\n");
+      
+      return summaryMilestones();
     },
   },
   {
