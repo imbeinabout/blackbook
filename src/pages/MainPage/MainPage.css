@@ -2914,7 +2914,8 @@
 }
 
 .bb-photo-frame {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
@@ -2943,6 +2944,30 @@
       0 0 2px
       rgba(155,226,123,0.35)
     );
+}
+
+.bb-milestone-details {
+  margin-top: 0.35rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.15rem 0.5rem;
+
+  border: 1px solid var(--bb-accent);
+  border-radius: 999px;
+
+  background: rgba(155, 226, 123, 0.08);
+
+  color: var(--bb-accent);
+
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  min-height: 1.4rem;
 }
 
 /* Photo block */

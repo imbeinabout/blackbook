@@ -5,6 +5,7 @@ import { useLayoutMode } from "../../../hooks/useLayoutMode";
 import { addAgentEvent } from "../../../lib/eventLogger";
 import { calculateAgentStatistics } from "../../../lib/agentHistory";
 import { calculateAgentMilestones } from "../../../lib/agentMilestones";
+import { AgentMilestone } from "../../../models/events";
 
 type DetailsTabProps = {
   agent: DeltaGreenAgent;
@@ -63,13 +64,10 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
   const statistics = React.useMemo(() => calculateAgentStatistics(agent), [agent]);
   const milestones = React.useMemo(() => calculateAgentMilestones(agent, statistics), [agent, statistics]);
   const achievedMilestones = milestones.filter(m => m.achieved);
-  const midpoint = Math.ceil(
-    achievedMilestones.length / 2
-  );
-  const leftMilestones =
-    achievedMilestones.slice(0, midpoint);
-  const rightMilestones =
-    achievedMilestones.slice(midpoint);
+  const midpoint = Math.ceil(achievedMilestones.length / 2);
+  const leftMilestones = achievedMilestones.slice(0, midpoint);
+  const rightMilestones = achievedMilestones.slice(midpoint);
+  const [selectedMilestone, setSelectedMilestone] = React.useState<AgentMilestone | null>(null);
   
   const isMobile = useLayoutMode() === "mobile";
 
@@ -337,6 +335,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                   src={getMilestoneIcon(milestone.icon)}
                   title={milestone.title}
                   className="bb-milestone-badge"
+                  onClick={() => setSelectedMilestone(selectedMilestone === milestone ? null : milestone)}
                 />
               ))}
             </div>
@@ -387,6 +386,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                   src={getMilestoneIcon(milestone.icon)}
                   title={milestone.title}
                   className="bb-milestone-badge"
+                  onClick={() => setSelectedMilestone(selectedMilestone === milestone ? null : milestone)}
                 />
               ))}
             </div>
@@ -398,6 +398,11 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
             style={{ display: "none" }}
             onChange={handleFileChange}
           />
+          {selectedMilestone && (
+            <div className="bb-milestone-details">
+              {selectedMilestone.title}
+            </div>
+          )}
 
           <button
             type="button"
