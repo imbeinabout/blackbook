@@ -129,65 +129,163 @@ const COMMANDS: Command[] = [
 
       const stats = calculateAgentStatistics(ctx.agent);
 
-      const subcommand =
-        raw.split(/\s+/)[1]?.toLowerCase() ?? "all";
+      const subcommand = raw.split(/\s+/)[1]?.toLowerCase() ?? "summary";
 
-      const recordStats = (): string =>
+      const summaryStats = (): string =>
         [
-          "=== AGENT RECORD ===",
+          "=== HANDLER ASSESSMENT ===",
+          "",
+          stats.operations >= 10
+            ? "Veteran field operative."
+            : stats.operations >= 3
+            ? "Experienced field operative."
+            : "Limited field experience.",
+          "",
+          `Operations: ${stats.operations}`,
+          `Events Recorded: ${stats.totalEvents}`,
+          `Most Developed Skill: ${
+            stats.mostImprovedSkill?.label ?? "Unknown"
+          }`,
+          `Total SAN Lost: ${stats.totalSanLost}`,
+          `Total Bond Damage: ${stats.totalBondDamage}`,
+          `Most Active Area: ${
+            stats.mostActiveCategory?.category ?? "Unknown"
+          }`,
+        ]
+        .join("\n");
+    
+      const serviceStats = (): string =>
+        [
+          "=== SERVICE RECORD ===",
+          `Campaigns: ${stats.campaigns}`,
+          `Operations: ${stats.operations}`,
+          `Sessions: ${stats.sessions}`,
+          "",
           `Events Recorded: ${stats.totalEvents}`,
           `First Event: ${stats.firstEventDate ?? "N/A"}`,
           `Latest Event: ${stats.lastEventDate ?? "N/A"}`,
           `Career Length: ${stats.activeDays ?? 0} days`,
-        ].join("\n");
+          "",
+          `Latest Campaign: ${stats.latestCampaign ?? "N/A"}`,
+          `Latest Operation: ${stats.latestOperation ?? "N/A"}`,
+          `Latest Session: ${stats.latestSession ?? "N/A"}`
+        ]
+        .join("\n");
 
       const developmentStats = (): string =>
         [
           "=== DEVELOPMENT ===",
           `Skill Changes: ${stats.skillValueChanges}`,
+          `Skill Upgrades: ${stats.skillUpgradeEvents}`,
+          `Skill Points Gained: ${stats.totalSkillPointsGained}`,
+          `Skill Points Reversed: ${stats.totalSkillPointsReversed}`,
           `Attribute Changes: ${stats.statValueChanges}`,
-        ].join("\n");
+          `Special Training Added: ${stats.specialTrainingAdded}`,
+          "",
+          `Most Improved Skill: ${
+            stats.mostImprovedSkill
+              ? `${stats.mostImprovedSkill.label} (+${stats.mostImprovedSkill.netChange})`
+              : "N/A"
+          }`
+        ]
+        .join("\n");
 
-      const mentalStats = (): string =>
+      const psychologyStats = (): string =>
         [
-          "=== MENTAL HEALTH ===",
+          "=== PSYCHOLOGICAL PROFILE ===",
           `SAN Events: ${stats.sanityLossEvents}`,
-          `Total SAN Lost: ${stats.totalSanLost}`,
-        ].join("\n");
+          `SAN Lost: ${stats.totalSanLost}`,
+          `SAN Recovered: ${stats.totalSanRecovered}`,
+          `Net SAN Change: ${stats.netSanChange}`,
+          "",
+          `Breaking Points: ${stats.breakingPointsCrossed}`,
+          `Temporary Insanity: ${stats.temporaryInsanityEpisodes}`,
+          "",
+          `Adapted to Violence: ${
+            stats.adaptedtoViolence ? "YES" : "NO"
+          }`,
+          `Adapted to Helplessness: ${
+            stats.adaptedtoHelplessness ? "YES" : "NO"
+          }`,
+          "",
+          `Violence Loss: ${stats.sanLostByType.violence}`,
+          `Helplessness Loss: ${stats.sanLostByType.helplessness}`,
+          `Unnatural Loss: ${stats.sanLostByType.unnatural}`
+        ]
+        .join("\n");
 
       const relationshipStats = (): string =>
         [
           "=== RELATIONSHIPS ===",
-          `Bond Changes: ${stats.bondScoreChanges}`,
+          `Bonds Created: ${stats.bondsCreated}`,
+          `Bonds Removed: ${stats.bondsRemoved}`,
+          "",
+          `Bond Damage Events: ${stats.bondDamagedEvents}`,
+          `Total Bond Damage: ${stats.totalBondDamage}`,
+          `Total Bond Recovery: ${stats.totalBondRecovery}`,
+          "",
+          `Projection Events: ${stats.projectionEvents}`,
+          "",
           `Home Scenes: ${stats.homeScenesCompleted}`,
-        ].join("\n");
+          `Personal Pursuits: ${stats.personalPursuits}`,
+          `Bonds Resolved: ${stats.bondsResolvedInHomeScenes}`
+        ]
+        .join("\n");
 
       const conditionStats = (): string =>
         [
-          "=== CONDITIONS ===",
+          "=== CONDITIONS & DISORDERS ===",
           `Conditions Added: ${stats.conditionsAdded}`,
           `Conditions Removed: ${stats.conditionsRemoved}`,
+          "",
           `Disorders Developed: ${stats.disordersAdded}`,
-        ].join("\n");
+          `Disorders Cured: ${stats.disordersCured}`
+        ]
+        .join("\n");
 
+      const traumaStats = (): string =>
+        [
+          "=== PHYSICAL TRAUMA ===",
+          `HP Damage Taken: ${stats.hpDamageTaken}`,
+          `HP Recovered: ${stats.hpRecovered}`,
+          "",
+          `WP Damage Taken: ${stats.wpDamageTaken}`,
+          `WP Recovered: ${stats.wpRecovered}`,
+          "",
+          `Wounds Sustained: ${stats.woundsAdded}`,
+          `Wounds Healed: ${stats.woundsRemoved}`,
+          "",
+          `First Aid Applications: ${stats.firstAidApplications}`
+        ]
+        .join("\n");
+      
       const activityStats = (): string =>
         [
-          "=== ACTIVITY ===",
+          "=== ACTIVITY PROFILE ===",
           `Most Active Category: ${
-            stats.mostActiveCategory?.category ??
-            stats.mostActiveCategory ??
-            "N/A"
+            stats.mostActiveCategory?.category ?? "N/A"
           }`,
-        ].join("\n");
+          "",
+          ...Object.entries(stats.categoryCounts)
+            .sort((a,b) => b[1] - a[1])
+            .map(([cat,count]) =>
+              `${cat.padEnd(16, ".")} ${count}`
+            )
+        ]
+        .join("\n");
 
       switch (subcommand) {
         case "all":
           return [
-            recordStats(),
+            summaryStats(),
+            "",
+            serviceStats(),
+            "",
+            traumaStats(),
             "",
             developmentStats(),
             "",
-            mentalStats(),
+            psychologyStats(),
             "",
             relationshipStats(),
             "",
@@ -196,14 +294,20 @@ const COMMANDS: Command[] = [
             activityStats(),
           ].join("\n");
 
-        case "record":
-          return recordStats();
+        case "summary":
+          return summaryStats();
+
+        case "service":
+          return serviceStats();
+
+        case "trauma":
+          return traumaStats();
 
         case "development":
           return developmentStats();
 
-        case "mental":
-          return mentalStats();
+        case "psychology":
+          return psychologyStats();
 
         case "relationships":
           return relationshipStats();
