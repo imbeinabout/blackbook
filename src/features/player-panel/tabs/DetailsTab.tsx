@@ -494,41 +494,92 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
 
             <div className="bb-modal__body bb-agent-statistics-modal__body">
 
-              <h3>Career</h3>
+              <h2>Handler Assessment</h2>
+
+              <p className="bb-text-muted">
+                {
+                  statistics.operations >= 10
+                    ? "Veteran field operative."
+                    : statistics.operations >= 3
+                    ? "Experienced field operative."
+                    : "Limited field experience."
+                }
+              </p>
+
+              <p className="bb-text-muted">
+                Most developed specialty:
+                {" "}
+                {statistics.mostImprovedSkill?.label ?? "Unknown"}.
+              </p>
+
+              <p className="bb-text-muted">
+                Most activity recorded in:
+                {" "}
+                {statistics.mostActiveCategory?.category ?? "Unknown"}
+                {" ("}
+                {statistics.mostActiveCategory?.count ?? 0}
+                {" events)."}
+              </p>
+
+              <div className="bb-agent-statistics-grid">
+                <section>
+                {/* PERSONNEL SUMMARY */}
+
+              <h2>Personnel Dossier</h2>
 
               <div className="bb-timeline-kv">
-                <span>Total Events</span>
+                <span>Campaigns Participated</span>
+                <span>{statistics.campaigns}</span>
+              </div>
+              
+              <div className="bb-timeline-kv">
+                <span>Operations Served</span>
+                <span>{statistics.operations}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Sessions Participated</span>
+                <span>{statistics.sessions}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Career Active Days</span>
+                <span>{statistics.activeDays ?? 0}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Events Recorded</span>
                 <span>{statistics.totalEvents}</span>
               </div>
 
-              <div className="bb-timeline-kv">
-                <span>First Event</span>
-                <span>
-                  {statistics.firstEventDate
-                    ? new Date(statistics.firstEventDate).toLocaleDateString()
-                    : "—"}
-                </span>
-              </div>
+              {statistics.latestCampaign && (
+                <div className="bb-timeline-kv">
+                  <span>Current Campaign</span>
+                  <span>{statistics.latestCampaign}</span>
+                </div>
+              )}
 
-              <div className="bb-timeline-kv">
-                <span>Latest Event</span>
-                <span>
-                  {statistics.lastEventDate
-                    ? new Date(statistics.lastEventDate).toLocaleDateString()
-                    : "—"}
-                </span>
-              </div>
+              {statistics.latestOperation && (
+                <div className="bb-timeline-kv">
+                  <span>Current Operation</span>
+                  <span>{statistics.latestOperation}</span>
+                </div>
+              )}
 
-              <div className="bb-timeline-kv">
-                <span>Career Length</span>
-                <span>
-                  {statistics.activeDays !== undefined
-                    ? statistics.activeDays.toFixed(1)
-                    : "—"} days
-                </span>
-              </div>
+              {statistics.latestSession && (
+                <div className="bb-timeline-kv">
+                  <span>Latest Session</span>
+                  <span>{statistics.latestSession}</span>
+                </div>
+              )}
 
-              <h3>Development</h3>
+              
+              </section>
+
+              <section>
+              {/* DEVELOPMENT */}
+
+              <h2>Development</h2>
 
               <div className="bb-timeline-kv">
                 <span>Skill Changes</span>
@@ -536,30 +587,49 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
               </div>
 
               <div className="bb-timeline-kv">
+                <span>Skill Upgrades</span>
+                <span>{statistics.skillUpgradeEvents}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Total Skill Points Gained</span>
+                <span>{statistics.totalSkillPointsGained}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Total Skill Points Reversed</span>
+                <span>{statistics.totalSkillPointsReversed}</span>
+              </div>
+
+              {statistics.mostImprovedSkill && (
+                <div className="bb-timeline-kv">
+                  <span>Most Improved Skill</span>
+                  <span>
+                    {statistics.mostImprovedSkill.label}
+                    {" (+"}
+                    {statistics.mostImprovedSkill.netChange}
+                    {")"}
+                  </span>
+                </div>
+              )}
+
+              <div className="bb-timeline-kv">
                 <span>Attribute Changes</span>
                 <span>{statistics.statValueChanges}</span>
               </div>
 
-              <h3>Mental Health</h3>
-
               <div className="bb-timeline-kv">
-                <span>SAN Events</span>
-                <span>{statistics.sanityLossEvents}</span>
+                <span>Special Training Acquired</span>
+                <span>{statistics.specialTrainingAdded}</span>
               </div>
 
-              <div className="bb-timeline-kv">
-                <span>Total SAN Lost</span>
-                <span>{statistics.totalSanLost}</span>
-              </div>
+              
+              </section>
 
-              <h3>Relationships</h3>
+              <section>
+              {/* CONDITIONS */}
 
-              <div className="bb-timeline-kv">
-                <span>Bond Changes</span>
-                <span>{statistics.bondScoreChanges}</span>
-              </div>
-
-              <h3>Conditions</h3>
+              <h2>Conditions & Disorders</h2>
 
               <div className="bb-timeline-kv">
                 <span>Conditions Added</span>
@@ -576,28 +646,186 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                 <span>{statistics.disordersAdded}</span>
               </div>
 
-              <h3>Personal Life</h3>
+              <div className="bb-timeline-kv">
+                <span>Disorders Cured</span>
+                <span>{statistics.disordersCured}</span>
+              </div>
+
+              
+              </section>
+
+              <section>
+              {/* PSYCHOLOGICAL PROFILE */}
+
+              <h2>Psychological Profile</h2>
 
               <div className="bb-timeline-kv">
-                <span>Home Scenes</span>
+                <span>Current Violence Adaptation</span>
+                <span>{statistics.adaptedtoViolence ? "YES" : "NO"}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Current Helplessness Adaptation</span>
+                <span>{statistics.adaptedtoHelplessness ? "YES" : "NO"}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>SAN Loss Events</span>
+                <span>{statistics.sanityLossEvents}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Total SAN Lost</span>
+                <span>{statistics.totalSanLost}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Total SAN Recovered</span>
+                <span>{statistics.totalSanRecovered}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Net SAN Change</span>
+                <span>{statistics.netSanChange}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Breaking Points Crossed</span>
+                <span>{statistics.breakingPointsCrossed}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Temporary Insanity Episodes</span>
+                <span>{statistics.temporaryInsanityEpisodes}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Violence SAN Loss</span>
+                <span>{statistics.sanLostByType.violence}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Helplessness SAN Loss</span>
+                <span>{statistics.sanLostByType.helplessness}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Unnatural SAN Loss</span>
+                <span>{statistics.sanLostByType.unnatural}</span>
+              </div>
+
+              
+              </section>
+
+              <section>
+              {/* PHYSICAL TRAUMA */}
+
+              <h2>Physical Trauma</h2>
+
+              <div className="bb-timeline-kv">
+                <span>HP Damage Taken</span>
+                <span>{statistics.hpDamageTaken}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>HP Recovered</span>
+                <span>{statistics.hpRecovered}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>WP Damage Taken</span>
+                <span>{statistics.wpDamageTaken}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>WP Recovered</span>
+                <span>{statistics.wpRecovered}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Wounds Sustained</span>
+                <span>{statistics.woundsAdded}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Wounds Healed</span>
+                <span>{statistics.woundsRemoved}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>First Aid Applications</span>
+                <span>{statistics.firstAidApplications}</span>
+              </div>
+
+              
+              </section>
+
+              <section>
+              {/* RELATIONSHIPS */}
+
+              <h2>Relationships</h2>
+
+              <div className="bb-timeline-kv">
+                <span>Bonds Created</span>
+                <span>{statistics.bondsCreated}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Bonds Removed</span>
+                <span>{statistics.bondsRemoved}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Bond Damage Events</span>
+                <span>{statistics.bondDamagedEvents}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Total Bond Damage</span>
+                <span>{statistics.totalBondDamage}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Total Bond Recovery</span>
+                <span>{statistics.totalBondRecovery}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Projected SAN Onto Bonds</span>
+                <span>{statistics.projectionEvents}</span>
+              </div>
+
+              <div className="bb-timeline-kv">
+                <span>Home Scenes Completed</span>
                 <span>{statistics.homeScenesCompleted}</span>
               </div>
 
-              {statistics.mostActiveCategory && (
-                <>
-                  <h3>Activity</h3>
+              <div className="bb-timeline-kv">
+                <span>Personal Pursuits</span>
+                <span>{statistics.personalPursuits}</span>
+              </div>
 
-                  <div className="bb-timeline-kv">
-                    <span>Most Active Category</span>
-                    <span>
-                      {statistics.mostActiveCategory.category}
-                      {" ("}
-                      {statistics.mostActiveCategory.count}
-                      {")"}
-                    </span>
+              <div className="bb-timeline-kv">
+                <span>Bonds Resolved</span>
+                <span>{statistics.bondsResolvedInHomeScenes}</span>
+              </div>
+              </section>
+
+              <section>
+              {/* EVENT PROFILE */}
+
+              <h2>Activity Profile</h2>
+
+              {Object.entries(statistics.categoryCounts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([category, count]) => (
+                  <div key={category} className="bb-timeline-kv">
+                    <span>{category}</span>
+                    <span>{count}</span>
                   </div>
-                </>
-              )}
+                ))}
+              </section>
+              </div>
 
             </div>
             <div className="bb-modal__footer">
