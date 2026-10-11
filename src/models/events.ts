@@ -131,3 +131,13 @@ export interface AgentStatistics {
   personalPursuits: number;
   bondsResolvedInHomeScenes: number;
 }
+
+export interface AgentMilestone {
+  id: string;
+  title: string;
+  achieved: boolean;
+  progress?: number;
+  target?: number;
+  skill?: string;
+  icon: string;
+}

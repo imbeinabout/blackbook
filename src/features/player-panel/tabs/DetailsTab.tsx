@@ -4,6 +4,7 @@ import type { DeltaGreenAgent } from "../../../models/DeltaGreenAgent";
 import { useLayoutMode } from "../../../hooks/useLayoutMode";
 import { addAgentEvent } from "../../../lib/eventLogger";
 import { calculateAgentStatistics } from "../../../lib/agentHistory";
+import { calculateAgentMilestones } from "../../../lib/agentMilestones";
 
 type DetailsTabProps = {
   agent: DeltaGreenAgent;
@@ -60,7 +61,16 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
   );
 
   const statistics = React.useMemo(() => calculateAgentStatistics(agent), [agent]);
-
+  const milestones = React.useMemo(() => calculateAgentMilestones(agent, statistics), [agent, statistics]);
+  const achievedMilestones = milestones.filter(m => m.achieved);
+  const midpoint = Math.ceil(
+    achievedMilestones.length / 2
+  );
+  const leftMilestones =
+    achievedMilestones.slice(0, midpoint);
+  const rightMilestones =
+    achievedMilestones.slice(midpoint);
+  
   const isMobile = useLayoutMode() === "mobile";
 
   const aliases: AgentAlias[] = (details as any).aliases ?? [];
@@ -292,6 +302,10 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
     fileInputRef.current?.click();
   };
 
+  const getMilestoneIcon = (milestoneId: string): string => {
+    return `/blackbook/milestones/${milestoneId}.svg`;
+  };
+
   const placeholderPersonal = `» A detail or two about the Agent’s personality, beliefs, hobbies, obsessions, and motivations.
 » Something you admire about the Agent.
 » Something you dislike about the Agent.
@@ -315,45 +329,67 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
                 AGENT PHOTO
               </h3>
           )}
-          <div
-            className={
-              "bb-photo-dropzone" +
-              (isDragOver ? " bb-photo-dropzone--drag-over" : "")
-            }
-            onClick={handleClickDropzone}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-          >
-            {details.photoDataUrl ? (
-              <>
-                {
-                  <img
-                    src={details.photoDataUrl}
-                    alt={`${agent.name} portrait`}
-                    className="bb-photo-dropzone__image"
-                  />
-                }
+          <div className="bb-photo-frame">
+            <div className="bb-photo-frame__milestones bb-photo-frame__milestones--left">
+              {leftMilestones.map((milestone) => (
+                <img
+                  key={milestone.id}
+                  src={getMilestoneIcon(milestone.icon)}
+                  title={milestone.title}
+                  className="bb-milestone-badge"
+                />
+              ))}
+            </div>
+            <div
+              className={
+                "bb-photo-dropzone" +
+                (isDragOver ? " bb-photo-dropzone--drag-over" : "")
+              }
+              onClick={handleClickDropzone}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              {details.photoDataUrl ? (
+                <>
+                  {
+                    <img
+                      src={details.photoDataUrl}
+                      alt={`${agent.name} portrait`}
+                      className="bb-photo-dropzone__image"
+                    />
+                  }
 
-                <button
-                  type="button"
-                  className="bb-photo-dropzone__remove bb-button bb-button--danger bb-button--small"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemovePhoto();
-                  }}
-                  title="Remove photo"
-                >
-                  ✕
-                </button>
-              </>
-            ) : (
-              <div className="bb-photo-dropzone__placeholder">
-                <p className="bb-photo-dropzone__hint">
-                  {isMobile ? "Tap to add a photo" : "Drag & drop an image here, or click to choose a file."}
-                </p>
-              </div>
-            )}
+                  <button
+                    type="button"
+                    className="bb-photo-dropzone__remove bb-button bb-button--danger bb-button--small"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRemovePhoto();
+                    }}
+                    title="Remove photo"
+                  >
+                    ✕
+                  </button>
+                </>
+              ) : (
+                <div className="bb-photo-dropzone__placeholder">
+                  <p className="bb-photo-dropzone__hint">
+                    {isMobile ? "Tap to add a photo" : "Drag & drop an image here, or click to choose a file."}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div className="bb-photo-frame__milestones bb-photo-frame__milestones--right">
+              {rightMilestones.map((milestone) => (
+                <img
+                  key={milestone.id}
+                  src={getMilestoneIcon(milestone.icon)}
+                  title={milestone.title}
+                  className="bb-milestone-badge"
+                />
+              ))}
+            </div>
           </div>
           <input
             ref={fileInputRef}

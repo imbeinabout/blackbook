@@ -2913,6 +2913,38 @@
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 
+.bb-photo-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.bb-photo-frame__milestones {
+  width: 36px;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bb-milestone-badge {
+  width: 28px;
+  height: 28px;
+
+  opacity: 0.9;
+
+  cursor: help;
+
+  filter:
+    drop-shadow(
+      0 0 2px
+      rgba(155,226,123,0.35)
+    );
+}
+
 /* Photo block */
 .bb-photo-dropzone {
   position: relative;
