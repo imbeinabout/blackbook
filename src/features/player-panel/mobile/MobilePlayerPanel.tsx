@@ -228,6 +228,12 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
           <PlayerBondsCard agent={agent} updateAgent={updateAgent} />
         )}
 
+        {section === "timeline" && (
+            <CardShell>
+              <TimelineTab agent={agent} updateAgent={updateAgent} />
+            </CardShell>
+        )}
+
         {section === "tools" && (
           <>
             <ModalsCard
@@ -242,9 +248,6 @@ const MobilePlayerPanel: React.FC<PlayerPanelProps> = (props) => {
             />
             <CardShell>
               <NotesTab agent={agent} updateAgent={updateAgent} />
-            </CardShell>
-            <CardShell>
-              <TimelineTab agent={agent} updateAgent={updateAgent} />
             </CardShell>
           </>
         )}

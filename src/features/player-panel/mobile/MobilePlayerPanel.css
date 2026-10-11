@@ -25,7 +25,13 @@
     z-index: 10;
 
     display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
     gap: 0.25rem;
+
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-behavior: smooth;
 
     padding:
       calc(0.45rem + var(--safe-top))
@@ -37,8 +43,13 @@
     border-bottom: 1px solid var(--bb-border);
   }
 
+  .bb-mobile-section-nav::-webkit-scrollbar {
+    display: none;
+  }
+
   .bb-mobile-section-nav__btn {
-    flex: 1;
+    flex: 0 0 auto;
+    min-width: 90px;
     font-size: 0.7rem;
     padding: 0.5rem 0;
     opacity: 0.6;
@@ -576,6 +587,11 @@
     padding: 0.75rem;
 
     -webkit-overflow-scrolling: touch;
+  }
+
+  .bb-agent-statistics-grid {
+    display: flex;
+    flex-direction: column;
   }
 
   .bb-agent-statistics-modal .bb-modal__footer {
