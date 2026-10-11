@@ -315,9 +315,11 @@ export default function HomeScenesModal({
         category: "home-scene",
         action: "home-scene-completed",
         source: "manual",
-        summary: `Completed Home Scene - Resolved Bonds: ${damagedBonds.map(
+        summary: damagedBonds.length > 0 ?
+          `Completed Home Scene - Resolved Bonds: ${damagedBonds.map(
             b => b.system?.name ?? b.name
-          ).join(", ")}`,
+          ).join(", ")}`
+          : `Completed Home Scene`,
         relatedEntity: "home-scenes",
         metadata: {
           damagedBondCount: damagedBonds.length,
