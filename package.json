@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "private": true,
   "type": "module",
-  "homepage": "https://imbeinabout.github.io/blackbook",
+  "homepage": "https://blackbook-rpg.app",
   "dependencies": {
     "@gltf-transform/core": "^4.3.0",
     "@gltf-transform/extensions": "^4.3.0",

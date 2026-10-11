@@ -17,7 +17,7 @@ All data lives in your browser. No accounts. No backend.
 
 The latest deployed version is available via **GitHub Pages**:
 
- **https://imbeinabout.github.io/blackbook/**
+ **https://blackbook-rpg.app/**
 
 ## Screenshots
 
@@ -159,13 +159,13 @@ From the project root (where the `build/` folder exists):
 ```bash
 mkdir -p local/blackbook
 cp -r build/* local/blackbook/
-cd local
+cd local/blackbook
 python -m http.server 8080
 ````
 
 Then open your browser to:
 
-    http://localhost:8080/blackbook/
+    http://localhost:8080/
 
 #### Python 2 (legacy)
 

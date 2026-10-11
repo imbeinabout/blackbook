@@ -301,7 +301,7 @@ export const DetailsTab: React.FC<DetailsTabProps> = ({ agent, updateAgent }) =>
   };
 
   const getMilestoneIcon = (milestoneId: string): string => {
-    return `/blackbook/milestones/${milestoneId}.svg`;
+    return `/milestones/${milestoneId}.svg`;
   };
 
   const placeholderPersonal = `» A detail or two about the Agent’s personality, beliefs, hobbies, obsessions, and motivations.
